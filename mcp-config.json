@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "node",
+      "args": ["/path/to/mcp-server-filesystem/dist/index.js"],
+      "env": {
+        "WORKSPACE_ROOT": "/Users/elizavetapirozkova/Desktop/lootpay-project"
+      }
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "your-brave-api-key"
+      }
+    },
+    "database": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-mysql"],
+      "env": {
+        "DATABASE_URL": "mysql://user:password@localhost:3306/lootpay_dev"
+      }
+    }
+  },
+  "globalShortcut": "Cmd+Shift+P"
+}

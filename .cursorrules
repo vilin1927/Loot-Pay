@@ -1,0 +1,338 @@
+# LootPay MVP - Cursor IDE Configuration
+
+## Project Context
+You are working on LootPay, a Telegram bot MVP for Steam wallet funding targeting Russian gamers. This is an MVP focused on rapid market validation, not scaling.
+
+## Core Business Logic
+- Service charges 10% commission total (4.5% LootPay margin, 5.5% PayDigital fee)
+- Target market: Russian gamers unable to use foreign payment methods
+- Payment method: SBP (Russian instant payments)
+- Steam funding via PayDigital.shop API integration
+- MVP goal: Validate willingness to pay 10% for fast, reliable Steam funding
+
+## Tech Stack (MVP-Focused)
+- **Runtime**: Node.js 18+ with TypeScript
+- **Framework**: Express.js (minimal setup)
+- **Database**: PostgreSQL via Supabase (better than MySQL for MVP)
+- **Bot Library**: node-telegram-bot-api
+- **Query Builder**: Knex.js (configured for PostgreSQL)
+- **Real-time**: Supabase subscriptions for payment updates
+- **Validation**: Joi
+- **Logging**: Winston (basic setup)
+- **Hosting**: Railway platform
+- **Testing**: Jest (basic coverage)
+
+## Project Structure
+```
+src/
+├── bot/
+│   ├── handlers/          # Telegram command handlers
+│   └── bot.ts            # Bot initialization
+├── services/
+│   ├── paydigital.ts     # PayDigital API integration
+│   ├── user.ts           # User management
+│   └── transaction.ts    # Transaction handling
+├── database/
+│   ├── connection.ts     # Knex database setup
+│   └── migrations/       # Database migrations
+├── utils/
+│   ├── logger.ts         # Winston logging
+│   └── validation.ts     # Joi schemas
+└── index.ts              # Express server entry point
+```
+
+## Development Principles for MVP
+
+### 1. MVP-First Mentality
+- Prioritize working features over perfect code
+- Use simple, direct implementations
+- Avoid premature optimization
+- Focus on core user journey validation
+- Ship fast, iterate based on real user feedback
+
+### 2. Essential Features Only
+Implement ONLY these user stories:
+- New user onboarding with 3-question questionnaire (with recovery)
+- Steam username validation via PayDigital API (with change capability)
+- Amount selection ($5, $10, $15, $20 + custom)
+- SBP payment processing and notifications
+- Basic transaction history (last 10 transactions, no pagination)
+- State management for interrupted flows
+- Required bot commands: /start, /help, /terms, /support
+
+### 3. State Management (No Redis for MVP)
+- Use database table for user states: user_states (user_id, current_state, state_data, expires_at)
+- Handle bot restarts and interrupted flows gracefully
+- Implement state recovery for better user experience
+- Clean up expired states automatically
+
+### 4. Critical Edge Cases to Handle
+- User abandons questionnaire midway
+- User wants to change Steam username after validation
+- User starts multiple payment flows (prevent concurrency)
+- Bot restarts during user flow (recover state)
+- PayDigital API failures (retry logic)
+- Exchange rate API failures (fallback mechanisms)
+
+### 3. Code Quality Guidelines
+- Write TypeScript with proper types
+- Use async/await for all async operations
+- Handle errors gracefully with user-friendly messages
+- Log all payment-related events
+- Keep functions focused and testable
+
+### 4. Database Operations
+- Use Knex.js query builder, not raw SQL
+- Always use transactions for financial operations
+- Index frequently queried columns
+- Store all user events for post-MVP analysis
+
+### 5. API Integration Patterns
+- Use axios with proper error handling
+- Implement basic retry logic for critical APIs
+- Validate all external API responses
+- Store API response data for debugging
+
+## Key Files to Reference
+
+### PRD Documentation
+- `prd/product-requirements.md` - Complete product requirements
+- `specifications/database-schema.md` - Database structure
+- `specifications/user-flows.md` - Step-by-step user journeys
+- `specifications/frontend-spec.md` - Exact bot text and buttons
+- `research/technical-research.md` - API specifications
+
+### When implementing features, ALWAYS:
+1. Reference the exact specifications from these files
+2. Use the precise text content from frontend-spec.md
+3. Follow the user flows exactly as documented
+4. Implement the database schema as specified
+
+## Commission Calculation (Critical Business Logic)
+```typescript
+// Always use this exact calculation
+const calculateCommission = (amountUSD: number, exchangeRate: number) => {
+  const totalCommissionRate = 0.10; // 10% total
+  const baseAmountRUB = amountUSD * exchangeRate;
+  const totalAmountRUB = baseAmountRUB / (1 - totalCommissionRate);
+  const paydigitalFeeRUB = totalAmountRUB * 0.055; // 5.5%
+  const lootpayFeeRUB = totalAmountRUB * 0.045;   // 4.5%
+  
+  return {
+    baseAmountRUB,
+    totalAmountRUB,
+    paydigitalFeeRUB,
+    lootpayFeeRUB,
+    netAmountRUB: baseAmountRUB
+  };
+};
+```
+
+## PayDigital API Integration
+Base URL: `https://foreign.foreignpay.ru`
+
+### CRITICAL: Two-Phase Steam Validation
+**Important**: TransactionId can only be used ONCE. Call /steam/check twice:
+1. **Phase 1**: Username validation (user experience)
+2. **Phase 2**: Payment preparation (fresh transactionId)
+
+### Steam Check Endpoint
+```typescript
+POST /steam/check
+Body: { "steamUsername": "string" }
+Response: { "transactionId": "string" } // Success
+
+// Usage:
+// 1st call: Validate username, show "Account found", DON'T store transactionId
+// 2nd call: Get fresh transactionId right before /steam/pay
+```
+
+### Steam Pay Endpoint  
+```typescript
+POST /steam/pay
+Headers: { "X-Partner-ID": "api_key" }
+Body: {
+  "steamUsername": "string",
+  "amount": number, // Total amount in RUB
+  "netAmount": number, // Net amount in RUB  
+  "currency": "RUB",
+  "transactionId": "string", // MUST be fresh from 2nd /steam/check call
+  "orderId": "string",
+  "directSuccess": false
+}
+Response: { "paymentUrl": "string" }
+
+// Error: "Транзакция с таким ID уже обработана" means transactionId was reused
+```
+
+## Error Handling Patterns
+```typescript
+// Always use this pattern for API calls
+try {
+  const response = await apiCall();
+  // Handle success
+} catch (error) {
+  logger.error('Operation failed', { error, context });
+  // Send user-friendly message from frontend-spec.md
+  // Store error for debugging
+}
+```
+
+## Required Bot Commands (Compliance)
+```typescript
+// MANDATORY: These commands are required for payment bot compliance
+
+// /start - Return to main menu
+bot.onText(/\/start/, async (msg) => {
+  await handleBotStart(msg.chat.id);
+});
+
+// /help - Show help information
+bot.onText(/\/help/, async (msg) => {
+  const helpText = `
+❓ Помощь по LootPay
+
+🎮 Основные команды:
+/start - Вернуться в главное меню
+/help - Показать эту справку
+/terms - Условия использования
+/support - Связаться с поддержкой
+
+💰 Как пополнить Steam:
+1. Нажмите "Пополнить Steam"
+2. Введите логин Steam аккаунта
+3. Выберите сумму пополнения
+4. Оплатите через СБП
+  `;
+  bot.sendMessage(msg.chat.id, helpText);
+});
+
+// /terms - Terms of service (REQUIRED for payment bots)
+bot.onText(/\/terms/, async (msg) => {
+  const termsText = `
+📄 Условия использования LootPay
+
+1. КОМИССИЯ: 10% от суммы пополнения
+2. ВОЗВРАТ: Возможен в течение 24 часов при технических сбоях
+3. ОТВЕТСТВЕННОСТЬ: Пользователь отвечает за правильность Steam логина
+4. ПОДДЕРЖКА: @lootpay_support
+
+Полная версия: https://lootpay.ru/terms
+  `;
+  bot.sendMessage(msg.chat.id, termsText);
+});
+
+// /support - Support contact (REQUIRED for payment bots)
+bot.onText(/\/support/, async (msg) => {
+  const supportText = `
+🛠 Поддержка LootPay
+
+📞 Связаться с нами:
+@lootpay_support - Telegram
+support@lootpay.ru - Email
+
+⏰ Время работы: 24/7
+📱 Среднее время ответа: 15 минут
+  `;
+  bot.sendMessage(msg.chat.id, supportText, {
+    reply_markup: {
+      inline_keyboard: [[
+        { text: '📞 Написать в поддержку', url: 'https://t.me/lootpay_support' }
+      ]]
+    }
+  });
+});
+```
+
+## Russian Locale Formatting
+```typescript
+// CRITICAL: All amounts and dates must use Russian formatting
+
+// Currency formatting
+const formatRussianCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('ru-RU', {
+    style: 'currency',
+    currency: 'RUB',
+    minimumFractionDigits: 2
+  }).format(amount);
+};
+
+// Moscow timezone handling
+const formatMoscowTime = (date: Date): string => {
+  return date.toLocaleString('ru-RU', {
+    timeZone: 'Europe/Moscow',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
+
+// Example usage:
+// {amount_rub} -> formatRussianCurrency(802.40) -> "802,40 ₽"
+// {formatted_date} -> formatMoscowTime(new Date()) -> "01.06.2025, 15:30"
+```
+
+## Testing Requirements
+- Test all commission calculations with edge cases
+- Test PayDigital API integration with mock responses
+- Test complete user flows end-to-end
+- Test error scenarios and recovery
+- Aim for >70% coverage on critical business logic
+
+## Environment Variables Required
+```bash
+TELEGRAM_BOT_TOKEN=         # Bot token from @BotFather
+TELEGRAM_WEBHOOK_URL=       # Webhook URL for production
+TELEGRAM_WEBHOOK_SECRET=    # Generated secret for webhook security
+
+PAYDIGITAL_API_KEY=         # PayDigital partner ID
+PAYDIGITAL_WEBHOOK_SECRET=  # PayDigital webhook verification secret
+
+DATABASE_URL=               # PostgreSQL connection string (Supabase)
+SUPABASE_URL=               # Supabase project URL
+SUPABASE_ANON_KEY=          # Supabase anon key
+NODE_ENV=                   # development/production
+PORT=                       # Express server port
+LOG_LEVEL=                  # Winston log level
+
+# Support configuration
+SUPPORT_CHAT_ID=@lootpay_support  # Support Telegram username
+SUPPORT_EMAIL=support@lootpay.ru  # Support email
+
+# Exchange rate fallback
+EXCHANGE_RATE_API_KEY=      # Optional for fallback API
+DEFAULT_USD_RUB_RATE=80.0   # Emergency fallback rate
+```
+
+## Common Commands
+
+### Development
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Compile TypeScript
+- `npm run test` - Run Jest tests
+- `npm run migrate` - Run database migrations
+
+### Database
+- `npm run migrate:make name` - Create new migration
+- `npm run migrate:rollback` - Rollback last migration
+
+## MVP Success Criteria
+Focus on these metrics only:
+- Bot responds to all commands within 3 seconds
+- Payment success rate >95%
+- All financial transactions logged correctly
+- 50+ completed transactions in first 30 days
+
+## What NOT to implement in MVP
+- Advanced analytics dashboards
+- Complex error recovery mechanisms
+- Performance optimizations
+- Redis caching
+- Advanced monitoring
+- Microservices architecture
+- Multiple payment providers
+- Advanced user analytics
+
+Remember: This is an MVP for market validation. Ship fast, measure user behavior, then optimize based on real data.

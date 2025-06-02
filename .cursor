@@ -1,0 +1,133 @@
+# Cursor IDE Configuration for LootPay Project
+
+## Recommended Extensions
+- **Telegram Bot API**: For Telegram bot development
+- **Node.js Extension Pack**: Complete Node.js development environment
+- **TypeScript**: TypeScript language support
+- **REST Client**: API testing and development
+- **GitLens**: Git integration and history
+- **MySQL**: Database management and querying
+- **Redis**: Redis database support
+- **Docker**: Container management
+- **Jest**: Testing framework support
+- **Prettier**: Code formatting
+- **ESLint**: Code linting and quality
+
+## Workspace Settings
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.env": false,
+    "**/coverage": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/coverage": true
+  },
+  "editor.rulers": [80, 120],
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true
+}
+```
+
+## Project Context
+This is a Telegram bot project for Steam wallet funding services targeting the Russian market.
+
+### Key Technologies
+- **Backend**: Node.js with TypeScript and Express.js
+- **Database**: MySQL with Redis caching
+- **Bot Framework**: node-telegram-bot-api
+- **Payment Integration**: PayDigital.shop API
+- **Testing**: Jest with comprehensive test coverage
+- **Deployment**: Railway platform
+
+### Development Workflow
+1. **Local Development**: Use `npm run dev` for hot reloading
+2. **Testing**: Run `npm test` for unit tests, `npm run test:coverage` for coverage
+3. **Code Quality**: Use `npm run lint` and `npm run format` for code quality
+4. **Database**: Use `npm run migrate` for database migrations
+5. **Docker**: Use `npm run docker:up` for local containerized development
+
+### Important Files and Directories
+- `src/`: Main source code directory
+- `src/bot/`: Telegram bot handlers and interface logic
+- `src/api/`: External API integrations (PayDigital)
+- `src/services/`: Core business logic and services
+- `src/database/`: Database models, migrations, and seeds
+- `src/types/`: TypeScript type definitions
+- `tests/`: Test files and test utilities
+- `docs/`: Additional documentation and specifications
+
+### Environment Variables
+Create a `.env` file with the following variables:
+```
+NODE_ENV=development
+PORT=3000
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+PAYDIGITAL_API_KEY=your_paydigital_api_key
+PAYDIGITAL_WEBHOOK_SECRET=your_webhook_secret
+DATABASE_URL=mysql://user:password@localhost:3306/lootpay_dev
+REDIS_URL=redis://localhost:6379
+ENCRYPTION_KEY=your_encryption_key_32_chars
+JWT_SECRET=your_jwt_secret
+```
+
+### Common Commands
+- `npm run dev`: Start development server with hot reload
+- `npm run build`: Build TypeScript to JavaScript
+- `npm start`: Start production server
+- `npm test`: Run all tests
+- `npm run lint`: Check code quality
+- `npm run typecheck`: Check TypeScript types
+- `npm run migrate`: Run database migrations
+- `docker-compose up -d`: Start local database services
+
+### Debugging Configuration
+```json
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Launch Program",
+  "skipFiles": ["<node_internals>/**"],
+  "program": "${workspaceFolder}/src/index.ts",
+  "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+  "envFile": "${workspaceFolder}/.env",
+  "runtimeArgs": ["-r", "ts-node/register"]
+}
+```
+
+## Code Style Guidelines
+- Use TypeScript for all new code
+- Follow ESLint and Prettier configurations
+- Write comprehensive tests for business logic
+- Use descriptive variable and function names
+- Add JSDoc comments for public APIs
+- Follow RESTful API design principles
+- Implement proper error handling and logging
+
+## Git Workflow
+- Use feature branches for development
+- Write descriptive commit messages
+- Include tests with new features
+- Update documentation as needed
+- Use conventional commit format
+
+## Security Considerations
+- Never commit sensitive data (.env files)
+- Use environment variables for all secrets
+- Implement proper input validation
+- Follow security best practices for APIs
+- Regular dependency updates and security audits
