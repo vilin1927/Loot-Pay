@@ -2,7 +2,7 @@ import knex from 'knex';
 import { logger } from '../utils/logger';
 
 // Initialize Knex with PostgreSQL
-export const db = knex({
+const db = knex({
   client: 'pg',
   connection: process.env.DATABASE_URL,
   pool: {
@@ -20,4 +20,7 @@ export async function testConnection() {
     logger.error('Database connection failed', { error });
     throw error;
   }
-} 
+}
+
+// Export both the db instance and knex
+export { db, knex }; 

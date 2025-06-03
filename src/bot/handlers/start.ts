@@ -11,6 +11,9 @@ import { handlePaymentConfirmation } from '../flows/paymentConfirmation';
 import { formatRussianCurrency } from '../../utils/locale';
 import { findOrCreateUser } from '../../services/user/userService';
 import { sendQuestion } from '../flows/questionnaire/questionnaireHandler';
+import { Message } from 'node-telegram-bot-api';
+import { getBotInstance } from '../botInstance';
+import { getSystemSetting } from '../../services/settings/settingsService';
 
 const MIN_AMOUNT_USD = 5;
 const MIN_AMOUNT_RUB = formatRussianCurrency(MIN_AMOUNT_USD * 80); // Using default exchange rate for MVP
@@ -18,22 +21,27 @@ const MIN_AMOUNT_RUB = formatRussianCurrency(MIN_AMOUNT_USD * 80); // Using defa
 // Messages
 const WELCOME_MESSAGE = `Привет, это 🎮 LootPay!
 Бот для быстрого и надёжного пополнения Steam кошелька
+
 Знакомо? Было?
 ⏳ Всего 5 минут, и баланс в Steam пополнен…
-😤 А вместо этого — долгие ожидания, скрытые наценки и тревога, что средства не дойдут.
+😤 А вместо этого — долгие ожидания, скрытые наценки и тревога, что средства не дойдут. 
+
 ✨ С  LootPay такого не будет ✨
 ⋯⋯⋯⋯⋯⋯⋯⋯
 Пополняй Steam за 15 минут
 с удобной оплатой, честным курсом и без риска быть обманутым ⏱️
-🔹 Минимальная и прозрачная комиссия 10% — без скрытых наценок
-🔹 Гарантия возврата при сбоях
+
+🔹 Минимальная и прозрачная комиссия **10%** — без скрытых наценок 
+🔹 Гарантия возврата при сбоях 
 🔹 Поддержка 24/7
 ⋯⋯⋯⋯⋯⋯⋯⋯
 💳 Автоматическое зачисление от ${MIN_AMOUNT_RUB} / ${MIN_AMOUNT_USD} USD — любые РФ-карты или СБП
+
 🔸 Как это работает?
-1️⃣ Запусти бота, включи уведомления, введи Steam ID
-2️⃣ Выбери сумму и оплати через СБП
-3️⃣ Получи уведомление о зачислении 🎉
+1️⃣ Запусти бота, включи уведомления, введи Steam ID 
+2️⃣ Выбери сумму и оплати через СБП 
+3️⃣ Получи уведомление о зачислении 🎉 
+
 Пополняй без риска и обмана — вместе с 🎮 LootPay!`;
 
 const FIRST_QUESTION = `📋 Давайте познакомимся! Ответьте на 3 быстрых вопроса, чтобы мы могли лучше вас понимать.
@@ -84,49 +92,93 @@ const CONTINUE_BUTTONS = [
 /**
  * Handle /start command
  */
-export async function handleStart(
-  bot: TelegramBot,
-  chatId: number,
-  userId: number,
-  userInfo: {
-    username?: string;
-    first_name?: string;
-    last_name?: string;
-  }
-): Promise<void> {
+export async function handleStartCommand(msg: Message) {
   try {
-    // First, ensure user exists in database
-    const user = await findOrCreateUser({
-      id: userId,
-      username: userInfo.username,
-      first_name: userInfo.first_name,
-      last_name: userInfo.last_name
-    });
-
-    if (!user) {
-      throw new Error('Failed to create or find user');
+    const telegramId = msg.from?.id;
+    if (!telegramId) {
+      logger.warn('Received /start without user ID');
+      return;
     }
 
-    // Clear any existing state using database user.id
-    await clearState(user.id);
-
-    // Send welcome message with main menu buttons
-    await bot.sendMessage(chatId, WELCOME_MESSAGE, {
-      reply_markup: {
-        inline_keyboard: MAIN_MENU_BUTTONS
-      }
+    // Register or get user
+    const user = await findOrCreateUser({
+      id: telegramId,
+      username: msg.from?.username,
+      first_name: msg.from?.first_name,
+      last_name: msg.from?.last_name
     });
 
-    logger.info('Start command handled', { 
-      userId,
-      databaseUserId: user.id 
+    // Get bot instance
+    const bot = await getBotInstance();
+
+    // Get minimum amounts from system settings
+    const minAmountRUB = await getSystemSetting('min_amount_rub') || '500';
+    const minAmountUSD = await getSystemSetting('min_amount_usd') || '5';
+
+    // Welcome message with inline keyboard
+    const welcomeMessage = `Привет, это 🎮 LootPay!
+Бот для быстрого и надёжного пополнения Steam кошелька
+
+Знакомо? Было?
+⏳ Всего 5 минут, и баланс в Steam пополнен…
+😤 А вместо этого — долгие ожидания, скрытые наценки и тревога, что средства не дойдут. 
+
+✨ С  LootPay такого не будет ✨
+⋯⋯⋯⋯⋯⋯⋯⋯
+Пополняй Steam за 15 минут
+с удобной оплатой, честным курсом и без риска быть обманутым ⏱️
+
+🔹 Минимальная и прозрачная комиссия **10%** — без скрытых наценок 
+🔹 Гарантия возврата при сбоях 
+🔹 Поддержка 24/7
+⋯⋯⋯⋯⋯⋯⋯⋯
+💳 Автоматическое зачисление от ${minAmountRUB} ₽ / ${minAmountUSD} USD — любые РФ-карты или СБП
+
+🔸 Как это работает?
+1️⃣ Запусти бота, включи уведомления, введи Steam ID 
+2️⃣ Выбери сумму и оплати через СБП 
+3️⃣ Получи уведомление о зачислении 🎉 
+
+Пополняй без риска и обмана — вместе с 🎮 LootPay!`;
+
+    const keyboard = {
+      inline_keyboard: [
+        [
+          { text: '💰 Пополнить Steam', callback_data: 'fund_steam' },
+          { text: '📊 История пополнений', callback_data: 'my_transactions' }
+        ],
+        [
+          { text: '❓ Поддержка', callback_data: 'support' },
+          { text: '📄 О нас / Оферта/ FAQ', callback_data: 'about' }
+        ]
+      ]
+    };
+
+    await bot.sendMessage(msg.chat.id, welcomeMessage, {
+      parse_mode: 'Markdown',
+      reply_markup: keyboard
     });
+
+    logger.info('Start command handled', {
+      telegramId,
+      userId: user.id,
+      username: user.username
+    });
+
   } catch (error) {
     logger.error('Error handling start command', {
       error,
-      userId
+      telegramId: msg.from?.id
     });
-    await handleError(chatId, error as Error);
+    
+    // Get bot instance for error message
+    const bot = await getBotInstance();
+    
+    // Send error message to user
+    await bot.sendMessage(
+      msg.chat.id,
+      '😔 Произошла ошибка. Пожалуйста, попробуйте позже или обратитесь в поддержку.'
+    );
   }
 }
 
@@ -196,11 +248,7 @@ export async function handleContinueFlow(
       default:
         // Clear invalid state
         await clearState(userId);
-        await handleStart(bot, chatId, userId, {
-          username: undefined,
-          first_name: undefined,
-          last_name: undefined
-        });
+        await handleStartCommand({ chat: { id: chatId }, from: { id: userId } } as Message);
     }
 
     logger.info('Flow continued', {
@@ -216,11 +264,7 @@ export async function handleContinueFlow(
 
     // Clear state and show main menu
     await clearState(userId);
-    await handleStart(bot, chatId, userId, {
-      username: undefined,
-      first_name: undefined,
-      last_name: undefined
-    });
+    await handleStartCommand({ chat: { id: chatId }, from: { id: userId } } as Message);
   }
 }
 
@@ -258,6 +302,68 @@ export async function handleRestartFlow(
     // Send error message
     await bot.sendMessage(
       chatId,
+      '😔 Произошла ошибка. Пожалуйста, попробуйте позже или обратитесь в поддержку.'
+    );
+  }
+}
+
+/**
+ * Handle invalid state by clearing it and showing main menu
+ */
+export async function handleInvalidState(msg: Message): Promise<void> {
+  try {
+    const telegramId = msg.from?.id;
+    if (!telegramId) {
+      logger.warn('Received invalid state without user ID');
+      return;
+    }
+
+    // Clear invalid state
+    await clearState(telegramId);
+    await handleStartCommand(msg);
+  } catch (error) {
+    logger.error('Error handling invalid state', {
+      error,
+      telegramId: msg.from?.id
+    });
+    
+    // Get bot instance for error message
+    const bot = await getBotInstance();
+    
+    // Send error message to user
+    await bot.sendMessage(
+      msg.chat.id,
+      '😔 Произошла ошибка. Пожалуйста, попробуйте позже или обратитесь в поддержку.'
+    );
+  }
+}
+
+/**
+ * Handle expired state by clearing it and showing main menu
+ */
+export async function handleExpiredState(msg: Message): Promise<void> {
+  try {
+    const telegramId = msg.from?.id;
+    if (!telegramId) {
+      logger.warn('Received expired state without user ID');
+      return;
+    }
+
+    // Clear state and show main menu
+    await clearState(telegramId);
+    await handleStartCommand(msg);
+  } catch (error) {
+    logger.error('Error handling expired state', {
+      error,
+      telegramId: msg.from?.id
+    });
+    
+    // Get bot instance for error message
+    const bot = await getBotInstance();
+    
+    // Send error message to user
+    await bot.sendMessage(
+      msg.chat.id,
       '😔 Произошла ошибка. Пожалуйста, попробуйте позже или обратитесь в поддержку.'
     );
   }

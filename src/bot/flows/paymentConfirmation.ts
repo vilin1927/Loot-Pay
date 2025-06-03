@@ -1,27 +1,26 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../utils/logger';
 import { getState, setState } from '../../services/state/stateService';
-import { createSteamPayment } from '../../services/paydigital/paydigitalService';
+import { payDigitalService } from '../../services/paydigital/paydigitalService';
 import { handleSteamUsernameRequest } from './steamUsername';
 import { handleAmountSelection } from './amountSelection';
+import { formatRussianCurrency } from '../../utils/locale';
 
-const PAYMENT_ERROR = `
-❌ Ошибка при создании платежа
+const PAYMENT_ERROR = `🚫 Произошла ошибка при создании оплаты.
 
-Пожалуйста, попробуйте позже или обратитесь в поддержку.
-`;
+Пожалуйста, попробуйте ещё раз чуть позже. 
+Если проблема повторяется — обратитесь в поддержку.`;
 
 // Payment confirmation message
-const PAYMENT_CONFIRMATION_MESSAGE = `
-💳 Подтверждение платежа
+const PAYMENT_DETAILS = (username: string, amountUSD: number, amountRUB: number) => `🔎 Проверь данные перед оплатой:
 
-👤 Steam аккаунт: {steam_username}
-💰 Сумма пополнения: {amount_usd}$ ({amount_rub} ₽)
-💸 Комиссия: {commission_rub} ₽
-💵 Итого к оплате: {total_rub} ₽
+🧾 Услуга: Пополнение Steam 
+👤 Аккаунт: ${username}
+💵 Сумма: ${amountUSD} USD (≈${formatRussianCurrency(amountRUB)}) — **комиссия 10% уже включена**
 
-Нажмите "Оплатить" для перехода к оплате через СБП.
-`;
+❗️Пожалуйста, убедитесь, что логин и сумма указаны верно. 
+В случае ошибки средства могут уйти другому пользователю.
+Если всё правильно — выберите способ оплаты ниже 👇`;
 
 // Handle payment confirmation
 export async function handlePaymentConfirmation(
@@ -39,10 +38,11 @@ export async function handlePaymentConfirmation(
     const { steamUsername, amountUSD, totalAmountRUB } = state.state_data;
 
     // Create payment
-    const paymentUrl = await createSteamPayment(
+    const paymentUrl = await payDigitalService.createSteamPayment(
       steamUsername,
       amountUSD,
-      totalAmountRUB
+      totalAmountRUB,
+      `order_${Date.now()}`
     );
 
     // Update state
@@ -51,15 +51,22 @@ export async function handlePaymentConfirmation(
       paymentUrl
     });
 
-    // Send payment link
+    // Send payment confirmation
     await bot.sendMessage(
       chatId,
-      `💳 Оплата: ${totalAmountRUB}₽\n\nНажмите кнопку ниже для оплаты:`,
+      PAYMENT_DETAILS(steamUsername, amountUSD, totalAmountRUB),
       {
+        parse_mode: 'Markdown',
         reply_markup: {
-          inline_keyboard: [[
-            { text: '💳 Оплатить', url: paymentUrl }
-          ]]
+          inline_keyboard: [
+            [
+              { text: `✅ Оплатить СБП [${formatRussianCurrency(totalAmountRUB)}]`, url: paymentUrl }
+            ],
+            [
+              { text: '🔁 Изменить логин', callback_data: 'steam_username' },
+              { text: '💵 Изменить сумму', callback_data: 'amount_custom' }
+            ]
+          ]
         }
       }
     );
@@ -76,24 +83,38 @@ export async function handlePaymentConfirmation(
       userId
     });
 
-    // Send error message
-    await bot.sendMessage(chatId, PAYMENT_ERROR);
+    // Send error message with buttons
+    await bot.sendMessage(chatId, PAYMENT_ERROR, {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: '🔁 Изменить логин', callback_data: 'steam_username' },
+            { text: '💵 Изменить сумму', callback_data: 'amount_custom' }
+          ],
+          [
+            { text: '❗️Поддержка', callback_data: 'support' }
+          ]
+        ]
+      }
+    });
     throw error;
   }
 }
 
 // Handle change Steam username
 export async function handleChangeSteam(
+  bot: TelegramBot,
   chatId: number,
   userId: number
 ) {
-  await handleSteamUsernameRequest(chatId, userId);
+  await handleSteamUsernameRequest(bot, chatId, userId);
 }
 
 // Handle change amount
 export async function handleChangeAmount(
+  bot: TelegramBot,
   chatId: number,
   userId: number
 ) {
-  await handleAmountSelection(chatId, userId);
+  await handleAmountSelection(bot, chatId, userId);
 } 

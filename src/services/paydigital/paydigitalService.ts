@@ -69,22 +69,24 @@ export class PayDigitalService {
   }
 
   /**
-   * Check if Steam username exists
+   * Phase 1: Validate Steam username (user experience)
+   * This is used to show "Account found" to the user
    * @param username Steam username to check
-   * @returns transactionId for future use
+   * @returns true if valid, false otherwise
    */
-  async checkSteam(username: string): Promise<string> {
+  async validateSteamUsername(username: string): Promise<boolean> {
     try {
       const response = await this.client.post<SteamCheckResponse>('/steam/check', {
         steamUsername: username
       });
 
-      logger.info('Steam username check successful', {
+      logger.info('Steam username validation successful', {
         username,
         transactionId: response.data.transactionId
       });
 
-      return response.data.transactionId;
+      // We don't store the transactionId from this call
+      return true;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const apiError = error.response?.data as PayDigitalError;
@@ -103,84 +105,93 @@ export class PayDigitalService {
       throw new Error('Ошибка проверки Steam логина. Пожалуйста, попробуйте позже.');
     }
   }
+
+  /**
+   * Phase 2: Get fresh transactionId for payment
+   * This is called right before creating the payment
+   * @param username Valid Steam username
+   * @returns transactionId for payment
+   */
+  async getPaymentTransactionId(username: string): Promise<string> {
+    try {
+      const response = await this.client.post<SteamCheckResponse>('/steam/check', {
+        steamUsername: username
+      });
+
+      logger.info('Got fresh transaction ID for payment', {
+        username,
+        transactionId: response.data.transactionId
+      });
+
+      return response.data.transactionId;
+    } catch (error) {
+      logger.error('Error getting payment transaction ID', {
+        error,
+        username
+      });
+      throw new Error('Ошибка подготовки платежа. Пожалуйста, попробуйте позже.');
+    }
+  }
+
+  /**
+   * Create Steam payment
+   * @param username Valid Steam username
+   * @param amountUSD Amount in USD
+   * @param amountRUB Total amount in RUB including commission
+   * @param orderId Unique order ID
+   * @returns Payment URL
+   */
+  async createSteamPayment(
+    username: string,
+    amountUSD: number,
+    amountRUB: number,
+    orderId: string
+  ): Promise<string> {
+    try {
+      // Phase 2: Get fresh transactionId right before payment
+      const transactionId = await this.getPaymentTransactionId(username);
+
+      // Create payment
+      const response = await this.client.post('/steam/pay', {
+        steamUsername: username,
+        amount: amountRUB,
+        netAmount: amountRUB,
+        currency: 'RUB',
+        transactionId,
+        orderId,
+        directSuccess: false
+      });
+
+      logger.info('Steam payment created', {
+        username,
+        amountUSD,
+        amountRUB,
+        orderId,
+        transactionId
+      });
+
+      return response.data.paymentUrl;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const apiError = error.response?.data as PayDigitalError;
+        
+        // Handle specific API errors
+        if (apiError?.code === 'TRANSACTION_USED') {
+          throw new Error('Ошибка создания платежа. Пожалуйста, попробуйте снова.');
+        }
+      }
+
+      logger.error('Error creating Steam payment', {
+        error,
+        username,
+        amountUSD,
+        amountRUB,
+        orderId
+      });
+      throw new Error('Ошибка создания платежа. Пожалуйста, попробуйте позже.');
+    }
+  }
 }
 
 // Export singleton instance
-export const payDigitalService = new PayDigitalService();
-
-const PAYDIGITAL_API_URL = 'https://foreign.foreignpay.ru';
-const PAYDIGITAL_API_KEY = process.env.PAYDIGITAL_API_KEY;
-
-// Initialize axios instance
-const api = axios.create({
-  baseURL: PAYDIGITAL_API_URL,
-  headers: {
-    'X-Partner-ID': PAYDIGITAL_API_KEY,
-    'Content-Type': 'application/json'
-  }
-});
-
-/**
- * Validate Steam username
- * @param username Steam username to validate
- * @returns true if valid, false otherwise
- */
-export async function validateSteamUsername(username: string): Promise<boolean> {
-  try {
-    const response = await api.post('/steam/check', {
-      steamUsername: username
-    });
-
-    // If we get a transactionId, the username is valid
-    return !!response.data.transactionId;
-  } catch (error) {
-    logger.error('Error validating Steam username', {
-      error,
-      username
-    });
-    return false;
-  }
-}
-
-/**
- * Create Steam payment
- * @param username Valid Steam username
- * @param amountUSD Amount in USD
- * @param amountRUB Total amount in RUB including commission
- * @returns Payment URL
- */
-export async function createSteamPayment(
-  username: string,
-  amountUSD: number,
-  amountRUB: number
-): Promise<string> {
-  try {
-    // Get fresh transactionId
-    const checkResponse = await api.post('/steam/check', {
-      steamUsername: username
-    });
-
-    const transactionId = checkResponse.data.transactionId;
-
-    // Create payment
-    const response = await api.post('/steam/pay', {
-      steamUsername: username,
-      amount: amountRUB,
-      netAmount: amountRUB,
-      currency: 'RUB',
-      transactionId,
-      orderId: `order_${Date.now()}`,
-      directSuccess: false
-    });
-
-    return response.data.paymentUrl;
-  } catch (error) {
-    logger.error('Error creating Steam payment', {
-      error,
-      username,
-      amountUSD,
-      amountRUB
-    });
-    throw error;
-  }
-} 
+export const payDigitalService = new PayDigitalService(); 

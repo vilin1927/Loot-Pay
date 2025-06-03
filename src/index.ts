@@ -27,7 +27,7 @@ app.post('/webhook', (req: Request, res: Response) => {
 });
 
 // Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', (_req: Request, res: Response) => {
   res.sendStatus(200);
 });
 

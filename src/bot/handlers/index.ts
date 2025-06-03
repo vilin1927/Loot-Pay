@@ -1,5 +1,5 @@
-import TelegramBot from 'node-telegram-bot-api';
-import { logger } from '../../utils/logger';
+import { Message } from 'node-telegram-bot-api';
+import { getBotInstance } from '../botInstance';
 import { handleStart } from './start';
 import { handleHelp } from './helpHandler';
 import { handleTerms } from './termsHandler';
@@ -19,16 +19,38 @@ export {
 };
 
 // Register command handlers
-export function registerCommandHandlers() {
+export async function registerCommandHandlers() {
+  const bot = await getBotInstance();
+  
   // Start command
-  bot.onText(/\/start/, handleStartCommand);
+  bot.onText(/\/start/, async (msg: Message) => {
+    if (msg.chat && msg.from) {
+      await handleStart(bot, msg.chat.id, msg.from.id, {
+        username: msg.from.username,
+        first_name: msg.from.first_name,
+        last_name: msg.from.last_name
+      });
+    }
+  });
   
   // Help command
-  bot.onText(/\/help/, handleHelpCommand);
+  bot.onText(/\/help/, async (msg: Message) => {
+    if (msg.chat) {
+      await handleHelp(bot, msg.chat.id);
+    }
+  });
 
   // Terms command
-  bot.onText(/\/terms/, handleTermsCommand);
+  bot.onText(/\/terms/, async (msg: Message) => {
+    if (msg.chat) {
+      await handleTerms(bot, msg.chat.id);
+    }
+  });
 
   // Support command
-  bot.onText(/\/support/, handleSupportCommand);
+  bot.onText(/\/support/, async (msg: Message) => {
+    if (msg.chat) {
+      await handleSupport(bot, msg.chat.id);
+    }
+  });
 } 

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { logger } from '../../utils/logger';
 import TelegramBot from 'node-telegram-bot-api';
-import { Message } from 'node-telegram-bot-api';
 import { getTransactionByOrderId, updateTransaction } from '../../services/transaction/transactionService';
 import { getUserByTelegramId } from '../../services/user/userService';
 import { formatRussianCurrency } from '../../utils/locale';
@@ -10,10 +9,11 @@ import { formatRussianCurrency } from '../../utils/locale';
 const PAYMENT_SUCCESS_MESSAGE = `
 ✅ Оплата успешно завершена!
 
-Сумма: {amount_rub} ₽
+Сумма: {amount_rub}
 Steam аккаунт: {steam_username}
 
 Средства будут зачислены в течение 5 минут.
+Если возникнут вопросы, обращайтесь в поддержку.
 `;
 
 const PAYMENT_FAILED_MESSAGE = `
@@ -27,7 +27,7 @@ const PAYMENT_FAILED_MESSAGE = `
 const PAYMENT_PENDING_MESSAGE = `
 ⏳ Ожидание подтверждения платежа
 
-Сумма: {amount_rub} ₽
+Сумма: {amount_rub}
 Steam аккаунт: {steam_username}
 
 Пожалуйста, подождите...
@@ -138,13 +138,14 @@ function getStatusMessage(
   }
 }
 
-export async function handleWebhook(req: Request, res: Response) {
+export async function handleWebhook(req: Request, res: Response): Promise<void> {
   try {
     // Verify webhook secret
     const secret = req.headers['x-telegram-bot-api-secret-token'];
     if (secret !== process.env.TELEGRAM_WEBHOOK_SECRET) {
       logger.warn('Invalid webhook secret', { secret });
-      return res.status(401).send('Unauthorized');
+      res.status(401).send('Unauthorized');
+      return;
     }
 
     // Process update
