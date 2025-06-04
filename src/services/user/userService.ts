@@ -27,44 +27,101 @@ interface UserUpdate {
 const userCache = new Map<number, { user: any; timestamp: number }>();
 const CACHE_TTL = 30000; // 30 seconds
 
-// Find or create a user
+// Mutex for preventing concurrent user creation
+const userCreationLocks = new Map<number, Promise<any>>();
+
+// Find or create a user with proper race condition handling and mutex
 export async function findOrCreateUser(telegramUser: TelegramUser) {
+  const telegramId = telegramUser.id;
+  
+  // Check if there's already a creation process running for this user
+  const existingLock = userCreationLocks.get(telegramId);
+  if (existingLock) {
+    logger.debug('Waiting for existing user creation process', { telegramId });
+    return await existingLock;
+  }
+
+  // Create a new promise for this user creation process
+  const creationPromise = performFindOrCreateUser(telegramUser);
+  userCreationLocks.set(telegramId, creationPromise);
+
+  try {
+    const result = await creationPromise;
+    return result;
+  } finally {
+    // Clean up the lock
+    userCreationLocks.delete(telegramId);
+  }
+}
+
+// Internal function that actually performs the find or create operation
+async function performFindOrCreateUser(telegramUser: TelegramUser) {
   try {
     const now = Date.now();
+    const telegramId = telegramUser.id;
     
     // Check cache first
-    const cached = userCache.get(telegramUser.id);
+    const cached = userCache.get(telegramId);
     if (cached && (now - cached.timestamp) < CACHE_TTL) {
-      logger.debug('Returning cached user', { telegramId: telegramUser.id });
+      logger.debug('Returning cached user', { telegramId });
       return cached.user;
     }
 
-    // Try to find existing user
+    // Try to find existing user first
     const existingUser = await db('users')
-      .where({ telegram_id: telegramUser.id })
+      .where({ telegram_id: telegramId })
       .first();
 
     if (existingUser) {
       // Cache the user
-      userCache.set(telegramUser.id, { user: existingUser, timestamp: now });
-      logger.debug('Found existing user', { telegramId: telegramUser.id });
+      userCache.set(telegramId, { user: existingUser, timestamp: now });
+      logger.debug('Found existing user', { telegramId });
       return existingUser;
     }
 
-    // Create new user
-    const [newUser] = await db('users')
-      .insert({
-        telegram_id: telegramUser.id,
-        username: telegramUser.username,
-        first_name: telegramUser.first_name,
-        last_name: telegramUser.last_name
-      })
-      .returning('*');
+    // Try to create new user with race condition handling
+    try {
+      const [newUser] = await db('users')
+        .insert({
+          telegram_id: telegramId,
+          username: telegramUser.username,
+          first_name: telegramUser.first_name,
+          last_name: telegramUser.last_name
+        })
+        .returning('*');
 
-    // Cache the new user
-    userCache.set(telegramUser.id, { user: newUser, timestamp: now });
-    logger.info('Created new user', { telegramId: telegramUser.id });
-    return newUser;
+      // Cache the new user
+      userCache.set(telegramId, { user: newUser, timestamp: now });
+      logger.info('Created new user', { telegramId });
+      return newUser;
+
+    } catch (insertError: any) {
+      // Handle unique constraint violation (race condition)
+      if (insertError.code === '23505' || insertError.constraint?.includes('telegram_id')) {
+        logger.debug('User creation race condition detected, fetching existing user', { 
+          telegramId,
+          error: insertError.message 
+        });
+        
+        // Another process created the user, fetch it
+        const existingUser = await db('users')
+          .where({ telegram_id: telegramId })
+          .first();
+
+        if (existingUser) {
+          // Cache the user
+          userCache.set(telegramId, { user: existingUser, timestamp: now });
+          return existingUser;
+        }
+        
+        // If still not found, something is seriously wrong
+        throw new Error(`User not found after race condition for telegram_id: ${telegramId}`);
+      }
+      
+      // Re-throw other errors
+      throw insertError;
+    }
+
   } catch (error) {
     logger.error('Error in findOrCreateUser', { error, telegramId: telegramUser.id });
     throw error;
