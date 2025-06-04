@@ -6,6 +6,8 @@ import { handleError } from '../../utils/errorHandler';
 import { findOrCreateUser } from '../../services/user/userService';
 import { setState, getState } from '../../services/state/stateService';
 import { showPaymentConfirmation } from '../flows/paymentConfirmation';
+import { createPayment } from '../../services/payment/paymentService';
+import { showTransactionHistory } from '../flows/transactionHistory';
 
 // Helper functions
 export async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: number, amount: number) {
@@ -95,8 +97,7 @@ export async function handleCallbackQuery(
 
       // Payment confirmation handlers
       case 'confirm_payment':
-        await bot.sendMessage(chatId, '🔄 Создаём платёж... (это пока временная заглушка)');
-        // TODO: Implement actual payment processing
+        await handlePaymentConfirmation(bot, chatId, userId);
         break;
 
       case 'steam_username':
@@ -106,8 +107,7 @@ export async function handleCallbackQuery(
 
       case 'show_history':
       case 'my_transactions':
-        // TODO: Implement history display
-        await bot.sendMessage(chatId, '📊 История пополнений будет доступна в ближайшее время');
+        await showTransactionHistory(bot, chatId, userId, 0);
         break;
 
       case 'show_support':
@@ -186,6 +186,11 @@ LootPay - это сервис для быстрого и безопасного 
         break;
 
       default:
+        if (data.startsWith('history_page_')) {
+          const page = parseInt(data.split('_')[2]);
+          await showTransactionHistory(bot, chatId, userId, page);
+          return;
+        }
         logger.warn('Unknown callback data', { data, telegramId, userId });
         break;
     }
@@ -207,5 +212,35 @@ LootPay - это сервис для быстрого и безопасного 
     if (query.message?.chat.id) {
       await handleError(query.message.chat.id, error as Error);
     }
+  }
+}
+
+async function handlePaymentConfirmation(bot: TelegramBot, chatId: number, userId: number) {
+  try {
+    await bot.sendMessage(chatId, '⏳ Создаем платеж...');
+
+    const state = await getState(userId);
+    if (!state?.state_data?.steamUsername || !state?.state_data?.amountUSD) {
+      throw new Error('Missing payment data');
+    }
+
+    const { steamUsername, amountUSD } = state.state_data;
+    
+    const payment = await createPayment(userId, steamUsername, amountUSD);
+
+    await bot.sendMessage(chatId, `💳 Платеж создан!
+
+🔗 Для оплаты нажмите кнопку ниже:`, {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: `💳 Оплатить ${payment.totalAmountRUB}₽`, url: payment.paymentUrl }],
+          [{ text: '🛠 Поддержка', callback_data: 'support' }]
+        ]
+      }
+    });
+
+  } catch (error) {
+    logger.error('Error in payment confirmation', { error, userId });
+    await bot.sendMessage(chatId, '❌ Ошибка создания платежа. Обратитесь в поддержку.');
   }
 } 

@@ -1,7 +1,7 @@
 import { getBotInstance } from '../botInstance';
 import { logger } from '../../utils/logger';
 import { getState, setState } from '../../services/state/stateService';
-import { createTransaction, updateTransaction } from '../../services/transaction/transactionService';
+import { createTransactionLegacy, updateTransaction } from '../../services/transaction/transactionService';
 import { payDigitalService } from '../../services/paydigital/paydigitalService';
 import { formatRussianCurrency } from '../../utils/locale';
 
@@ -50,7 +50,7 @@ export async function handleSbpPayment(
     });
 
     // Create transaction
-    const transaction = await createTransaction(userId, {
+    const transaction = await createTransactionLegacy(userId, {
       user_id: userId,
       steam_username: steamUsername,
       amount_usd: amountUSD,

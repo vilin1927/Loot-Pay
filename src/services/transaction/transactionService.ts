@@ -2,7 +2,17 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../database/connection';
 import { logger } from '../../utils/logger';
 
-// Transaction data interface
+// New interface as specified
+interface CreateTransactionData {
+  userId: number;
+  steamUsername: string;
+  amountUSD: number;
+  amountRUB: number;
+  totalAmountRUB: number;
+  exchangeRate: number;
+}
+
+// Existing transaction data interface
 interface TransactionData {
   user_id: number;
   steam_username: string;
@@ -29,9 +39,97 @@ interface TransactionUpdate {
 }
 
 /**
- * Create a new transaction
+ * Create a new transaction (new specification)
  */
-export async function createTransaction(
+export async function createTransaction(data: CreateTransactionData) {
+  try {
+    // Calculate commission from the total amount
+    const commissionRUB = data.totalAmountRUB - data.amountRUB;
+    
+    const [transaction] = await db('transactions')
+      .insert({
+        user_id: data.userId,
+        steam_username: data.steamUsername,
+        amount_usd: data.amountUSD,
+        amount_rub: data.amountRUB,
+        commission_rub: commissionRUB,
+        exchange_rate: data.exchangeRate,
+        status: 'pending',
+        sbp_payment_expires_at: new Date(Date.now() + 30 * 60 * 1000)
+      })
+      .returning('*');
+
+    logger.info('Transaction created', { transactionId: transaction.id });
+    return transaction;
+  } catch (error) {
+    logger.error('Error creating transaction', { error });
+    throw error;
+  }
+}
+
+/**
+ * Update transaction status (new specification)
+ */
+export async function updateTransactionStatus(
+  transactionId: string, 
+  status: string, 
+  externalPaymentId?: string,
+  paymentUrl?: string
+) {
+  try {
+    const updateData: any = { 
+      status,
+      ...(status === 'completed' && { completed_at: new Date() })
+    };
+    
+    // Map to actual database columns
+    if (externalPaymentId) updateData.sbp_payment_id = externalPaymentId;
+    if (paymentUrl) updateData.sbp_payment_url = paymentUrl;
+
+    const [transaction] = await db('transactions')
+      .where('id', transactionId)
+      .update(updateData)
+      .returning('*');
+
+    logger.info('Transaction updated', { transactionId, status });
+    return transaction;
+  } catch (error) {
+    logger.error('Error updating transaction', { error, transactionId });
+    throw error;
+  }
+}
+
+/**
+ * Get user transactions (updated specification)
+ */
+export async function getUserTransactions(userId: number, limit = 3, offset = 0) {
+  try {
+    const transactions = await db('transactions')
+      .where('user_id', userId)
+      .orderBy('created_at', 'desc')
+      .limit(limit)
+      .offset(offset);
+
+    const total = await db('transactions')
+      .where('user_id', userId)
+      .count('* as count')
+      .first();
+
+    return {
+      transactions,
+      total: Number(total?.count || 0),
+      hasMore: offset + limit < Number(total?.count || 0)
+    };
+  } catch (error) {
+    logger.error('Error getting user transactions', { error, userId });
+    throw error;
+  }
+}
+
+/**
+ * Create a new transaction (legacy interface for existing code)
+ */
+export async function createTransactionLegacy(
   userId: number,
   data: TransactionData
 ) {
@@ -70,7 +168,7 @@ export async function createTransaction(
 }
 
 /**
- * Update transaction details
+ * Update transaction details (legacy interface)
  */
 export async function updateTransaction(
   transactionId: number,
@@ -98,47 +196,6 @@ export async function updateTransaction(
       error,
       transactionId,
       updates
-    });
-    throw error;
-  }
-}
-
-/**
- * Get user's transactions
- */
-export async function getUserTransactions(
-  userId: number,
-  limit: number = 10,
-  offset: number = 0
-) {
-  try {
-    // Get transactions
-    const transactions = await db('transactions')
-      .where({ user_id: userId })
-      .orderBy('created_at', 'desc')
-      .limit(limit)
-      .offset(offset);
-
-    // Get total count
-    const [{ count }] = await db('transactions')
-      .where({ user_id: userId })
-      .count();
-
-    logger.info('User transactions retrieved', {
-      userId,
-      count: transactions.length,
-      total: count
-    });
-
-    return {
-      transactions,
-      total: Number(count)
-    };
-
-  } catch (error) {
-    logger.error('Error getting user transactions', {
-      error,
-      userId
     });
     throw error;
   }
