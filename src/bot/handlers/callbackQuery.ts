@@ -7,7 +7,7 @@ import { findOrCreateUser } from '../../services/user/userService';
 import { setState } from '../../services/state/stateService';
 
 // Helper functions
-async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: number, amount: number) {
+export async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: number, amount: number) {
   // Store amount in state and show payment confirmation
   await setState(userId, 'AMOUNT_SELECTED', { amountUSD: amount });
   
@@ -17,7 +17,7 @@ async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: nu
 
 async function handleCustomAmountPrompt(bot: TelegramBot, chatId: number, userId: number) {
   await bot.sendMessage(chatId, `💰 Введите сумму в USD (от 5 до 100):`);
-  await setState(userId, 'AMOUNT_SELECTION', {});
+  await setState(userId, 'AWAITING_CUSTOM_AMOUNT', {});
 }
 
 // Handle callback queries
