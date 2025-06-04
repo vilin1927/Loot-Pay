@@ -5,6 +5,7 @@ import { getTransactionByOrderId, updateTransaction } from '../../services/trans
 import { getUserByTelegramId } from '../../services/user/userService';
 import { formatRussianCurrency } from '../../utils/locale';
 import { processPaymentWebhook } from '../../services/webhook/webhookProcessor';
+import { getBotInstance } from '../botInstance';
 
 // Status messages
 const PAYMENT_SUCCESS_MESSAGE = `
@@ -161,8 +162,8 @@ export async function handleWebhook(req: Request, res: Response): Promise<void> 
       return;
     }
 
-    // Process Telegram update
-    const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!, { polling: false });
+    // Process Telegram update using the existing bot instance with registered handlers
+    const bot = await getBotInstance();
     await bot.processUpdate(req.body);
     res.sendStatus(200);
 
