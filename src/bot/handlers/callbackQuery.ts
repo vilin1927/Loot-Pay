@@ -1,9 +1,24 @@
-import TelegramBot from 'node-telegram-bot-api';
+import TelegramBot, { Message } from 'node-telegram-bot-api';
 import { logger } from '../../utils/logger';
 import { handleStartPayment } from './start';
 import { handleQuestionResponse } from '../flows/questionnaire/questionnaireHandler';
 import { handleError } from '../../utils/errorHandler';
 import { findOrCreateUser } from '../../services/user/userService';
+import { setState } from '../../services/state/stateService';
+
+// Helper functions
+async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: number, amount: number) {
+  // Store amount in state and show payment confirmation
+  await setState(userId, 'AMOUNT_SELECTED', { amountUSD: amount });
+  
+  // For now, just show confirmation message
+  await bot.sendMessage(chatId, `✅ Выбрана сумма: ${amount} USD\n🔄 Переходим к оплате...`);
+}
+
+async function handleCustomAmountPrompt(bot: TelegramBot, chatId: number, userId: number) {
+  await bot.sendMessage(chatId, `💰 Введите сумму в USD (от 5 до 100):`);
+  await setState(userId, 'AMOUNT_SELECTION', {});
+}
 
 // Handle callback queries
 export async function handleCallbackQuery(
@@ -53,6 +68,23 @@ export async function handleCallbackQuery(
       case 'start_payment':
       case 'fund_steam':
         await handleStartPayment(bot, chatId, userId);
+        break;
+
+      // Amount selection handlers
+      case 'amount_5':
+        await handleAmountSelected(bot, chatId, userId, 5);
+        break;
+      case 'amount_10':
+        await handleAmountSelected(bot, chatId, userId, 10);
+        break;
+      case 'amount_15':
+        await handleAmountSelected(bot, chatId, userId, 15);
+        break;
+      case 'amount_20':
+        await handleAmountSelected(bot, chatId, userId, 20);
+        break;
+      case 'amount_custom':
+        await handleCustomAmountPrompt(bot, chatId, userId);
         break;
 
       case 'show_history':
