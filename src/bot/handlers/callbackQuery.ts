@@ -51,17 +51,20 @@ export async function handleCallbackQuery(
     // Handle other button clicks
     switch (data) {
       case 'start_payment':
+      case 'fund_steam':
         await handleStartPayment(bot, chatId, userId);
         break;
 
       case 'show_history':
+      case 'my_transactions':
         // TODO: Implement history display
         await bot.sendMessage(chatId, '📊 История пополнений будет доступна в ближайшее время');
         break;
 
       case 'show_support':
+      case 'support':
         await bot.sendMessage(chatId, `
-🛠 Поддержка LootPay
+�� Поддержка LootPay
 
 📞 Связаться с нами:
 @lootpay_support - Telegram

@@ -1,4 +1,4 @@
-import { knex } from '../../database/connection';
+import { db } from '../../database/connection';
 import { logger } from '../../utils/logger';
 
 /**
@@ -8,7 +8,7 @@ import { logger } from '../../utils/logger';
  */
 export async function getSystemSetting(key: string): Promise<string | null> {
   try {
-    const setting = await knex('system_settings')
+    const setting = await db('system_settings')
       .where({ key })
       .select('value')
       .first();
@@ -30,7 +30,7 @@ export async function getSystemSetting(key: string): Promise<string | null> {
  */
 export async function setSystemSetting(key: string, value: string): Promise<void> {
   try {
-    await knex('system_settings')
+    await db('system_settings')
       .insert({ key, value })
       .onConflict('key')
       .merge();

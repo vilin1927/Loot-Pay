@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { knex } from '../../database/connection';
+import { db } from '../../database/connection';
 import { logger } from '../../utils/logger';
 
 // Transaction data interface
@@ -40,7 +40,7 @@ export async function createTransaction(
     const orderId = `LP-${uuidv4().slice(0, 8)}`;
 
     // Create transaction
-    const [transaction] = await knex('transactions')
+    const [transaction] = await db('transactions')
       .insert({
         ...data,
         paydigital_order_id: orderId,
@@ -78,7 +78,7 @@ export async function updateTransaction(
 ) {
   try {
     // Update transaction
-    const [transaction] = await knex('transactions')
+    const [transaction] = await db('transactions')
       .where({ id: transactionId })
       .update({
         ...updates,
@@ -113,14 +113,14 @@ export async function getUserTransactions(
 ) {
   try {
     // Get transactions
-    const transactions = await knex('transactions')
+    const transactions = await db('transactions')
       .where({ user_id: userId })
       .orderBy('created_at', 'desc')
       .limit(limit)
       .offset(offset);
 
     // Get total count
-    const [{ count }] = await knex('transactions')
+    const [{ count }] = await db('transactions')
       .where({ user_id: userId })
       .count();
 
@@ -149,7 +149,7 @@ export async function getUserTransactions(
  */
 export async function getTransaction(transactionId: number) {
   try {
-    const transaction = await knex('transactions')
+    const transaction = await db('transactions')
       .where({ id: transactionId })
       .first();
 
@@ -173,7 +173,7 @@ export async function getTransaction(transactionId: number) {
  */
 export async function getTransactionByOrderId(orderId: string) {
   try {
-    const transaction = await knex('transactions')
+    const transaction = await db('transactions')
       .where({ paydigital_order_id: orderId })
       .first();
 

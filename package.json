@@ -4,11 +4,14 @@
   "description": "Telegram bot for Steam wallet funding targeting Russian gamers",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "jest",
     "migrate": "knex migrate:latest",
-    "migrate:rollback": "knex migrate:rollback"
+    "migrate:make": "knex migrate:make",
+    "migrate:rollback": "knex migrate:rollback",
+    "railway-migrate": "npm run migrate && npm run start"
   },
   "keywords": [],
   "author": "",
