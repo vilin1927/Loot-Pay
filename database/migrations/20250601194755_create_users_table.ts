@@ -20,6 +20,10 @@ export async function up(knex: Knex): Promise<void> {
     table.jsonb('state_data').nullable();
     table.timestamp('state_expires_at').nullable();
 
+    // Questionnaire completion tracking
+    table.boolean('questionnaire_completed').defaultTo(false);
+    table.timestamp('questionnaire_completed_at').nullable();
+
     // Questionnaire responses
     table.string('gaming_frequency').nullable();
     table.string('payment_method').nullable();
