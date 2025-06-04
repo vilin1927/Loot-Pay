@@ -1,4 +1,4 @@
-import TelegramBot, { Message } from 'node-telegram-bot-api';
+import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../utils/logger';
 import { handleStartPayment } from './start';
 import { handleQuestionResponse } from '../flows/questionnaire/questionnaireHandler';
