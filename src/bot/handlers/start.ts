@@ -118,6 +118,9 @@ export async function handleStartCommand(msg: Message) {
   }
 }
 
+// Export alias for compatibility with other files
+export const handleStart = handleStartCommand;
+
 // Handle start payment button click
 export async function handleStartPayment(
   bot: TelegramBot,

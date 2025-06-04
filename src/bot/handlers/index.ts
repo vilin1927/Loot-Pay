@@ -25,11 +25,7 @@ export async function registerCommandHandlers() {
   // Start command
   bot.onText(/\/start/, async (msg: Message) => {
     if (msg.chat && msg.from) {
-      await handleStart(bot, msg.chat.id, msg.from.id, {
-        username: msg.from.username,
-        first_name: msg.from.first_name,
-        last_name: msg.from.last_name
-      });
+      await handleStart(msg);
     }
   });
   

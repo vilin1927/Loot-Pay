@@ -1,8 +1,7 @@
-import { Message } from 'node-telegram-bot-api';
-import bot from '../../../bot';
 import { logger } from '../../../utils/logger';
 import { setState } from '../../../services/state/stateService';
-import { db } from '../../../services/database/connection';
+import { db } from '../../../database/connection';
+import { getBotInstance } from '../../botInstance';
 
 // Completion message
 const COMPLETION_MESSAGE = `
@@ -37,6 +36,7 @@ export async function handleQuestionnaireCompletion(
     });
 
     // Send completion message
+    const bot = await getBotInstance();
     await bot.sendMessage(chatId, COMPLETION_MESSAGE);
 
     logger.info('Completed questionnaire', {
@@ -51,6 +51,7 @@ export async function handleQuestionnaireCompletion(
     });
 
     // Send error message
+    const bot = await getBotInstance();
     await bot.sendMessage(
       chatId,
       '😔 Произошла ошибка. Пожалуйста, попробуйте позже или обратитесь в поддержку.'

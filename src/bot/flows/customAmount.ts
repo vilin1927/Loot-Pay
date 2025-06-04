@@ -1,8 +1,6 @@
-import { Message } from 'node-telegram-bot-api';
-import bot from '../bot';
-import { logger } from '../utils/logger';
-import { setState } from '../services/state/stateService';
-import { handlePresetAmount } from './amountSelection';
+import { logger } from '../../utils/logger';
+import { setState } from '../../services/state/stateService';
+import { getBotInstance } from '../botInstance';
 
 // Amount limits
 const MIN_AMOUNT = 2;
@@ -60,12 +58,13 @@ export async function handleCustomAmountRequest(
   userId: number
 ) {
   try {
-    // Set state
-    await setState(userId, 'AWAITING_CUSTOM_AMOUNT', {
+    // Set state to amount selection
+    await setState(userId, 'AMOUNT_SELECTION', {
       started_at: new Date().toISOString()
     });
 
-    // Show message
+    // Get bot instance and show message
+    const bot = await getBotInstance();
     await bot.sendMessage(chatId, CUSTOM_AMOUNT_MESSAGE);
 
     logger.info('Custom amount requested', { userId });
@@ -77,6 +76,7 @@ export async function handleCustomAmountRequest(
     });
 
     // Send error message
+    const bot = await getBotInstance();
     await bot.sendMessage(
       chatId,
       '😔 Произошла ошибка. Пожалуйста, попробуйте позже или обратитесь в поддержку.'
@@ -91,6 +91,8 @@ export async function handleCustomAmountInput(
   input: string
 ) {
   try {
+    const bot = await getBotInstance();
+
     // Parse amount
     const amount = parseFloat(input);
 
@@ -120,8 +122,18 @@ export async function handleCustomAmountInput(
       return;
     }
 
-    // Process valid amount
-    await handlePresetAmount(chatId, userId, amount);
+    // Set amount and proceed to payment confirmation
+    await setState(userId, 'AMOUNT_SELECTED', { 
+      amountUSD: amount,
+      // TODO: Calculate total amount with commission
+      totalAmountRUB: amount * 90 // Placeholder exchange rate
+    });
+
+    // Send confirmation message
+    await bot.sendMessage(
+      chatId, 
+      `✅ Сумма ${amount} USD выбрана. Переходим к подтверждению платежа.`
+    );
 
     logger.info('Custom amount processed', {
       userId,
@@ -136,6 +148,7 @@ export async function handleCustomAmountInput(
     });
 
     // Send error message
+    const bot = await getBotInstance();
     await bot.sendMessage(
       chatId,
       '😔 Произошла ошибка. Пожалуйста, попробуйте позже или обратитесь в поддержку.'

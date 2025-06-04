@@ -1,9 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../utils/logger';
 import { setState } from '../../services/state/stateService';
-import { validateSteamUsername } from '../../services/paydigital/paydigitalService';
-import { handleAmountSelection } from './amountSelection';
-import { getBotInstance } from '../botInstance';
+import { payDigitalService } from '../../services/paydigital/paydigitalService';
 
 const STEAM_USERNAME_PROMPT = `🧩 Введите логин аккаунта Steam:
 ⚠️ *Внимание!* Пожалуйста, убедитесь, что логин введён правильно. Если вы допустите ошибку — средства могут уйти другому пользователю, и мы *не сможем вернуть деньги*. Проверьте логин дважды перед подтверждением!`;
@@ -37,6 +35,11 @@ const STEAM_USERNAME_SUCCESS = (username: string) => `✅ Аккаунт най�
 — Минимум: 5 USD 
 — Максимум: 100 USD
 Выберите один из вариантов ниже или введите свою сумму 👇`;
+
+// Export validateSteamUsername function
+export async function validateSteamUsername(username: string): Promise<boolean> {
+  return await payDigitalService.validateSteamUsername(username);
+}
 
 export async function handleSteamUsernameRequest(
   bot: TelegramBot,

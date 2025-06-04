@@ -1,4 +1,3 @@
-import { Message } from 'node-telegram-bot-api';
 import { getBotInstance } from '../botInstance';
 import { logger } from '../../utils/logger';
 import { getUserTransactions } from '../../services/transaction/transactionService';
