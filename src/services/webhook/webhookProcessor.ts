@@ -17,7 +17,7 @@ interface InlineKeyboardButton {
 
 export async function processPaymentWebhook(payload: WebhookPayload) {
   try {
-    const { order_uuid, status, amount } = payload;
+    const { order_uuid, status } = payload;
 
     // Find transaction
     const transaction = await db('transactions')
