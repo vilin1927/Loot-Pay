@@ -76,24 +76,49 @@ export class PayDigitalService {
    */
   async validateSteamUsername(username: string): Promise<boolean> {
     try {
-      const response = await this.client.post<SteamCheckResponse>('/steam/check', {
+      const response = await this.client.post<any>('/steam/check', {
         steamUsername: username
       });
+
+      // Check if PayDigital returned an error status
+      if (response.data.status === 'error') {
+        logger.info('Steam username validation failed - account not found', {
+          username,
+          message: response.data.message
+        });
+        return false;
+      }
+
+      // Check if response contains transactionId (success indicator)
+      if (!response.data.transactionId) {
+        logger.warn('Steam username validation - no transactionId in response', {
+          username,
+          responseData: response.data
+        });
+        return false;
+      }
 
       logger.info('Steam username validation successful', {
         username,
         transactionId: response.data.transactionId
       });
 
-      // We don't store the transactionId from this call
+      // We don't store the transactionId from this call (Phase 1)
       return true;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const apiError = error.response?.data as PayDigitalError;
         
+        logger.error('Steam username validation API error', {
+          username,
+          status: error.response?.status,
+          data: error.response?.data,
+          message: error.message
+        });
+        
         // Handle specific API errors
         if (apiError?.code === 'INVALID_USERNAME') {
-          throw new Error('Неверный Steam логин. Пожалуйста, проверьте и попробуйте снова.');
+          return false;
         }
 
         if (apiError?.code === 'RATE_LIMIT') {
@@ -101,7 +126,11 @@ export class PayDigitalService {
         }
       }
 
-      // Generic error
+      // For network errors or unknown API errors, throw exception
+      logger.error('Steam username validation network/unknown error', {
+        username,
+        error: error instanceof Error ? error.message : error
+      });
       throw new Error('Ошибка проверки Steam логина. Пожалуйста, попробуйте позже.');
     }
   }
