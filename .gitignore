@@ -1,13 +1,13 @@
 # Dependencies
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+*.lock
 
-# Environment
+# Environment variables
 .env
-.env.*
-!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Build output
 dist/
@@ -15,18 +15,42 @@ build/
 *.tsbuildinfo
 
 # Logs
-logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# IDE
-.idea/
+# IDE files
 .vscode/
+.idea/
 *.swp
 *.swo
+*~
 
-# OS
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+
+# Railway configuration (contains sensitive data)
+.railway-config.json
+railway.json
+railway.toml
+
+# Database
+*.sqlite
+*.db
+seeds/
+*.sql
+
+# Temporary files
+.tmp/
+temp/
+tmp/
 
 # Testing
 coverage/
@@ -36,12 +60,7 @@ coverage/
 *.pid
 bot.pid
 
-# Database
-*.sqlite
-*.sqlite3
-seeds/
-*.sql
-
-# Temporary files
-tmp/
-temp/ 
+# Runtime data
+pids
+*.pid.lock
+*.seed 

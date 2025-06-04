@@ -4,6 +4,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { getTransactionByOrderId, updateTransaction } from '../../services/transaction/transactionService';
 import { getUserByTelegramId } from '../../services/user/userService';
 import { formatRussianCurrency } from '../../utils/locale';
+import { processPaymentWebhook } from '../../services/webhook/webhookProcessor';
 
 // Status messages
 const PAYMENT_SUCCESS_MESSAGE = `
@@ -140,7 +141,19 @@ function getStatusMessage(
 
 export async function handleWebhook(req: Request, res: Response): Promise<void> {
   try {
-    // Verify webhook secret
+    const payload = req.body;
+    
+    logger.info('Webhook received', { payload });
+
+    // Check if this is a payment webhook from PayDigital
+    if (payload.order_uuid && payload.status) {
+      // Process the payment webhook
+      await processPaymentWebhook(payload);
+      res.status(200).json({ success: true });
+      return;
+    }
+
+    // Verify webhook secret for Telegram webhooks
     const secret = req.headers['x-telegram-bot-api-secret-token'];
     if (secret !== process.env.TELEGRAM_WEBHOOK_SECRET) {
       logger.warn('Invalid webhook secret', { secret });
@@ -148,19 +161,16 @@ export async function handleWebhook(req: Request, res: Response): Promise<void> 
       return;
     }
 
-    // Process update
+    // Process Telegram update
     const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!, { polling: false });
     await bot.processUpdate(req.body);
     res.sendStatus(200);
 
-    logger.info('Webhook processed', {
+    logger.info('Telegram webhook processed', {
       updateId: req.body.update_id
     });
   } catch (error) {
-    logger.error('Webhook error', {
-      error,
-      body: req.body
-    });
-    res.sendStatus(500);
+    logger.error('Webhook processing failed', { error });
+    res.status(500).json({ error: 'Webhook processing failed' });
   }
 } 
