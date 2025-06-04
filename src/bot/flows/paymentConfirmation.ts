@@ -126,8 +126,16 @@ export async function showPaymentConfirmation(
 ) {
   try {
     const state = await getState(userId);
-    if (!state?.state_data?.steamUsername || !state?.state_data?.amountUSD) {
-      throw new Error('Missing payment data');
+    if (!state?.state_data?.amountUSD) {
+      throw new Error('Missing amount data');
+    }
+
+    // Check if Steam username is set
+    if (!state.state_data.steamUsername) {
+      logger.info('Steam username missing, redirecting to Steam username flow', { userId });
+      await bot.sendMessage(chatId, '🎮 Сначала введите логин Steam аккаунта:');
+      await setState(userId, 'STEAM_USERNAME', { amountUSD: state.state_data.amountUSD });
+      return;
     }
 
     const { steamUsername, amountUSD } = state.state_data;
@@ -157,7 +165,14 @@ export async function showPaymentConfirmation(
 
     logger.info('Payment confirmation shown', { userId, steamUsername, amountUSD });
   } catch (error) {
-    logger.error('Error showing payment confirmation', { error, userId });
+    logger.error('Error showing payment confirmation', { 
+      error: error instanceof Error ? {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      } : error,
+      userId 
+    });
     await bot.sendMessage(chatId, '❌ Ошибка. Попробуйте снова.');
   }
 } 

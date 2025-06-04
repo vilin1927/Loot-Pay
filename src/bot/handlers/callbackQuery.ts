@@ -221,7 +221,7 @@ async function handlePaymentConfirmation(bot: TelegramBot, chatId: number, userI
 
     const state = await getState(userId);
     if (!state?.state_data?.steamUsername || !state?.state_data?.amountUSD) {
-      throw new Error('Missing payment data');
+      throw new Error(`Missing payment data: steamUsername=${!!state?.state_data?.steamUsername}, amountUSD=${!!state?.state_data?.amountUSD}`);
     }
 
     const { steamUsername, amountUSD } = state.state_data;
@@ -240,7 +240,14 @@ async function handlePaymentConfirmation(bot: TelegramBot, chatId: number, userI
     });
 
   } catch (error) {
-    logger.error('Error in payment confirmation', { error, userId });
+    logger.error('Error in payment confirmation', { 
+      error: error instanceof Error ? {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      } : error,
+      userId 
+    });
     await bot.sendMessage(chatId, '❌ Ошибка создания платежа. Обратитесь в поддержку.');
   }
 } 
