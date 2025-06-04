@@ -10,14 +10,53 @@ export const getBotInstance = async (): Promise<TelegramBot> => {
   if (!botInstance) {
     logger.info('Creating new bot instance');
 
-    botInstance = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!, {
-      polling: {
-        interval: 1000,
-        autoStart: false
-      }
-    });
+    const isWebhookMode = process.env.BOT_MODE === 'webhook' || process.env.NODE_ENV === 'production';
+    
+    if (isWebhookMode) {
+      // Webhook mode for production
+      botInstance = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!, {
+        polling: false
+      });
+      logger.info('Bot initialized in webhook mode');
+    } else {
+      // Polling mode for development
+      botInstance = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!, {
+        polling: {
+          interval: 1000,
+          autoStart: false
+        }
+      });
+      logger.info('Bot initialized in polling mode');
+    }
   }
   return botInstance;
+};
+
+/**
+ * Setup webhook for production
+ */
+export const setupWebhook = async () => {
+  const bot = await getBotInstance();
+  const webhookUrl = process.env.TELEGRAM_WEBHOOK_URL;
+  const webhookSecret = process.env.TELEGRAM_WEBHOOK_SECRET;
+
+  if (!webhookUrl) {
+    throw new Error('TELEGRAM_WEBHOOK_URL is required for webhook mode');
+  }
+
+  try {
+    logger.info('Setting up webhook', { url: webhookUrl });
+    
+    await bot.setWebHook(webhookUrl, {
+      secret_token: webhookSecret,
+      allowed_updates: ['message', 'callback_query']
+    });
+
+    logger.info('Webhook setup successful', { url: webhookUrl });
+  } catch (error) {
+    logger.error('Failed to setup webhook', { error });
+    throw error;
+  }
 };
 
 /**
@@ -38,9 +77,17 @@ export const killExistingBots = async () => {
 };
 
 /**
- * Start bot polling if not already polling
+ * Start bot polling if not already polling (development mode only)
  */
 export const startBotPolling = async () => {
+  const isWebhookMode = process.env.BOT_MODE === 'webhook' || process.env.NODE_ENV === 'production';
+  
+  if (isWebhookMode) {
+    logger.info('Production mode detected - setting up webhook instead of polling');
+    await setupWebhook();
+    return;
+  }
+
   const bot = await getBotInstance();
   
   if (!bot.isPolling()) {
