@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../utils/logger';
-import { handleStartPayment } from './start';
+import { handleStartPayment, handleStartCommand } from './start';
 import { handleQuestionResponse } from '../flows/questionnaire/questionnaireHandler';
 import { handleError } from '../../utils/errorHandler';
 import { findOrCreateUser } from '../../services/user/userService';
@@ -8,6 +8,7 @@ import { setState, getState } from '../../services/state/stateService';
 import { showPaymentConfirmation } from '../flows/paymentConfirmation';
 import { createPayment } from '../../services/payment/paymentService';
 import { showTransactionHistory } from '../flows/transactionHistory';
+import { Message } from 'node-telegram-bot-api';
 
 // Helper functions
 export async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: number, amount: number) {
@@ -131,8 +132,8 @@ support@lootpay.ru - Email
         break;
 
       case 'main_menu':
-        // Return user to main menu by calling start handler
-        await handleStartPayment(bot, chatId, userId);
+        // Return user to main menu - use start command for proper main menu
+        await handleStartCommand({ chat: { id: chatId }, from: { id: telegramId } } as Message);
         break;
 
       case 'steam_login_help':
@@ -170,6 +171,7 @@ support@lootpay.ru - Email
         break;
 
       case 'show_info':
+      case 'about':
         await bot.sendMessage(chatId, `
 📄 О LootPay
 

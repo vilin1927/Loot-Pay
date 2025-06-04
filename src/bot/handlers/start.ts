@@ -10,6 +10,7 @@ import { sendQuestion } from '../flows/questionnaire/questionnaireHandler';
 import { Message } from 'node-telegram-bot-api';
 import { getBotInstance } from '../botInstance';
 import { getSystemSetting } from '../../services/settings/settingsService';
+import { getUserById } from '../../services/user/userService';
 
 // Messages
 const MAIN_MENU_MESSAGE = `
@@ -85,7 +86,7 @@ export async function handleStartCommand(msg: Message) {
         ],
         [
           { text: '❓ Поддержка', callback_data: 'support' },
-          { text: '📄 О нас / Оферта/ FAQ', callback_data: 'about' }
+          { text: '📄 О нас / Оферта/ FAQ', callback_data: 'show_info' }
         ]
       ]
     };
@@ -128,14 +129,25 @@ export async function handleStartPayment(
   userId: number
 ): Promise<void> {
   try {
-    // Start with first question
-    await sendQuestion(bot, chatId, userId, 1);
+    // Check if user completed questionnaire
+    const user = await getUserById(userId);
+    
+    if (user.questionnaire_completed) {
+      // Returning user - skip to Steam username
+      logger.info('Returning user, skipping questionnaire', { userId });
+      await handleSteamUsernameRequest(bot, chatId, userId);
+    } else {
+      // New user - start questionnaire
+      logger.info('New user, starting questionnaire', { userId });
+      await sendQuestion(bot, chatId, userId, 1);
+    }
 
-    logger.info('Started questionnaire', {
-      userId
+    logger.info('Started payment flow', {
+      userId,
+      questionnaireCompleted: user.questionnaire_completed
     });
   } catch (error) {
-    logger.error('Error starting questionnaire', {
+    logger.error('Error starting payment flow', {
       error,
       userId
     });
