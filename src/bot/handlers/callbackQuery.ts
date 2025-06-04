@@ -64,7 +64,7 @@ export async function handleCallbackQuery(
       case 'show_support':
       case 'support':
         await bot.sendMessage(chatId, `
-�� Поддержка LootPay
+🛠 Поддержка LootPay
 
 📞 Связаться с нами:
 @lootpay_support - Telegram
@@ -76,6 +76,45 @@ support@lootpay.ru - Email
           reply_markup: {
             inline_keyboard: [[
               { text: '📞 Написать в поддержку', url: 'https://t.me/lootpay_support' }
+            ]]
+          }
+        });
+        break;
+
+      case 'main_menu':
+        // Return user to main menu by calling start handler
+        await handleStartPayment(bot, chatId, userId);
+        break;
+
+      case 'steam_login_help':
+        await bot.sendMessage(chatId, `
+🎮 Помощь с логином Steam
+
+📝 Как найти свой логин Steam:
+
+1️⃣ **Через клиент Steam:**
+   • Откройте Steam на компьютере
+   • Ваш логин указан в правом верхнем углу
+
+2️⃣ **Через браузер:**
+   • Зайдите на steamcommunity.com
+   • Ваш логин в URL: steamcommunity.com/id/ВАШ_ЛОГИН/
+
+3️⃣ **Примеры правильных логинов:**
+   • nickname123
+   • player_2024
+   • steam_user
+
+❌ **НЕ используйте:**
+   • Email адрес
+   • Отображаемое имя
+   • Телефон
+
+💡 **Совет:** Логин Steam - это уникальный идентификатор, который вы создали при регистрации
+        `, {
+          reply_markup: {
+            inline_keyboard: [[
+              { text: '🏠 Главное меню', callback_data: 'main_menu' }
             ]]
           }
         });
