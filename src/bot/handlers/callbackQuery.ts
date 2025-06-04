@@ -217,12 +217,20 @@ LootPay - это сервис для быстрого и безопасного 
 
 async function handlePaymentConfirmation(bot: TelegramBot, chatId: number, userId: number) {
   try {
-    await bot.sendMessage(chatId, '⏳ Создаем платеж...');
-
     const state = await getState(userId);
-    if (!state?.state_data?.steamUsername || !state?.state_data?.amountUSD) {
-      throw new Error(`Missing payment data: steamUsername=${!!state?.state_data?.steamUsername}, amountUSD=${!!state?.state_data?.amountUSD}`);
+    if (!state?.state_data?.amountUSD) {
+      throw new Error(`Missing amount data: amountUSD=${!!state?.state_data?.amountUSD}`);
     }
+
+    // Check if Steam username is set
+    if (!state.state_data.steamUsername) {
+      logger.info('Steam username missing in payment confirmation, redirecting to Steam username flow', { userId });
+      await bot.sendMessage(chatId, '🎮 Сначала введите логин Steam аккаунта:');
+      await setState(userId, 'STEAM_USERNAME', { amountUSD: state.state_data.amountUSD });
+      return;
+    }
+
+    await bot.sendMessage(chatId, '⏳ Создаем платеж...');
 
     const { steamUsername, amountUSD } = state.state_data;
     
