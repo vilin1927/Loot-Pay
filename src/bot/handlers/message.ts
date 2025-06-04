@@ -19,6 +19,12 @@ export async function handleMessage(
       return;
     }
 
+    // Skip messages that are bot commands (already handled by command handlers)
+    if (text.startsWith('/')) {
+      logger.debug('Skipping command message in general handler', { telegramId, text });
+      return;
+    }
+
     // Get or create user to get database user.id
     const user = await findOrCreateUser({
       id: telegramId,
@@ -32,6 +38,7 @@ export async function handleMessage(
     // Get user state
     const state = await getState(userId);
     if (!state) {
+      logger.debug('No state found for user message', { telegramId, userId, text });
       return;
     }
 

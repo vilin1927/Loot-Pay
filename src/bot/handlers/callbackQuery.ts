@@ -23,6 +23,11 @@ export async function handleCallbackQuery(
       throw new Error('Missing callback data');
     }
 
+    logger.debug('Processing callback query', { telegramId, data, queryId: query.id });
+
+    // Answer callback query immediately to prevent loading state
+    await bot.answerCallbackQuery(query.id);
+
     // Get or create user to get database user.id
     const user = await findOrCreateUser({
       id: telegramId,
@@ -39,6 +44,7 @@ export async function handleCallbackQuery(
       const questionNumber = parseInt(questionPart.substring(1)) as 1 | 2 | 3;
       
       await handleQuestionResponse(bot, chatId, userId, questionNumber, answer);
+      logger.info('Questionnaire response handled', { telegramId, userId, questionNumber, answer });
       return;
     }
 
@@ -89,14 +95,11 @@ LootPay - это сервис для быстрого и безопасного 
         break;
 
       default:
-        logger.warn('Unknown callback data', { data });
+        logger.warn('Unknown callback data', { data, telegramId, userId });
         break;
     }
 
-    // Answer callback query to remove loading state
-    await bot.answerCallbackQuery(query.id);
-
-    logger.info('Callback query handled', {
+    logger.info('Callback query handled successfully', {
       telegramId,
       userId,
       data
@@ -104,7 +107,11 @@ LootPay - это сервис для быстрого и безопасного 
   } catch (error) {
     logger.error('Error handling callback query', {
       error,
-      query
+      query: {
+        id: query.id,
+        data: query.data,
+        from: query.from?.id
+      }
     });
     if (query.message?.chat.id) {
       await handleError(query.message.chat.id, error as Error);

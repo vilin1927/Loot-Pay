@@ -23,15 +23,30 @@ interface UserUpdate {
   referral_source?: string;
 }
 
+// Simple cache to prevent repeated database queries
+const userCache = new Map<number, { user: any; timestamp: number }>();
+const CACHE_TTL = 30000; // 30 seconds
+
 // Find or create a user
 export async function findOrCreateUser(telegramUser: TelegramUser) {
   try {
+    const now = Date.now();
+    
+    // Check cache first
+    const cached = userCache.get(telegramUser.id);
+    if (cached && (now - cached.timestamp) < CACHE_TTL) {
+      logger.debug('Returning cached user', { telegramId: telegramUser.id });
+      return cached.user;
+    }
+
     // Try to find existing user
     const existingUser = await db('users')
       .where({ telegram_id: telegramUser.id })
       .first();
 
     if (existingUser) {
+      // Cache the user
+      userCache.set(telegramUser.id, { user: existingUser, timestamp: now });
       logger.debug('Found existing user', { telegramId: telegramUser.id });
       return existingUser;
     }
@@ -46,6 +61,8 @@ export async function findOrCreateUser(telegramUser: TelegramUser) {
       })
       .returning('*');
 
+    // Cache the new user
+    userCache.set(telegramUser.id, { user: newUser, timestamp: now });
     logger.info('Created new user', { telegramId: telegramUser.id });
     return newUser;
   } catch (error) {
@@ -54,7 +71,7 @@ export async function findOrCreateUser(telegramUser: TelegramUser) {
   }
 }
 
-// Update user
+// Clear user from cache when updated
 export async function updateUser(userId: number, updates: UserUpdate) {
   try {
     const [updatedUser] = await db('users')
@@ -64,6 +81,11 @@ export async function updateUser(userId: number, updates: UserUpdate) {
         updated_at: db.fn.now()
       })
       .returning('*');
+
+    // Clear cache for this user's telegram_id
+    if (updatedUser) {
+      userCache.delete(updatedUser.telegram_id);
+    }
 
     logger.info('Updated user', { userId, updates });
     return updatedUser;
@@ -111,4 +133,14 @@ export async function getUserByTelegramId(telegramId: number) {
     logger.error('Error in getUserByTelegramId', { error, telegramId });
     throw error;
   }
-} 
+}
+
+// Clean up expired cache entries periodically
+setInterval(() => {
+  const now = Date.now();
+  for (const [telegramId, cached] of userCache.entries()) {
+    if ((now - cached.timestamp) > CACHE_TTL) {
+      userCache.delete(telegramId);
+    }
+  }
+}, CACHE_TTL); 
