@@ -37,15 +37,21 @@ export const getBotInstance = async (): Promise<TelegramBot> => {
  */
 export const setupWebhook = async () => {
   const bot = await getBotInstance();
-  const webhookUrl = process.env.TELEGRAM_WEBHOOK_URL;
+  
+  // Construct webhook URL from Railway domain or fallback to manual setting
+  const railwayDomain = process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN;
+  const webhookUrl = railwayDomain 
+    ? `https://${railwayDomain}/webhook`
+    : process.env.TELEGRAM_WEBHOOK_URL;
+    
   const webhookSecret = process.env.TELEGRAM_WEBHOOK_SECRET;
 
   if (!webhookUrl) {
-    throw new Error('TELEGRAM_WEBHOOK_URL is required for webhook mode');
+    throw new Error('No webhook URL available - check RAILWAY_STATIC_URL or TELEGRAM_WEBHOOK_URL');
   }
 
   try {
-    logger.info('Setting up webhook', { url: webhookUrl });
+    logger.info('Setting up webhook', { url: webhookUrl, source: railwayDomain ? 'railway-domain' : 'manual-url' });
     
     await bot.setWebHook(webhookUrl, {
       secret_token: webhookSecret,
