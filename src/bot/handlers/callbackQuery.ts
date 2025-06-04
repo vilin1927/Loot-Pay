@@ -3,6 +3,7 @@ import { logger } from '../../utils/logger';
 import { handleStartPayment } from './start';
 import { handleQuestionResponse } from '../flows/questionnaire/questionnaireHandler';
 import { handleError } from '../../utils/errorHandler';
+import { findOrCreateUser } from '../../services/user/userService';
 
 // Handle callback queries
 export async function handleCallbackQuery(
@@ -15,12 +16,22 @@ export async function handleCallbackQuery(
     }
 
     const chatId = query.message.chat.id;
-    const userId = query.from.id;
+    const telegramId = query.from.id;
     const data = query.data;
 
     if (!data) {
       throw new Error('Missing callback data');
     }
+
+    // Get or create user to get database user.id
+    const user = await findOrCreateUser({
+      id: telegramId,
+      username: query.from?.username,
+      first_name: query.from?.first_name,
+      last_name: query.from?.last_name
+    });
+
+    const userId = user.id; // Use database user.id, not telegram_id
 
     // Handle questionnaire responses
     if (data.startsWith('q')) {
@@ -86,6 +97,7 @@ LootPay - это сервис для быстрого и безопасного 
     await bot.answerCallbackQuery(query.id);
 
     logger.info('Callback query handled', {
+      telegramId,
       userId,
       data
     });

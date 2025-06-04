@@ -1,8 +1,9 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../../utils/logger';
 import { setState, UserState } from '../../../services/state/stateService';
-import { saveResponse } from '../../../services/questionnaire/questionnaireService';
+import { saveResponse, ANSWER_TEXTS } from '../../../services/questionnaire/questionnaireService';
 import { getBotInstance } from '../../../bot/botInstance';
+import { db } from '../../../database/connection';
 
 const QUESTION = `❓ Мы делаем пополнение в USD для всех стран (кроме UK) — гуд?`;
 
@@ -38,16 +39,38 @@ export async function handleQuestion3(
 export async function handleQuestion3Answer(
   chatId: number,
   userId: number,
-  answer: string
+  answerCode: string
 ) {
   try {
     const bot = await getBotInstance();
-    await saveResponse(userId, 3, answer);
+    
+    // Get full answer text from callback data
+    const callbackData = `q3_${answerCode}`;
+    const answerText = ANSWER_TEXTS[callbackData as keyof typeof ANSWER_TEXTS];
+    
+    if (!answerText) {
+      throw new Error(`Unknown answer code: ${callbackData}`);
+    }
+
+    // Save response with full question and answer text
+    await saveResponse(userId, 3, QUESTION, answerText);
+    
+    // Update users table to mark questionnaire as completed
+    await db('users')
+      .where('id', userId)
+      .update({
+        questionnaire_completed: true,
+        questionnaire_completed_at: new Date()
+      });
+    
     await setState(userId, 'QUESTIONNAIRE_COMPLETE' as UserState, {
       completed: true,
       completed_at: new Date().toISOString()
     });
-    logger.info('Saved question 3 answer', { userId, answer });
+    
+    logger.info('Saved question 3 answer and completed questionnaire', { userId, answerText });
+    
+    // Send completion message according to PRD
     await bot.sendMessage(
       chatId,
       '🎉 Готово! Ты прошёл опрос — красавчик! Спасибо, что поделился своими предпочтениями 🙌 \nЭто поможет нам сделать LootPay ещё удобнее и полезнее для тебя.\n🔻 Теперь введи логин аккаунта Steam, который будем пополнять.\n⚠️ *Внимание!* Пожалуйста, убедитесь, что логин введён правильно.',
@@ -61,7 +84,7 @@ export async function handleQuestion3Answer(
       }
     );
   } catch (error) {
-    logger.error('Error handling question 3 answer', { error, userId, answer });
+    logger.error('Error handling question 3 answer', { error, userId, answerCode });
     const bot = await getBotInstance();
     await bot.sendMessage(
       chatId,

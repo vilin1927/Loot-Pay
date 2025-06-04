@@ -4,7 +4,21 @@ import { logger } from '../../utils/logger';
 // Question types
 export type QuestionNumber = 1 | 2 | 3;
 
-// Question data
+// Answer texts mapping for callback data
+export const ANSWER_TEXTS = {
+  'q1_games': '🎮 Игры — покупаю новинки и классику',
+  'q1_items': '✨ Внутриигровые штуки, кейсы, боевые пропуски',
+  'q1_other': '🧸 Другое — что-то ещё, не из этого',
+  'q1_none': '🧘 Вообще не трачу — просто сижу, не покупаю',
+  'q2_yes': '👍 Да, юзаю',
+  'q2_abandoned': '👌 Да, но забросил(а)',
+  'q2_no': '❌ Нет',
+  'q3_yes': '✅ Да, ок',
+  'q3_uk': '🇬🇧 Я из Британии',
+  'q3_no': '❌ Нет, не в тему'
+};
+
+// Question data according to PRD requirements
 export const QUESTIONS = {
   1: {
     text: "На что чаще всего тратишь деньги в Steam?",
@@ -16,30 +30,29 @@ export const QUESTIONS = {
     ]
   },
   2: {
-    text: "Как давно ты пользуешься Steam?",
+    text: "Пробовал(а) другие пополнялки?",
     options: [
-      { text: "🆕 Меньше года", value: "less_than_year" },
-      { text: "⏳ 1-3 года", value: "1_to_3_years" },
-      { text: "⏳ Больше 3 лет", value: "more_than_3_years" },
-      { text: "❓ Не помню", value: "dont_remember" }
+      { text: "👍 Да, юзаю", value: "yes" },
+      { text: "👌 Да, но забросил(а)", value: "abandoned" },
+      { text: "❌ Нет", value: "no" }
     ]
   },
   3: {
-    text: "Как часто ты пополняешь Steam?",
+    text: "Мы делаем пополнение в USD для всех стран (кроме UK) — гуд?",
     options: [
-      { text: "💰 Раз в неделю или чаще", value: "weekly" },
-      { text: "📅 Раз в месяц", value: "monthly" },
-      { text: "⏳ Раз в несколько месяцев", value: "few_months" },
-      { text: "❌ Никогда не пополнял", value: "never" }
+      { text: "✅ Да, ок", value: "yes" },
+      { text: "🇬🇧 Я из Британии", value: "uk" },
+      { text: "❌ Нет, не в тему", value: "no" }
     ]
   }
 } as const;
 
-// Save user response
+// Save user response - now accepts full question and answer text
 export async function saveResponse(
   userId: number,
   questionNumber: QuestionNumber,
-  answer: string
+  questionText: string,
+  answerText: string
 ) {
   try {
     // Upsert response
@@ -47,8 +60,8 @@ export async function saveResponse(
       .insert({
         user_id: userId,
         question_number: questionNumber,
-        question_text: QUESTIONS[questionNumber].text,
-        answer_text: answer
+        question_text: questionText,
+        answer_text: answerText
       })
       .onConflict(['user_id', 'question_number'])
       .merge()
@@ -57,7 +70,7 @@ export async function saveResponse(
     logger.info('Saved questionnaire response', {
       userId,
       questionNumber,
-      answer
+      answerText
     });
 
     return response;

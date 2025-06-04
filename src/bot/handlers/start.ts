@@ -1,57 +1,17 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../utils/logger';
-import { getState, setState, clearState } from '../../services/state/stateService';
-import { handleQuestion1 } from '../flows/questionnaire/question1';
-import { handleQuestion2 } from '../flows/questionnaire/question2';
-import { handleQuestion3 } from '../flows/questionnaire/question3';
+import { getState, clearState } from '../../services/state/stateService';
 import { handleError } from '../../utils/errorHandler';
 import { handleSteamUsernameRequest } from '../flows/steamUsername';
 import { handleAmountSelection } from '../flows/amountSelection';
 import { handlePaymentConfirmation } from '../flows/paymentConfirmation';
-import { formatRussianCurrency } from '../../utils/locale';
 import { findOrCreateUser } from '../../services/user/userService';
 import { sendQuestion } from '../flows/questionnaire/questionnaireHandler';
 import { Message } from 'node-telegram-bot-api';
 import { getBotInstance } from '../botInstance';
 import { getSystemSetting } from '../../services/settings/settingsService';
 
-const MIN_AMOUNT_USD = 5;
-const MIN_AMOUNT_RUB = formatRussianCurrency(MIN_AMOUNT_USD * 80); // Using default exchange rate for MVP
-
 // Messages
-const WELCOME_MESSAGE = `Привет, это 🎮 LootPay!
-Бот для быстрого и надёжного пополнения Steam кошелька
-
-Знакомо? Было?
-⏳ Всего 5 минут, и баланс в Steam пополнен…
-😤 А вместо этого — долгие ожидания, скрытые наценки и тревога, что средства не дойдут. 
-
-✨ С  LootPay такого не будет ✨
-⋯⋯⋯⋯⋯⋯⋯⋯
-Пополняй Steam за 15 минут
-с удобной оплатой, честным курсом и без риска быть обманутым ⏱️
-
-🔹 Минимальная и прозрачная комиссия **10%** — без скрытых наценок 
-🔹 Гарантия возврата при сбоях 
-🔹 Поддержка 24/7
-⋯⋯⋯⋯⋯⋯⋯⋯
-💳 Автоматическое зачисление от ${MIN_AMOUNT_RUB} / ${MIN_AMOUNT_USD} USD — любые РФ-карты или СБП
-
-🔸 Как это работает?
-1️⃣ Запусти бота, включи уведомления, введи Steam ID 
-2️⃣ Выбери сумму и оплати через СБП 
-3️⃣ Получи уведомление о зачислении 🎉 
-
-Пополняй без риска и обмана — вместе с 🎮 LootPay!`;
-
-const FIRST_QUESTION = `📋 Давайте познакомимся! Ответьте на 3 быстрых вопроса, чтобы мы могли лучше вас понимать.
-❓ На что чаще всего тратишь деньги в Steam?`;
-
-const CONTINUE_MESSAGE = `
-⏳ У вас есть незавершенная операция.
-
-Хотите продолжить с того места, где остановились?`;
-
 const MAIN_MENU_MESSAGE = `
 🎮 Главное меню
 
@@ -63,30 +23,6 @@ const MAIN_MENU_BUTTONS = [
   [{ text: '📊 История пополнений', callback_data: 'show_history' }],
   [{ text: '❓ Поддержка', callback_data: 'show_support' }],
   [{ text: '📄 О нас / Оферта / FAQ', callback_data: 'show_info' }]
-];
-
-// First question buttons
-const FIRST_QUESTION_BUTTONS = [
-  [
-    { text: '🎮 Игры — покупаю новинки и классику', callback_data: 'q1_games' }
-  ],
-  [
-    { text: '✨ Внутриигровые штуки, кейсы, боевые пропуски', callback_data: 'q1_items' }
-  ],
-  [
-    { text: '🧸 Другое — что-то ещё, не из этого', callback_data: 'q1_other' }
-  ],
-  [
-    { text: '🧘 Вообще не трачу — просто сижу, не покупаю', callback_data: 'q1_none' }
-  ]
-];
-
-// Continue buttons
-const CONTINUE_BUTTONS = [
-  [
-    { text: '✅ Да, продолжить', callback_data: 'continue_flow' },
-    { text: '❌ Нет, начать заново', callback_data: 'restart_flow' }
-  ]
 ];
 
 /**
@@ -204,18 +140,6 @@ export async function handleStartPayment(
   }
 }
 
-async function startNewQuestionnaire(
-  bot: TelegramBot,
-  chatId: number,
-  userId: number
-): Promise<void> {
-  // Send welcome message
-  await bot.sendMessage(chatId, WELCOME_MESSAGE);
-
-  // Start questionnaire
-  await handleQuestion1(bot, chatId, userId);
-}
-
 /**
  * Handle continue flow callback
  */
@@ -318,8 +242,16 @@ export async function handleInvalidState(msg: Message): Promise<void> {
       return;
     }
 
-    // Clear invalid state
-    await clearState(telegramId);
+    // Get or create user to get database user.id
+    const user = await findOrCreateUser({
+      id: telegramId,
+      username: msg.from?.username,
+      first_name: msg.from?.first_name,
+      last_name: msg.from?.last_name
+    });
+
+    // Clear invalid state using database user.id
+    await clearState(user.id);
     await handleStartCommand(msg);
   } catch (error) {
     logger.error('Error handling invalid state', {
@@ -349,8 +281,16 @@ export async function handleExpiredState(msg: Message): Promise<void> {
       return;
     }
 
-    // Clear state and show main menu
-    await clearState(telegramId);
+    // Get or create user to get database user.id
+    const user = await findOrCreateUser({
+      id: telegramId,
+      username: msg.from?.username,
+      first_name: msg.from?.first_name,
+      last_name: msg.from?.last_name
+    });
+
+    // Clear state and show main menu using database user.id
+    await clearState(user.id);
     await handleStartCommand(msg);
   } catch (error) {
     logger.error('Error handling expired state', {

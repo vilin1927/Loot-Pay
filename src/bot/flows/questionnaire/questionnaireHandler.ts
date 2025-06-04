@@ -1,15 +1,15 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../../utils/logger';
 import { setState } from '../../../services/state/stateService';
-import { saveResponse, isQuestionnaireComplete, QUESTIONS } from '../../../services/questionnaire/questionnaireService';
+import { saveResponse, isQuestionnaireComplete, QUESTIONS, ANSWER_TEXTS } from '../../../services/questionnaire/questionnaireService';
 import { handleError } from '../../../utils/errorHandler';
+import { db } from '../../../database/connection';
 
-// Completion message
-const COMPLETION_MESSAGE = `
-✅ Спасибо за ответы! Теперь вы можете пополнить свой Steam кошелек.
-
-Нажмите кнопку ниже, чтобы начать:
-`;
+// Completion message according to PRD
+const COMPLETION_MESSAGE = `🎉 Готово! Ты прошёл опрос — красавчик! Спасибо, что поделился своими предпочтениями 🙌 
+Это поможет нам сделать LootPay ещё удобнее и полезнее для тебя.
+🔻 Теперь введи логин аккаунта Steam, который будем пополнять.
+⚠️ *Внимание!* Пожалуйста, убедитесь, что логин введён правильно.`;
 
 // Send question to user
 export async function sendQuestion(
@@ -57,23 +57,46 @@ export async function handleQuestionResponse(
   chatId: number,
   userId: number,
   questionNumber: 1 | 2 | 3,
-  answer: string
+  answerCode: string
 ): Promise<void> {
   try {
-    // Save response
-    await saveResponse(userId, questionNumber, answer);
+    // Get full answer text from callback data
+    const callbackData = `q${questionNumber}_${answerCode}`;
+    const answerText = ANSWER_TEXTS[callbackData as keyof typeof ANSWER_TEXTS];
+    
+    if (!answerText) {
+      throw new Error(`Unknown answer code: ${callbackData}`);
+    }
+
+    // Get question text
+    const questionText = QUESTIONS[questionNumber].text;
+
+    // Save response with full text
+    await saveResponse(userId, questionNumber, questionText, answerText);
 
     // Check if questionnaire is complete
     const isComplete = await isQuestionnaireComplete(userId);
 
     if (isComplete) {
-      // Send completion message
+      // Update users table to mark questionnaire as completed
+      await db('users')
+        .where('id', userId)
+        .update({
+          questionnaire_completed: true,
+          questionnaire_completed_at: new Date()
+        });
+
+      // Send completion message according to PRD
       await bot.sendMessage(chatId, COMPLETION_MESSAGE, {
         reply_markup: {
-          inline_keyboard: [[
-            { text: '🎮 Пополнить Steam', callback_data: 'start_payment' }
-          ]]
-        }
+          inline_keyboard: [
+            [
+              { text: '🧠 Как найти логин?', callback_data: 'steam_login_help' },
+              { text: 'ℹ️ Меню', callback_data: 'main_menu' }
+            ]
+          ]
+        },
+        parse_mode: 'Markdown'
       });
 
       // Set state to complete
@@ -96,7 +119,8 @@ export async function handleQuestionResponse(
     logger.error('Error handling question response', {
       error,
       userId,
-      questionNumber
+      questionNumber,
+      answerCode
     });
     await handleError(chatId, error as Error);
   }

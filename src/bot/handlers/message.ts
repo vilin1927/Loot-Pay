@@ -4,6 +4,7 @@ import { logger } from '../../utils/logger';
 import { getState } from '../../services/state/stateService';
 import { handleSteamUsernameRequest } from '../flows/steamUsername';
 import { handleAmountSelection } from '../flows/amountSelection';
+import { findOrCreateUser } from '../../services/user/userService';
 
 export async function handleMessage(
   bot: TelegramBot,
@@ -11,12 +12,22 @@ export async function handleMessage(
 ): Promise<void> {
   try {
     const chatId = msg.chat.id;
-    const userId = msg.from?.id;
+    const telegramId = msg.from?.id;
     const text = msg.text;
 
-    if (!userId || !text) {
+    if (!telegramId || !text) {
       return;
     }
+
+    // Get or create user to get database user.id
+    const user = await findOrCreateUser({
+      id: telegramId,
+      username: msg.from?.username,
+      first_name: msg.from?.first_name,
+      last_name: msg.from?.last_name
+    });
+
+    const userId = user.id; // Use database user.id, not telegram_id
 
     // Get user state
     const state = await getState(userId);
@@ -36,6 +47,7 @@ export async function handleMessage(
 
       default:
         logger.warn('Message received in unknown state', {
+          telegramId,
           userId,
           state: state.current_state,
           text
@@ -43,6 +55,7 @@ export async function handleMessage(
     }
 
     logger.info('Message handled', {
+      telegramId,
       userId,
       chatId,
       state: state.current_state

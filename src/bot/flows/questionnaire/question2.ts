@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../../utils/logger';
 import { setState, UserState } from '../../../services/state/stateService';
-import { saveResponse } from '../../../services/questionnaire/questionnaireService';
+import { saveResponse, ANSWER_TEXTS } from '../../../services/questionnaire/questionnaireService';
 import { handleQuestion3 } from './question3';
 import { getBotInstance } from '../../../bot/botInstance';
 
@@ -39,18 +39,29 @@ export async function handleQuestion2(
 export async function handleQuestion2Answer(
   chatId: number,
   userId: number,
-  answer: string
+  answerCode: string
 ) {
   try {
     const bot = await getBotInstance();
-    await saveResponse(userId, 2, answer);
+    
+    // Get full answer text from callback data
+    const callbackData = `q2_${answerCode}`;
+    const answerText = ANSWER_TEXTS[callbackData as keyof typeof ANSWER_TEXTS];
+    
+    if (!answerText) {
+      throw new Error(`Unknown answer code: ${callbackData}`);
+    }
+
+    // Save response with full question and answer text
+    await saveResponse(userId, 2, QUESTION, answerText);
+    
     await setState(userId, 'QUESTIONNAIRE_Q2' as UserState, {
       current_question: 3
     });
-    logger.info('Saved question 2 answer', { userId, answer });
+    logger.info('Saved question 2 answer', { userId, answerText });
     await handleQuestion3(bot, chatId, userId);
   } catch (error) {
-    logger.error('Error handling question 2 answer', { error, userId, answer });
+    logger.error('Error handling question 2 answer', { error, userId, answerCode });
     const bot = await getBotInstance();
     await bot.sendMessage(
       chatId,
