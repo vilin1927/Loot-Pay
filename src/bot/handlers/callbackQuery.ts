@@ -4,15 +4,21 @@ import { handleStartPayment } from './start';
 import { handleQuestionResponse } from '../flows/questionnaire/questionnaireHandler';
 import { handleError } from '../../utils/errorHandler';
 import { findOrCreateUser } from '../../services/user/userService';
-import { setState } from '../../services/state/stateService';
+import { setState, getState } from '../../services/state/stateService';
+import { showPaymentConfirmation } from '../flows/paymentConfirmation';
 
 // Helper functions
 export async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: number, amount: number) {
-  // Store amount in state and show payment confirmation
-  await setState(userId, 'AMOUNT_SELECTED', { amountUSD: amount });
+  // Get existing state to preserve steamUsername
+  const currentState = await getState(userId);
+  const existingData = currentState?.state_data || {};
   
-  // For now, just show confirmation message
-  await bot.sendMessage(chatId, `✅ Выбрана сумма: ${amount} USD\n🔄 Переходим к оплате...`);
+  // Store amount in state and show payment confirmation
+  await setState(userId, 'AMOUNT_SELECTED', { 
+    ...existingData,
+    amountUSD: amount 
+  });
+  await showPaymentConfirmation(bot, chatId, userId);
 }
 
 async function handleCustomAmountPrompt(bot: TelegramBot, chatId: number, userId: number) {
@@ -85,6 +91,17 @@ export async function handleCallbackQuery(
         break;
       case 'amount_custom':
         await handleCustomAmountPrompt(bot, chatId, userId);
+        break;
+
+      // Payment confirmation handlers
+      case 'confirm_payment':
+        await bot.sendMessage(chatId, '🔄 Создаём платёж... (это пока временная заглушка)');
+        // TODO: Implement actual payment processing
+        break;
+
+      case 'steam_username':
+        await bot.sendMessage(chatId, '🎮 Введите логин Steam аккаунта:');
+        await setState(userId, 'STEAM_USERNAME', {});
         break;
 
       case 'show_history':

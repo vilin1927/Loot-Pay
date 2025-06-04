@@ -117,4 +117,47 @@ export async function handleChangeAmount(
   userId: number
 ) {
   await handleAmountSelection(bot, chatId, userId);
+}
+
+export async function showPaymentConfirmation(
+  bot: TelegramBot,
+  chatId: number,
+  userId: number
+) {
+  try {
+    const state = await getState(userId);
+    if (!state?.state_data?.steamUsername || !state?.state_data?.amountUSD) {
+      throw new Error('Missing payment data');
+    }
+
+    const { steamUsername, amountUSD } = state.state_data;
+    const exchangeRate = 90; // TODO: Get real rate
+    const totalRUB = Math.round(amountUSD * exchangeRate * 1.1); // 10% commission
+
+    const message = `🔎 Проверь данные перед оплатой:
+
+🧾 Услуга: Пополнение Steam 
+👤 Аккаунт: ${steamUsername}
+💵 Сумма: ${amountUSD} USD (≈${totalRUB}₽)
+💰 Комиссия: 10% (уже включена)
+
+❗️ Убедитесь, что данные верны!`;
+
+    await bot.sendMessage(chatId, message, {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: `✅ Оплатить ${totalRUB}₽`, callback_data: 'confirm_payment' }],
+          [
+            { text: '🔁 Изменить логин', callback_data: 'steam_username' },
+            { text: '💵 Изменить сумму', callback_data: 'amount_custom' }
+          ]
+        ]
+      }
+    });
+
+    logger.info('Payment confirmation shown', { userId, steamUsername, amountUSD });
+  } catch (error) {
+    logger.error('Error showing payment confirmation', { error, userId });
+    await bot.sendMessage(chatId, '❌ Ошибка. Попробуйте снова.');
+  }
 } 
