@@ -44,6 +44,10 @@ export async function handleMessage(
 
     // Handle message based on current state
     switch (state.current_state) {
+      case 'QUESTIONNAIRE_COMPLETE':
+        await handleSteamUsernameRequest(bot, chatId, userId, text);
+        break;
+
       case 'STEAM_USERNAME':
         await handleSteamUsernameRequest(bot, chatId, userId, text);
         break;
