@@ -33,8 +33,17 @@ export async function handleAmountSelected(bot: TelegramBot, chatId: number, use
 }
 
 async function handleCustomAmountPrompt(bot: TelegramBot, chatId: number, userId: number) {
+  // ✅ FIX: Preserve existing state data instead of clearing it
+  const currentState = await getState(userId);
+  const existingData = currentState?.state_data || {};
+  
   await bot.sendMessage(chatId, `💰 Введите сумму в USD (от 5 до 100):`);
-  await setState(userId, 'AWAITING_CUSTOM_AMOUNT', {});
+  await setState(userId, 'AWAITING_CUSTOM_AMOUNT', existingData);
+  
+  logger.info('Custom amount prompt shown, preserving state', {
+    userId,
+    preservedData: existingData
+  });
 }
 
 // Handle callback queries
