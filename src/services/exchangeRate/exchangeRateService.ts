@@ -110,12 +110,8 @@ class ExchangeRateService {
     try {
       logger.info('Fetching exchange rate from PayDigital API');
 
-      const response = await axios.post(
-        `${this.PAYDIGITAL_API_URL}/rates/current`,
-        { 
-          from: 'USD',
-          to: 'RUB'
-        },
+      const response = await axios.get(
+        `${this.PAYDIGITAL_API_URL}/rates`,
         {
           headers: {
             'X-Partner-ID': this.PAYDIGITAL_API_KEY,
@@ -125,8 +121,8 @@ class ExchangeRateService {
         }
       );
 
-      if (response.status === 200 && response.data.rate) {
-        const rate = parseFloat(response.data.rate);
+      if (response.status === 200 && response.data.USD_RUB) {
+        const rate = parseFloat(response.data.USD_RUB);
         
         if (this.isValidRate(rate)) {
           // Save to database and create history
