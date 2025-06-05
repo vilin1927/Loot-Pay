@@ -228,8 +228,20 @@ LootPay - это сервис для быстрого и безопасного 
 async function handlePaymentConfirmation(bot: TelegramBot, chatId: number, userId: number) {
   try {
     const state = await getState(userId);
-    if (!state?.state_data?.amountUSD) {
-      throw new Error(`Missing amount data: amountUSD=${!!state?.state_data?.amountUSD}`);
+    
+    // ✅ CRITICAL: Check for both required parameters
+    if (!state?.state_data?.amountUSD || !state?.state_data?.transactionId) {
+      const missingFields = [];
+      if (!state?.state_data?.amountUSD) missingFields.push('amountUSD');
+      if (!state?.state_data?.transactionId) missingFields.push('transactionId');
+      
+      logger.error('Missing required payment data', { 
+        userId, 
+        missingFields,
+        stateData: state?.state_data 
+      });
+      
+      throw new Error(`Missing payment data: ${missingFields.join(', ')}`);
     }
 
     // Check if Steam username is set
@@ -240,21 +252,11 @@ async function handlePaymentConfirmation(bot: TelegramBot, chatId: number, userI
       return;
     }
 
-    // ✅ CRITICAL FIX: Check if transactionId is available
-    if (!state.state_data.transactionId) {
-      logger.error('TransactionId missing in payment confirmation - this should not happen', { 
-        userId, 
-        stateData: state.state_data 
-      });
-      await bot.sendMessage(chatId, '❌ Ошибка: необходимо заново ввести логин Steam. Нажмите /start');
-      return;
-    }
-
     await bot.sendMessage(chatId, '⏳ Создаем платеж...');
 
     const { steamUsername, amountUSD, transactionId } = state.state_data;
     
-    // ✅ CRITICAL FIX: Pass stored transactionId to payment creation
+    // ✅ CRITICAL FIX: Pass all required parameters including transactionId
     const payment = await createPayment(userId, steamUsername, amountUSD, transactionId);
 
     await bot.sendMessage(chatId, `💳 Платеж создан!
@@ -268,12 +270,13 @@ async function handlePaymentConfirmation(bot: TelegramBot, chatId: number, userI
       }
     });
 
-    logger.info('Payment created successfully with stored transactionId', {
+    logger.info('Payment created successfully with required transactionId', {
       userId,
       steamUsername,
       amountUSD,
       transactionId,
-      paymentUrl: payment.paymentUrl
+      paymentUrl: payment.paymentUrl,
+      databaseTransactionId: payment.transactionId
     });
 
   } catch (error) {

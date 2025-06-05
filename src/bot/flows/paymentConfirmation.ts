@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../utils/logger';
 import { getState, setState } from '../../services/state/stateService';
-import { payDigitalService } from '../../services/paydigital/paydigitalService';
+import { createPayment } from '../../services/payment/paymentService';
 import { handleSteamUsernameRequest } from './steamUsername';
 import { handleAmountSelection } from './amountSelection';
 import { formatRussianCurrency } from '../../utils/locale';
@@ -35,32 +35,39 @@ export async function handlePaymentConfirmation(
       throw new Error('Invalid state for payment confirmation');
     }
 
-    const { steamUsername, amountUSD, totalAmountRUB } = state.state_data;
+    // ✅ CHECK: Ensure we have required data including transactionId
+    const { steamUsername, amountUSD, transactionId } = state.state_data;
+    
+    if (!steamUsername || !amountUSD || !transactionId) {
+      logger.error('Missing required payment data in legacy flow', {
+        userId,
+        hasUsername: !!steamUsername,
+        hasAmount: !!amountUSD,
+        hasTransactionId: !!transactionId
+      });
+      throw new Error('Missing required payment data');
+    }
 
-    // Create payment
-    const paymentUrl = await payDigitalService.createSteamPayment(
-      steamUsername,
-      amountUSD,
-      totalAmountRUB,
-      `order_${Date.now()}`
-    );
+    // ✅ USE: New centralized payment service with required transactionId
+    const payment = await createPayment(userId, steamUsername, amountUSD, transactionId);
 
     // Update state
     await setState(userId, 'PAYMENT_PENDING', {
       ...state.state_data,
-      paymentUrl
+      paymentUrl: payment.paymentUrl,
+      databaseTransactionId: payment.transactionId
     });
 
     // Send payment confirmation
     await bot.sendMessage(
       chatId,
-      PAYMENT_DETAILS(steamUsername, amountUSD, totalAmountRUB),
+      PAYMENT_DETAILS(steamUsername, amountUSD, payment.totalAmountRUB),
       {
         parse_mode: 'Markdown',
         reply_markup: {
           inline_keyboard: [
             [
-              { text: `✅ Оплатить СБП [${formatRussianCurrency(totalAmountRUB)}]`, url: paymentUrl }
+              { text: `✅ Оплатить СБП [${formatRussianCurrency(payment.totalAmountRUB)}]`, url: payment.paymentUrl }
             ],
             [
               { text: '🔁 Изменить логин', callback_data: 'steam_username' },
@@ -71,10 +78,12 @@ export async function handlePaymentConfirmation(
       }
     );
 
-    logger.info('Payment created', {
+    logger.info('Legacy payment created using new service', {
       userId,
       amountUSD,
-      totalAmountRUB
+      totalAmountRUB: payment.totalAmountRUB,
+      transactionId,
+      databaseTransactionId: payment.transactionId
     });
 
   } catch (error) {

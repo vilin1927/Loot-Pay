@@ -13,18 +13,18 @@ interface PaymentResult {
 }
 
 /**
- * ✅ UPDATED: Create a payment for Steam funding using existing transactionId
+ * ✅ UPDATED: Create a payment for Steam funding using required transactionId
  * @param userId Database user ID
  * @param steamUsername Validated Steam username
  * @param amountUSD Amount in USD
- * @param existingTransactionId TransactionId from Steam validation (CRITICAL FIX)
+ * @param transactionId TransactionId from Steam validation (REQUIRED)
  * @returns Payment details including URL
  */
 export async function createPayment(
   userId: number,
   steamUsername: string,
   amountUSD: number,
-  existingTransactionId?: string
+  transactionId: string  // ✅ REQUIRED PARAMETER - NO FALLBACK
 ): Promise<PaymentResult> {
   try {
     // 1. Get current exchange rate
@@ -55,26 +55,26 @@ export async function createPayment(
       userId,
       steamUsername,
       amountUSD,
-      existingTransactionId
+      paydigitalTransactionId: transactionId
     });
 
-    // ✅ CRITICAL FIX: Use existing transactionId from Steam validation
+    // ✅ CRITICAL FIX: Use required transactionId from Steam validation
     const paymentUrl = await payDigitalService.createSteamPayment(
       steamUsername,
       amountUSD,
       commission.totalAmountRUB,
       `LP-${transaction.id}`, // Use transaction ID as order ID
-      existingTransactionId // ✅ PASS the stored transactionId
+      transactionId  // ✅ USE STORED TRANSACTION ID (REQUIRED)
     );
 
     // 5. Update transaction with payment URL
     // Note: We'll implement updateTransactionStatus when needed
     
-    logger.info('Payment created successfully using existing transactionId', {
+    logger.info('Payment created successfully using required transactionId', {
       transactionId: transaction.id,
       paymentUrl,
       totalAmountRUB: commission.totalAmountRUB,
-      existingTransactionId
+      paydigitalTransactionId: transactionId
     });
 
     return {
@@ -91,7 +91,7 @@ export async function createPayment(
       userId,
       steamUsername,
       amountUSD,
-      existingTransactionId
+      paydigitalTransactionId: transactionId
     });
     throw error;
   }

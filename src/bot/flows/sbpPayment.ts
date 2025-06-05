@@ -1,8 +1,7 @@
 import { getBotInstance } from '../botInstance';
 import { logger } from '../../utils/logger';
 import { getState, setState } from '../../services/state/stateService';
-import { createTransactionLegacy, updateTransaction } from '../../services/transaction/transactionService';
-import { payDigitalService } from '../../services/paydigital/paydigitalService';
+import { createPayment } from '../../services/payment/paymentService';
 import { formatRussianCurrency } from '../../utils/locale';
 
 // Payment processing message
@@ -38,7 +37,18 @@ export async function handleSbpPayment(
       throw new Error('Invalid state for SBP payment');
     }
 
-    const { steamUsername, amountUSD, totalAmountRUB } = state.state_data;
+    // ✅ CHECK: Ensure we have required data including transactionId
+    const { steamUsername, amountUSD, transactionId } = state.state_data;
+    
+    if (!steamUsername || !amountUSD || !transactionId) {
+      logger.error('Missing required payment data in SBP flow', {
+        userId,
+        hasUsername: !!steamUsername,
+        hasAmount: !!amountUSD,
+        hasTransactionId: !!transactionId
+      });
+      throw new Error('Missing required payment data');
+    }
 
     // Show processing message
     await bot.sendMessage(chatId, PAYMENT_PROCESSING_MESSAGE, {
@@ -49,33 +59,11 @@ export async function handleSbpPayment(
       }
     });
 
-    // Create transaction
-    const transaction = await createTransactionLegacy(userId, {
-      user_id: userId,
-      steam_username: steamUsername,
-      amount_usd: amountUSD,
-      amount_rub: totalAmountRUB,
-      commission_rub: totalAmountRUB * 0.1, // 10% commission
-      exchange_rate: 90, // TODO: Get real exchange rate
-      sbp_payment_expires_at: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
-    });
-
-    // Create PayDigital payment
-    const paymentUrl = await payDigitalService.createSteamPayment(
-      steamUsername,
-      amountUSD,
-      totalAmountRUB,
-      transaction.paydigital_order_id
-    );
-
-    // Update transaction with payment URL
-    await updateTransaction(transaction.id, {
-      sbp_payment_url: paymentUrl,
-      sbp_payment_status: 'created'
-    });
+    // ✅ USE: New centralized payment service with required transactionId
+    const payment = await createPayment(userId, steamUsername, amountUSD, transactionId);
 
     // Format amount
-    const formattedAmount = formatRussianCurrency(totalAmountRUB);
+    const formattedAmount = formatRussianCurrency(payment.totalAmountRUB);
 
     // Show payment link
     await bot.sendMessage(
@@ -85,7 +73,7 @@ export async function handleSbpPayment(
         reply_markup: {
           inline_keyboard: [
             [
-              { text: '💳 Оплатить', url: paymentUrl }
+              { text: '💳 Оплатить', url: payment.paymentUrl }
             ],
             [
               { text: '❌ Отмена', callback_data: 'cancel_payment' }
@@ -98,15 +86,17 @@ export async function handleSbpPayment(
     // Update state
     await setState(userId, 'PAYMENT_PENDING', {
       ...state.state_data,
-      transaction_id: transaction.id,
-      payment_url: paymentUrl,
-      expires_at: transaction.sbp_payment_expires_at
+      databaseTransactionId: payment.transactionId,
+      paymentUrl: payment.paymentUrl,
+      expires_at: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
     });
 
-    logger.info('SBP payment created', {
+    logger.info('SBP payment created using new service', {
       userId,
-      transactionId: transaction.id,
-      amount: totalAmountRUB
+      databaseTransactionId: payment.transactionId,
+      amount: payment.totalAmountRUB,
+      transactionId,
+      paymentUrl: payment.paymentUrl
     });
 
   } catch (error) {

@@ -195,12 +195,12 @@ export class PayDigitalService {
   }
 
   /**
-   * ✅ UPDATED: Create Steam payment using existing transactionId
+   * ✅ UPDATED: Create Steam payment using required transactionId
    * @param username Valid Steam username
    * @param amountUSD Amount in USD
    * @param amountRUB Total amount in RUB including commission
    * @param orderId Unique order ID
-   * @param existingTransactionId TransactionId from validation step
+   * @param transactionId TransactionId from validation step (REQUIRED)
    * @returns Payment URL
    */
   async createSteamPayment(
@@ -208,27 +208,17 @@ export class PayDigitalService {
     amountUSD: number,
     amountRUB: number,
     orderId: string,
-    existingTransactionId?: string
+    transactionId: string  // ✅ REQUIRED PARAMETER - NO FALLBACK
   ): Promise<string> {
     try {
-      let transactionId: string;
-
-      if (existingTransactionId) {
-        // ✅ USE EXISTING transactionId (new approach)
-        transactionId = existingTransactionId;
-        logger.info('Using existing transactionId for payment', {
-          username,
-          transactionId,
-          orderId
-        });
-      } else {
-        // ❌ FALLBACK: Get fresh transactionId (old approach - causes errors)
-        logger.warn('No existing transactionId provided, falling back to fresh call', {
-          username,
-          orderId
-        });
-        transactionId = await this.getPaymentTransactionId(username);
-      }
+      // ✅ USE REQUIRED transactionId (new approach)
+      logger.info('Creating payment with required transactionId', {
+        username,
+        transactionId,
+        orderId,
+        amountUSD,
+        amountRUB
+      });
 
       // Create payment
       const response = await this.client.post('/steam/pay', {
@@ -260,7 +250,7 @@ export class PayDigitalService {
           logger.error('TransactionId already used', {
             username,
             orderId,
-            transactionId: existingTransactionId
+            transactionId
           });
           throw new Error('Ошибка создания платежа. Пожалуйста, попробуйте снова.');
         }
@@ -272,7 +262,7 @@ export class PayDigitalService {
           amountUSD,
           amountRUB,
           orderId,
-          transactionId: existingTransactionId,
+          transactionId,
           status: error.response?.status,
           data: error.response?.data
         });
@@ -284,7 +274,7 @@ export class PayDigitalService {
         amountUSD,
         amountRUB,
         orderId,
-        transactionId: existingTransactionId
+        transactionId
       });
       throw new Error('Ошибка создания платежа. Пожалуйста, попробуйте позже.');
     }
