@@ -12,13 +12,13 @@ export async function showTransactionHistory(
     const { transactions, total, hasMore } = await getUserTransactions(userId, 3, page * 3);
 
     if (transactions.length === 0) {
-      await bot.sendMessage(chatId, `📊 История пополнений
-
-У вас пока нет успешных пополнений.`, {
+      await bot.sendMessage(chatId, `У вас пока нет ни одного пополнения 😔
+Но это легко исправить! Пополните Steam-кошелёк за пару минут — быстро, безопасно и с честным курсом 💳
+👇 Выберите действие ниже:`, {
         reply_markup: {
           inline_keyboard: [
             [{ text: '💰 Пополнить сейчас', callback_data: 'fund_steam' }],
-            [{ text: '🏠 Главное меню', callback_data: 'main_menu' }]
+            [{ text: '🔄 В начало', callback_data: 'main_menu' }]
           ]
         }
       });
