@@ -27,9 +27,18 @@ export async function createPayment(
   transactionId: string  // ✅ REQUIRED PARAMETER - NO FALLBACK
 ): Promise<PaymentResult> {
   try {
-    // 1. Get current exchange rate
-    const exchangeRate = await exchangeRateService.getRate();
-    logger.info('Got exchange rate for payment', { amountUSD, exchangeRate });
+    // 1. Get current exchange rate with new PRD-compliant system
+    const rateResult = await exchangeRateService.getCurrentUSDRUBRate();
+    if (!rateResult.success || !rateResult.rate) {
+      throw new Error(`Failed to get exchange rate: ${rateResult.error}`);
+    }
+    const exchangeRate = rateResult.rate.rate;
+    logger.info('Got exchange rate for payment', { 
+      amountUSD, 
+      exchangeRate, 
+      source: rateResult.source,
+      rateAge: rateResult.rate.created_at 
+    });
 
     // 2. Calculate commission and amounts
     const commission = calculateCommission(amountUSD, exchangeRate);

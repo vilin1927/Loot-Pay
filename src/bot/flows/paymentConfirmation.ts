@@ -153,7 +153,13 @@ export async function showPaymentConfirmation(
     const { exchangeRateService } = require('../../services/exchangeRate/exchangeRateService');
     const { calculateCommission } = require('../../services/commission/commissionService');
     
-    const exchangeRate = await exchangeRateService.getRate();
+    // Get current exchange rate with new PRD-compliant system
+  const rateResult = await exchangeRateService.getCurrentUSDRUBRate();
+  if (!rateResult.success || !rateResult.rate) {
+    logger.error('Failed to get exchange rate for payment confirmation', { error: rateResult.error });
+    throw new Error('Exchange rate service unavailable');
+  }
+  const exchangeRate = rateResult.rate.rate;
     const commission = calculateCommission(amountUSD, exchangeRate);
     const totalRUB = Math.round(commission.totalAmountRUB);
 

@@ -4,6 +4,8 @@ import { logger } from './utils/logger';
 import { startBot } from './bot';
 import { handleWebhook } from './bot/handlers/webhookHandler';
 import { stopBotPolling } from './bot/botInstance';
+import { exchangeRateJobService } from './services/jobs/exchangeRateJobService';
+import adminRoutes from './routes/admin';
 import net from 'net';
 
 const app = express();
@@ -11,6 +13,9 @@ const defaultPort = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 // Middleware
 app.use(express.json());
+
+// Admin routes (PRD requirement: Exchange rate monitoring)
+app.use('/admin', adminRoutes);
 
 // Webhook endpoint
 app.post('/webhook', (req: Request, res: Response) => {
@@ -61,6 +66,10 @@ const shutdown = async () => {
   try {
     logger.info('Shutting down gracefully...');
     
+    // Stop exchange rate background job
+    exchangeRateJobService.stopJob();
+    logger.info('Exchange rate background job stopped');
+    
     // Stop bot polling
     await stopBotPolling();
     
@@ -87,12 +96,19 @@ async function startServer() {
     // Start bot
     await startBot();
     
+    // Start exchange rate background job (PRD requirement: Daily updates)
+    exchangeRateJobService.startJob();
+    logger.info('Exchange rate background job started', {
+      schedule: 'Daily at 6:00 AM UTC (9:00 AM Moscow)'
+    });
+    
     // Start server
     app.listen(port, () => {
       logger.info('Server started', {
         port,
         env: process.env.NODE_ENV,
-        originalPort: defaultPort
+        originalPort: defaultPort,
+        exchangeRateJob: 'active'
       });
     });
   } catch (error) {
