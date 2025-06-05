@@ -148,8 +148,14 @@ export async function showPaymentConfirmation(
     }
 
     const { steamUsername, amountUSD } = state.state_data;
-    const exchangeRate = 90; // TODO: Get real rate
-    const totalRUB = Math.round(amountUSD * exchangeRate * 1.1); // 10% commission
+    
+    // ✅ FIX: Use correct exchange rate and commission calculation
+    const { exchangeRateService } = require('../../services/exchangeRate/exchangeRateService');
+    const { calculateCommission } = require('../../services/commission/commissionService');
+    
+    const exchangeRate = await exchangeRateService.getRate();
+    const commission = calculateCommission(amountUSD, exchangeRate);
+    const totalRUB = Math.round(commission.totalAmountRUB);
 
     const message = `🔎 Проверь данные перед оплатой:
 
