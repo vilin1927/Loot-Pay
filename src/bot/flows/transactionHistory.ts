@@ -14,7 +14,7 @@ export async function showTransactionHistory(
     if (transactions.length === 0) {
       await bot.sendMessage(chatId, `📊 История пополнений
 
-У вас пока нет транзакций.`, {
+У вас пока нет успешных пополнений.`, {
         reply_markup: {
           inline_keyboard: [
             [{ text: '💰 Пополнить сейчас', callback_data: 'fund_steam' }],
@@ -25,14 +25,13 @@ export async function showTransactionHistory(
       return;
     }
 
-    let message = `📊 История пополнений (${total} всего)\n\n`;
+    let message = `📊 История пополнений (${total} успешных)\n\n`;
     
     transactions.forEach((tx) => {
       const date = new Date(tx.created_at).toLocaleDateString('ru-RU');
-      const status = tx.status === 'completed' ? '✅' : 
-                   tx.status === 'pending' ? '⏳' : '❌';
+      // Since we only show completed transactions, always show ✅
       
-      message += `${status} ${date}\n`;
+      message += `✅ ${date}\n`;
       message += `💰 ${tx.amount_usd} USD → ${tx.amount_rub + tx.commission_rub}₽\n`;
       message += `🎮 ${tx.steam_username}\n\n`;
     });

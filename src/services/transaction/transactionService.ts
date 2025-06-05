@@ -100,18 +100,22 @@ export async function updateTransactionStatus(
 }
 
 /**
- * Get user transactions (updated specification)
+ * Get user transactions (updated specification - only successful payments)
  */
 export async function getUserTransactions(userId: number, limit = 3, offset = 0) {
   try {
+    // ✅ FILTER: Only show completed/successful transactions
     const transactions = await db('transactions')
       .where('user_id', userId)
+      .where('status', 'completed')
       .orderBy('created_at', 'desc')
       .limit(limit)
       .offset(offset);
 
+    // ✅ COUNT: Only count completed transactions for pagination
     const total = await db('transactions')
       .where('user_id', userId)
+      .where('status', 'completed')
       .count('* as count')
       .first();
 
