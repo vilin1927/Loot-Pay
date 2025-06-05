@@ -13,16 +13,18 @@ interface PaymentResult {
 }
 
 /**
- * Create a payment for Steam funding
+ * ✅ UPDATED: Create a payment for Steam funding using existing transactionId
  * @param userId Database user ID
  * @param steamUsername Validated Steam username
  * @param amountUSD Amount in USD
+ * @param existingTransactionId TransactionId from Steam validation (CRITICAL FIX)
  * @returns Payment details including URL
  */
 export async function createPayment(
   userId: number,
   steamUsername: string,
-  amountUSD: number
+  amountUSD: number,
+  existingTransactionId?: string
 ): Promise<PaymentResult> {
   try {
     // 1. Get current exchange rate
@@ -52,24 +54,27 @@ export async function createPayment(
       transactionId: transaction.id,
       userId,
       steamUsername,
-      amountUSD
+      amountUSD,
+      existingTransactionId
     });
 
-    // 4. Create PayDigital payment
+    // ✅ CRITICAL FIX: Use existing transactionId from Steam validation
     const paymentUrl = await payDigitalService.createSteamPayment(
       steamUsername,
       amountUSD,
       commission.totalAmountRUB,
-      `LP-${transaction.id}` // Use transaction ID as order ID
+      `LP-${transaction.id}`, // Use transaction ID as order ID
+      existingTransactionId // ✅ PASS the stored transactionId
     );
 
     // 5. Update transaction with payment URL
     // Note: We'll implement updateTransactionStatus when needed
     
-    logger.info('Payment created successfully', {
+    logger.info('Payment created successfully using existing transactionId', {
       transactionId: transaction.id,
       paymentUrl,
-      totalAmountRUB: commission.totalAmountRUB
+      totalAmountRUB: commission.totalAmountRUB,
+      existingTransactionId
     });
 
     return {
@@ -85,7 +90,8 @@ export async function createPayment(
       error,
       userId,
       steamUsername,
-      amountUSD
+      amountUSD,
+      existingTransactionId
     });
     throw error;
   }

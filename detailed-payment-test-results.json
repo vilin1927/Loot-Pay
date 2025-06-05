@@ -1,0 +1,698 @@
+[
+  {
+    "testNumber": 1,
+    "testName": "Valid Payment $5 USD",
+    "notes": "$5 = 444.44 RUB total, 400 RUB net",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 444.44,
+      "netAmount": 400,
+      "currency": "RUB",
+      "transactionId": "a8b1f56a-c071-4a97-bb81-3fe9ce50b43b",
+      "orderId": "LP-1749074105104-5",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/d74f9d97-25f1-45c9-ba3f-c2426062cc88",
+      "sbpTransactionUuid": "d74f9d97-25f1-45c9-ba3f-c2426062cc88"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 2,
+    "testName": "Valid Payment $10 USD",
+    "notes": "$10 = 888.89 RUB total, 800 RUB net",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "1911186e-9265-4a65-a3d0-ece9dfa07dbb",
+      "orderId": "LP-1749074106830-10",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/63b778e9-f855-4d31-ac24-d6f0edce67d6",
+      "sbpTransactionUuid": "63b778e9-f855-4d31-ac24-d6f0edce67d6"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 3,
+    "testName": "Valid Payment $15 USD",
+    "notes": "$15 = 1333.33 RUB total, 1200 RUB net",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 1333.33,
+      "netAmount": 1200,
+      "currency": "RUB",
+      "transactionId": "dda834e6-31f9-43a0-8193-65f854ad1b53",
+      "orderId": "LP-1749074108581-15",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/f3c39ce7-d2dd-4c80-ba4b-6c8060514c3c",
+      "sbpTransactionUuid": "f3c39ce7-d2dd-4c80-ba4b-6c8060514c3c"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 4,
+    "testName": "Valid Payment $20 USD",
+    "notes": "$20 = 1777.78 RUB total, 1600 RUB net",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 1777.78,
+      "netAmount": 1600,
+      "currency": "RUB",
+      "transactionId": "95449393-6e0a-4791-a7f2-b563ab61f103",
+      "orderId": "LP-1749074110220-20",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/49261acd-2bed-489d-b2d2-22d8fa067408",
+      "sbpTransactionUuid": "49261acd-2bed-489d-b2d2-22d8fa067408"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 5,
+    "testName": "Valid Custom Amount $12.50",
+    "notes": "Custom amount with proper commission calculation",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 1111.11,
+      "netAmount": 1000,
+      "currency": "RUB",
+      "transactionId": "8246c964-9e67-4d4f-929e-4a97a6f73cef",
+      "orderId": "LP-1749074111854-custom",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/cfcf1fdc-27c6-4ce7-86f9-c580ca26a763",
+      "sbpTransactionUuid": "cfcf1fdc-27c6-4ce7-86f9-c580ca26a763"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 6,
+    "testName": "Valid Minimum Amount $5.00",
+    "notes": "Minimum boundary test",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 444.44,
+      "netAmount": 400,
+      "currency": "RUB",
+      "transactionId": "bc56cb50-0004-40a0-a510-9be31800c68f",
+      "orderId": "LP-1749074113496-min",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/b1fcba52-7560-4529-af72-321655904a11",
+      "sbpTransactionUuid": "b1fcba52-7560-4529-af72-321655904a11"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 7,
+    "testName": "Valid Maximum Amount $100.00",
+    "notes": "Maximum boundary test - 8888.89 RUB",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 8888.89,
+      "netAmount": 8000,
+      "currency": "RUB",
+      "transactionId": "31e6a373-22cc-48ac-95b1-1ce7cb6f3022",
+      "orderId": "LP-1749074115340-max",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/9e85592e-f67e-47bf-8cc6-5de283fddb5a",
+      "sbpTransactionUuid": "9e85592e-f67e-47bf-8cc6-5de283fddb5a"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 8,
+    "testName": "Valid Amount with Cents $15.50",
+    "notes": "Testing decimal precision",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 1377.78,
+      "netAmount": 1240,
+      "currency": "RUB",
+      "transactionId": "6c63fbe0-b139-4cc1-892e-1c9d9746e949",
+      "orderId": "LP-1749074116852-cents",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/7f455936-d04c-4d39-9800-1827bc0fe7c6",
+      "sbpTransactionUuid": "7f455936-d04c-4d39-9800-1827bc0fe7c6"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 9,
+    "testName": "Invalid Amount Below Minimum $4.99",
+    "notes": "Below minimum threshold",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 443.56,
+      "netAmount": 399.2,
+      "currency": "RUB",
+      "transactionId": "c17b4ae4-f5b9-47a0-b710-1bb3deb60127",
+      "orderId": "LP-1749074118514-below",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/23775fa1-347c-4880-a879-60c36c14205b",
+      "sbpTransactionUuid": "23775fa1-347c-4880-a879-60c36c14205b"
+    },
+    "expectedOutcome": "error",
+    "actualOutcome": "success",
+    "passed": false,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 10,
+    "testName": "Invalid Amount Above Maximum $100.01",
+    "notes": "Above maximum threshold - 8889.78 RUB",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 8889.78,
+      "netAmount": 8000.8,
+      "currency": "RUB",
+      "transactionId": "c481c80c-9459-429b-be28-fee22661f48f",
+      "orderId": "LP-1749074120153-above",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/8db6037a-a685-421b-8fb8-17eeb5155f9a",
+      "sbpTransactionUuid": "8db6037a-a685-421b-8fb8-17eeb5155f9a"
+    },
+    "expectedOutcome": "error",
+    "actualOutcome": "success",
+    "passed": false,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 11,
+    "testName": "Invalid Zero Amount",
+    "notes": "Testing zero amount validation",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 0,
+      "netAmount": 0,
+      "currency": "RUB",
+      "transactionId": "7a9c6620-6a66-4875-aa5a-d31f8a9939ae",
+      "orderId": "LP-1749074121611-zero",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Сумма должна быть от 1 до 100000 RUB",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 12,
+    "testName": "Invalid Negative Amount",
+    "notes": "Testing negative amount validation",
+    "input": {
+      "steamUsername": "admin",
+      "amount": -100,
+      "netAmount": -90,
+      "currency": "RUB",
+      "transactionId": "07fbbbe8-d4cd-4f03-85b7-2b0c416a9628",
+      "orderId": "LP-1749074122335-negative",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Общая сумма оплаты не может быть меньше зачисляемой",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 13,
+    "testName": "Invalid Very Large Amount",
+    "notes": "Testing very large amount (999M RUB)",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 999999999,
+      "netAmount": 950000000,
+      "currency": "RUB",
+      "transactionId": "9763df87-1fca-45bf-8aac-60aa91934c93",
+      "orderId": "LP-1749074123066-large",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Сумма должна быть от 1 до 100000 RUB",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 14,
+    "testName": "Invalid Non-numeric Amount",
+    "notes": "Testing string amounts",
+    "input": {
+      "steamUsername": "admin",
+      "amount": "abc",
+      "netAmount": "xyz",
+      "currency": "RUB",
+      "transactionId": "7b0248ec-7606-4b5d-ad8e-b82d659fabfc",
+      "orderId": "LP-1749074123839-nonnumeric",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 15,
+    "testName": "Invalid Null Amount",
+    "notes": "Testing null amounts",
+    "input": {
+      "steamUsername": "admin",
+      "amount": null,
+      "netAmount": null,
+      "currency": "RUB",
+      "transactionId": "059ece4b-b4b5-4a7e-9c7a-37104ebec4b0",
+      "orderId": "LP-1749074124547-null",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 16,
+    "testName": "Invalid Too Many Decimals",
+    "notes": "Testing excessive decimal precision",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 1000.999999,
+      "netAmount": 950.888888,
+      "currency": "RUB",
+      "transactionId": "1332e5d2-288e-43cd-9bc3-07e4a979e9f5",
+      "orderId": "LP-1749074125262-decimals",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Разница между оплачиваемой и зачисляемой суммой составляет менее 5.5 %",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 17,
+    "testName": "Valid Payment with Fresh TransactionId",
+    "notes": "First use of transactionId",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "d29610c6-e9fb-4e1f-8685-674fe48f85d5",
+      "orderId": "LP-1749074125972-first",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/eaa24dab-be7c-455b-84bb-86be71a2068d",
+      "sbpTransactionUuid": "eaa24dab-be7c-455b-84bb-86be71a2068d"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 18,
+    "testName": "Invalid Reused TransactionId",
+    "notes": "Attempting to reuse same transactionId",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "d29610c6-e9fb-4e1f-8685-674fe48f85d5",
+      "orderId": "LP-1749074126739-reuse",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Транзакция с таким ID уже обработана",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 19,
+    "testName": "Invalid TransactionId Format",
+    "notes": "Testing malformed transactionId",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "invalid-format-123",
+      "orderId": "LP-1749074126760-invalid-tid",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 500,
+    "responseData": {
+      "statusCode": 500,
+      "message": "Ошибка при генерации ссылки для оплаты",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 500",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 20,
+    "testName": "Invalid Empty TransactionId",
+    "notes": "Testing empty transactionId",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "",
+      "orderId": "LP-1749074126789-empty-tid",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 21,
+    "testName": "Invalid Null TransactionId",
+    "notes": "Testing null transactionId",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": null,
+      "orderId": "LP-1749074126799-null-tid",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 22,
+    "testName": "Invalid Random String TransactionId",
+    "notes": "Testing random string as transactionId",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "random-string-not-uuid",
+      "orderId": "LP-1749074126812-random-tid",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 500,
+    "responseData": {
+      "statusCode": 500,
+      "message": "Ошибка при генерации ссылки для оплаты",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 500",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 23,
+    "testName": "Valid Payment with Order ID",
+    "notes": "First use of order ID",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "10031e82-460e-4146-a5e6-5802f7236c5c",
+      "orderId": "LP-DUPLICATE-1749074126834",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/81d4f67f-1f23-46a8-a661-8de7beafd1b4",
+      "sbpTransactionUuid": "81d4f67f-1f23-46a8-a661-8de7beafd1b4"
+    },
+    "expectedOutcome": "success",
+    "actualOutcome": "success",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 24,
+    "testName": "Invalid Duplicate Order ID",
+    "notes": "Attempting to reuse same order ID",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "fa787d78-8aa3-444c-9859-773a610099f5",
+      "orderId": "LP-DUPLICATE-1749074126834",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 500,
+    "responseData": {
+      "statusCode": 500,
+      "message": "Request failed with status code 500",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 500",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 25,
+    "testName": "Invalid Very Long Order ID",
+    "notes": "Testing extremely long order ID (1000+ chars)",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "46afb06d-cb6a-4416-92c5-a8397036df0e",
+      "orderId": "LP-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/36371df5-188e-418a-ad16-4293560865a0",
+      "sbpTransactionUuid": "36371df5-188e-418a-ad16-4293560865a0"
+    },
+    "expectedOutcome": "error",
+    "actualOutcome": "success",
+    "passed": false,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 26,
+    "testName": "Invalid Empty Order ID",
+    "notes": "Testing empty order ID",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "7e54de4a-0400-4431-bbaa-19976c6eb88d",
+      "orderId": "",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/6a89047c-8cd8-4618-9168-d8d909dbd47c",
+      "sbpTransactionUuid": "6a89047c-8cd8-4618-9168-d8d909dbd47c"
+    },
+    "expectedOutcome": "error",
+    "actualOutcome": "success",
+    "passed": false,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 27,
+    "testName": "Order ID with Special Characters",
+    "notes": "Testing special characters in order ID",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "1b43ea70-cfe6-4fa9-a659-85054054ad9c",
+      "orderId": "LP@#$%^&*()_+{}|:\"<>?[]\\;',./",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/f02fdb45-1f18-45cf-a1ec-dfbd99a96ec0",
+      "sbpTransactionUuid": "f02fdb45-1f18-45cf-a1ec-dfbd99a96ec0"
+    },
+    "expectedOutcome": "error",
+    "actualOutcome": "success",
+    "passed": false,
+    "paymentUrl": null
+  },
+  {
+    "testNumber": 28,
+    "testName": "Order ID SQL Injection Attempt",
+    "notes": "Testing SQL injection in order ID",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 888.89,
+      "netAmount": 800,
+      "currency": "RUB",
+      "transactionId": "a242a961-6fe0-4e3f-99f2-48f24c5e255d",
+      "orderId": "LP-123'; DROP TABLE orders; --",
+      "directSuccess": false
+    },
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "payUrl": "https://paydigital.shop/payment/2ddb2f33-59bf-4d6c-8a47-c2714aa5ed15",
+      "sbpTransactionUuid": "2ddb2f33-59bf-4d6c-8a47-c2714aa5ed15"
+    },
+    "expectedOutcome": "error",
+    "actualOutcome": "success",
+    "passed": false,
+    "paymentUrl": null
+  }
+]

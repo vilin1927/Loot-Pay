@@ -1,0 +1,771 @@
+{
+  "summary": {
+    "totalFlowTests": 9,
+    "successfulFlows": 8,
+    "failedFlows": 1,
+    "passedTests": 8,
+    "failedTests": 1,
+    "untestedFlows": 0
+  },
+  "categories": {
+    "completeFlows": 1,
+    "abandonmentFlows": 3,
+    "stateFlows": 2,
+    "multiUserFlows": 2
+  },
+  "performance": {
+    "average": 896.7777777777778,
+    "longest": {
+      "testNumber": 2,
+      "testName": "Returning User Flow",
+      "notes": "Returning user flow without questionnaire",
+      "flowId": "FLOW-2-1749112306754",
+      "status": "SUCCESS",
+      "result": {
+        "userId": "USER-RETURNING-1749112306754",
+        "steps": [
+          "steam_username_start",
+          "steam_username_input",
+          "steam_username_validate",
+          "amount_selection",
+          "payment_get_fresh_transaction_id",
+          "payment_create",
+          "payment_process",
+          "flow_complete"
+        ],
+        "finalState": {
+          "userId": "USER-RETURNING-1749112306754",
+          "currentStep": "completed",
+          "data": {
+            "steamUsername": "admin",
+            "steamValid": true,
+            "amountUSD": 20,
+            "amountRUB": 1777.78,
+            "netAmountRUB": 1600,
+            "orderId": "LP-RETURNING-FLOW-2-1749112306754-1749112308208",
+            "completedAt": "2025-06-05T08:31:49.119Z"
+          },
+          "createdAt": "2025-06-05T08:31:46.754Z",
+          "updatedAt": "2025-06-05T08:31:49.121Z",
+          "expiresAt": "2025-06-05T09:01:46.754Z",
+          "isExpired": false
+        },
+        "orderId": "LP-RETURNING-FLOW-2-1749112306754-1749112308208",
+        "totalSteps": 8
+      },
+      "duration": 2367,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "steam_username_start",
+        "steam_username_input",
+        "steam_username_validate",
+        "amount_selection",
+        "payment_get_fresh_transaction_id",
+        "payment_create",
+        "payment_process",
+        "flow_complete"
+      ],
+      "finalState": {
+        "userId": "USER-RETURNING-1749112306754",
+        "currentStep": "completed",
+        "data": {
+          "steamUsername": "admin",
+          "steamValid": true,
+          "amountUSD": 20,
+          "amountRUB": 1777.78,
+          "netAmountRUB": 1600,
+          "orderId": "LP-RETURNING-FLOW-2-1749112306754-1749112308208",
+          "completedAt": "2025-06-05T08:31:49.119Z"
+        },
+        "createdAt": "2025-06-05T08:31:46.754Z",
+        "updatedAt": "2025-06-05T08:31:49.121Z",
+        "expiresAt": "2025-06-05T09:01:46.754Z",
+        "isExpired": false
+      }
+    },
+    "shortest": {
+      "testNumber": 4,
+      "testName": "Abandon During Steam Validation",
+      "notes": "User abandons during Steam username validation",
+      "flowId": "FLOW-4-1749112309123",
+      "status": "SUCCESS",
+      "result": {
+        "userId": "USER-ABANDON-STEAM-1749112309123",
+        "steps": [
+          "steam_username_start",
+          "steam_username_input_partial",
+          "user_abandons"
+        ],
+        "finalState": {
+          "userId": "USER-ABANDON-STEAM-1749112309123",
+          "currentStep": "abandoned",
+          "data": {
+            "steamUsername": "partial-input",
+            "inputStarted": true,
+            "abandonedAt": "2025-06-05T08:31:49.123Z",
+            "abandonedStep": "steam_validation"
+          },
+          "createdAt": "2025-06-05T08:31:49.123Z",
+          "updatedAt": "2025-06-05T08:31:49.123Z",
+          "expiresAt": "2025-06-05T09:01:49.123Z",
+          "isExpired": false
+        },
+        "abandoned": true,
+        "abandonedAt": "steam_validation",
+        "totalSteps": 3
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "steam_username_start",
+        "steam_username_input_partial",
+        "user_abandons"
+      ],
+      "finalState": {
+        "userId": "USER-ABANDON-STEAM-1749112309123",
+        "currentStep": "abandoned",
+        "data": {
+          "steamUsername": "partial-input",
+          "inputStarted": true,
+          "abandonedAt": "2025-06-05T08:31:49.123Z",
+          "abandonedStep": "steam_validation"
+        },
+        "createdAt": "2025-06-05T08:31:49.123Z",
+        "updatedAt": "2025-06-05T08:31:49.123Z",
+        "expiresAt": "2025-06-05T09:01:49.123Z",
+        "isExpired": false
+      }
+    }
+  },
+  "userStates": {
+    "totalCreated": 8,
+    "states": [
+      {
+        "userId": "USER-RECOVERY-1749112310226",
+        "currentStep": "amount_selection",
+        "data": {
+          "steamUsername": "admin",
+          "steamValid": true,
+          "recoveryTest": true
+        },
+        "createdAt": "2025-06-05T08:31:50.226Z",
+        "updatedAt": "2025-06-05T08:31:50.226Z",
+        "expiresAt": "2025-06-05T09:01:50.226Z",
+        "isExpired": false
+      },
+      {
+        "userId": "USER-CONCURRENT-4-1749112310236",
+        "currentStep": "steam_validated",
+        "data": {
+          "steamUsername": "user4",
+          "concurrentTest": true
+        },
+        "createdAt": "2025-06-05T08:31:50.236Z",
+        "updatedAt": "2025-06-05T08:31:51.077Z",
+        "expiresAt": "2025-06-05T09:01:50.236Z",
+        "isExpired": false
+      },
+      {
+        "userId": "USER-CONCURRENT-2-1749112310230",
+        "currentStep": "steam_validated",
+        "data": {
+          "steamUsername": "user2",
+          "concurrentTest": true,
+          "transactionId": "3d4d3da6-4853-466d-a5f6-ceb6c8d2ac47"
+        },
+        "createdAt": "2025-06-05T08:31:50.230Z",
+        "updatedAt": "2025-06-05T08:31:51.113Z",
+        "expiresAt": "2025-06-05T09:01:50.230Z",
+        "isExpired": false
+      },
+      {
+        "userId": "USER-CONCURRENT-1-1749112310227",
+        "currentStep": "steam_validated",
+        "data": {
+          "steamUsername": "user1",
+          "concurrentTest": true,
+          "transactionId": "f2377530-7fcc-43a0-bd2a-5171950355de"
+        },
+        "createdAt": "2025-06-05T08:31:50.227Z",
+        "updatedAt": "2025-06-05T08:31:51.124Z",
+        "expiresAt": "2025-06-05T09:01:50.227Z",
+        "isExpired": false
+      },
+      {
+        "userId": "USER-CONCURRENT-0-1749112310227",
+        "currentStep": "steam_validated",
+        "data": {
+          "steamUsername": "user0",
+          "concurrentTest": true
+        },
+        "createdAt": "2025-06-05T08:31:50.227Z",
+        "updatedAt": "2025-06-05T08:31:51.131Z",
+        "expiresAt": "2025-06-05T09:01:50.227Z",
+        "isExpired": false
+      },
+      {
+        "userId": "USER-CONCURRENT-3-1749112310234",
+        "currentStep": "steam_validated",
+        "data": {
+          "steamUsername": "user3",
+          "concurrentTest": true,
+          "transactionId": "c1a5ccdc-ca33-411c-b592-3b79aa673645"
+        },
+        "createdAt": "2025-06-05T08:31:50.234Z",
+        "updatedAt": "2025-06-05T08:31:51.157Z",
+        "expiresAt": "2025-06-05T09:01:50.234Z",
+        "isExpired": false
+      },
+      {
+        "userId": "USER-SAME-STEAM-0-1749112311158",
+        "currentStep": "payment_attempted",
+        "data": {
+          "steamUsername": "admin",
+          "paymentSuccess": true,
+          "orderId": "LP-SAME-STEAM-0-FLOW-9-1749112311158-1749112311890"
+        },
+        "createdAt": "2025-06-05T08:31:51.158Z",
+        "updatedAt": "2025-06-05T08:31:52.823Z",
+        "expiresAt": "2025-06-05T09:01:51.158Z",
+        "isExpired": false
+      },
+      {
+        "userId": "USER-SAME-STEAM-1-1749112311159",
+        "currentStep": "payment_attempted",
+        "data": {
+          "steamUsername": "admin",
+          "paymentSuccess": true,
+          "orderId": "LP-SAME-STEAM-1-FLOW-9-1749112311158-1749112311893"
+        },
+        "createdAt": "2025-06-05T08:31:51.159Z",
+        "updatedAt": "2025-06-05T08:31:52.849Z",
+        "expiresAt": "2025-06-05T09:01:51.159Z",
+        "isExpired": false
+      }
+    ]
+  },
+  "detailedResults": [
+    {
+      "testNumber": 1,
+      "testName": "New User Complete Flow",
+      "notes": "Complete new user journey from questionnaire to payment",
+      "flowId": "FLOW-1-1749112304774",
+      "status": "ERROR",
+      "error": "Payment creation failed: Request failed with status code 400",
+      "duration": 1979,
+      "expectedOutcome": "success",
+      "actualOutcome": "error",
+      "passed": false,
+      "steps": [],
+      "finalState": null
+    },
+    {
+      "testNumber": 2,
+      "testName": "Returning User Flow",
+      "notes": "Returning user flow without questionnaire",
+      "flowId": "FLOW-2-1749112306754",
+      "status": "SUCCESS",
+      "result": {
+        "userId": "USER-RETURNING-1749112306754",
+        "steps": [
+          "steam_username_start",
+          "steam_username_input",
+          "steam_username_validate",
+          "amount_selection",
+          "payment_get_fresh_transaction_id",
+          "payment_create",
+          "payment_process",
+          "flow_complete"
+        ],
+        "finalState": {
+          "userId": "USER-RETURNING-1749112306754",
+          "currentStep": "completed",
+          "data": {
+            "steamUsername": "admin",
+            "steamValid": true,
+            "amountUSD": 20,
+            "amountRUB": 1777.78,
+            "netAmountRUB": 1600,
+            "orderId": "LP-RETURNING-FLOW-2-1749112306754-1749112308208",
+            "completedAt": "2025-06-05T08:31:49.119Z"
+          },
+          "createdAt": "2025-06-05T08:31:46.754Z",
+          "updatedAt": "2025-06-05T08:31:49.121Z",
+          "expiresAt": "2025-06-05T09:01:46.754Z",
+          "isExpired": false
+        },
+        "orderId": "LP-RETURNING-FLOW-2-1749112306754-1749112308208",
+        "totalSteps": 8
+      },
+      "duration": 2367,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "steam_username_start",
+        "steam_username_input",
+        "steam_username_validate",
+        "amount_selection",
+        "payment_get_fresh_transaction_id",
+        "payment_create",
+        "payment_process",
+        "flow_complete"
+      ],
+      "finalState": {
+        "userId": "USER-RETURNING-1749112306754",
+        "currentStep": "completed",
+        "data": {
+          "steamUsername": "admin",
+          "steamValid": true,
+          "amountUSD": 20,
+          "amountRUB": 1777.78,
+          "netAmountRUB": 1600,
+          "orderId": "LP-RETURNING-FLOW-2-1749112306754-1749112308208",
+          "completedAt": "2025-06-05T08:31:49.119Z"
+        },
+        "createdAt": "2025-06-05T08:31:46.754Z",
+        "updatedAt": "2025-06-05T08:31:49.121Z",
+        "expiresAt": "2025-06-05T09:01:46.754Z",
+        "isExpired": false
+      }
+    },
+    {
+      "testNumber": 3,
+      "testName": "Abandon During Questionnaire",
+      "notes": "User abandons flow during questionnaire - should save state",
+      "flowId": "FLOW-3-1749112309122",
+      "status": "SUCCESS",
+      "result": {
+        "userId": "USER-ABANDON-Q-1749112309123",
+        "steps": [
+          "questionnaire_start",
+          "questionnaire_question_1",
+          "questionnaire_question_2",
+          "user_abandons"
+        ],
+        "finalState": {
+          "userId": "USER-ABANDON-Q-1749112309123",
+          "currentStep": "abandoned",
+          "data": {
+            "question": 1,
+            "question_1": "answer_1",
+            "question_2": "answer_2",
+            "abandonedAt": "2025-06-05T08:31:49.123Z",
+            "abandonedStep": "questionnaire_question_3"
+          },
+          "createdAt": "2025-06-05T08:31:49.123Z",
+          "updatedAt": "2025-06-05T08:31:49.123Z",
+          "expiresAt": "2025-06-05T09:01:49.123Z",
+          "isExpired": false
+        },
+        "abandoned": true,
+        "abandonedAt": "questionnaire",
+        "totalSteps": 4
+      },
+      "duration": 1,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "questionnaire_start",
+        "questionnaire_question_1",
+        "questionnaire_question_2",
+        "user_abandons"
+      ],
+      "finalState": {
+        "userId": "USER-ABANDON-Q-1749112309123",
+        "currentStep": "abandoned",
+        "data": {
+          "question": 1,
+          "question_1": "answer_1",
+          "question_2": "answer_2",
+          "abandonedAt": "2025-06-05T08:31:49.123Z",
+          "abandonedStep": "questionnaire_question_3"
+        },
+        "createdAt": "2025-06-05T08:31:49.123Z",
+        "updatedAt": "2025-06-05T08:31:49.123Z",
+        "expiresAt": "2025-06-05T09:01:49.123Z",
+        "isExpired": false
+      }
+    },
+    {
+      "testNumber": 4,
+      "testName": "Abandon During Steam Validation",
+      "notes": "User abandons during Steam username validation",
+      "flowId": "FLOW-4-1749112309123",
+      "status": "SUCCESS",
+      "result": {
+        "userId": "USER-ABANDON-STEAM-1749112309123",
+        "steps": [
+          "steam_username_start",
+          "steam_username_input_partial",
+          "user_abandons"
+        ],
+        "finalState": {
+          "userId": "USER-ABANDON-STEAM-1749112309123",
+          "currentStep": "abandoned",
+          "data": {
+            "steamUsername": "partial-input",
+            "inputStarted": true,
+            "abandonedAt": "2025-06-05T08:31:49.123Z",
+            "abandonedStep": "steam_validation"
+          },
+          "createdAt": "2025-06-05T08:31:49.123Z",
+          "updatedAt": "2025-06-05T08:31:49.123Z",
+          "expiresAt": "2025-06-05T09:01:49.123Z",
+          "isExpired": false
+        },
+        "abandoned": true,
+        "abandonedAt": "steam_validation",
+        "totalSteps": 3
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "steam_username_start",
+        "steam_username_input_partial",
+        "user_abandons"
+      ],
+      "finalState": {
+        "userId": "USER-ABANDON-STEAM-1749112309123",
+        "currentStep": "abandoned",
+        "data": {
+          "steamUsername": "partial-input",
+          "inputStarted": true,
+          "abandonedAt": "2025-06-05T08:31:49.123Z",
+          "abandonedStep": "steam_validation"
+        },
+        "createdAt": "2025-06-05T08:31:49.123Z",
+        "updatedAt": "2025-06-05T08:31:49.123Z",
+        "expiresAt": "2025-06-05T09:01:49.123Z",
+        "isExpired": false
+      }
+    },
+    {
+      "testNumber": 5,
+      "testName": "Abandon After Amount Selection",
+      "notes": "User abandons after amount selection",
+      "flowId": "FLOW-5-1749112309123",
+      "status": "SUCCESS",
+      "result": {
+        "userId": "USER-ABANDON-AMOUNT-1749112309123",
+        "steps": [
+          "steam_username_complete",
+          "amount_selected",
+          "user_abandons"
+        ],
+        "finalState": {
+          "userId": "USER-ABANDON-AMOUNT-1749112309123",
+          "currentStep": "abandoned",
+          "data": {
+            "steamUsername": "admin",
+            "steamValid": true,
+            "amountUSD": 10,
+            "amountRUB": 888.89,
+            "netAmountRUB": 800,
+            "abandonedAt": "2025-06-05T08:31:49.123Z",
+            "abandonedStep": "payment_creation"
+          },
+          "createdAt": "2025-06-05T08:31:49.123Z",
+          "updatedAt": "2025-06-05T08:31:49.123Z",
+          "expiresAt": "2025-06-05T09:01:49.123Z",
+          "isExpired": false
+        },
+        "abandoned": true,
+        "abandonedAt": "payment_creation",
+        "totalSteps": 3
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "steam_username_complete",
+        "amount_selected",
+        "user_abandons"
+      ],
+      "finalState": {
+        "userId": "USER-ABANDON-AMOUNT-1749112309123",
+        "currentStep": "abandoned",
+        "data": {
+          "steamUsername": "admin",
+          "steamValid": true,
+          "amountUSD": 10,
+          "amountRUB": 888.89,
+          "netAmountRUB": 800,
+          "abandonedAt": "2025-06-05T08:31:49.123Z",
+          "abandonedStep": "payment_creation"
+        },
+        "createdAt": "2025-06-05T08:31:49.123Z",
+        "updatedAt": "2025-06-05T08:31:49.123Z",
+        "expiresAt": "2025-06-05T09:01:49.123Z",
+        "isExpired": false
+      }
+    },
+    {
+      "testNumber": 6,
+      "testName": "State Expiration Handling",
+      "notes": "Expired states should be cleaned up properly",
+      "flowId": "FLOW-6-1749112309124",
+      "status": "SUCCESS",
+      "result": {
+        "userId": "USER-EXPIRE-1749112309124",
+        "steps": [
+          "state_created",
+          "waiting_for_expiration",
+          "check_expiration",
+          "cleanup_expired_state"
+        ],
+        "finalState": null,
+        "expired": true,
+        "totalSteps": 4
+      },
+      "duration": 1101,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "state_created",
+        "waiting_for_expiration",
+        "check_expiration",
+        "cleanup_expired_state"
+      ],
+      "finalState": null
+    },
+    {
+      "testNumber": 7,
+      "testName": "State Recovery After Bot Restart",
+      "notes": "State recovery should work after bot restart",
+      "flowId": "FLOW-7-1749112310226",
+      "status": "SUCCESS",
+      "result": {
+        "userId": "USER-RECOVERY-1749112310226",
+        "steps": [
+          "initial_state",
+          "save_state",
+          "simulate_bot_restart",
+          "recover_state",
+          "verify_recovery"
+        ],
+        "finalState": {
+          "userId": "USER-RECOVERY-1749112310226",
+          "currentStep": "amount_selection",
+          "data": {
+            "steamUsername": "admin",
+            "steamValid": true,
+            "recoveryTest": true
+          },
+          "createdAt": "2025-06-05T08:31:50.226Z",
+          "updatedAt": "2025-06-05T08:31:50.226Z",
+          "expiresAt": "2025-06-05T09:01:50.226Z",
+          "isExpired": false
+        },
+        "recovered": true,
+        "totalSteps": 5
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "initial_state",
+        "save_state",
+        "simulate_bot_restart",
+        "recover_state",
+        "verify_recovery"
+      ],
+      "finalState": {
+        "userId": "USER-RECOVERY-1749112310226",
+        "currentStep": "amount_selection",
+        "data": {
+          "steamUsername": "admin",
+          "steamValid": true,
+          "recoveryTest": true
+        },
+        "createdAt": "2025-06-05T08:31:50.226Z",
+        "updatedAt": "2025-06-05T08:31:50.226Z",
+        "expiresAt": "2025-06-05T09:01:50.226Z",
+        "isExpired": false
+      }
+    },
+    {
+      "testNumber": 8,
+      "testName": "Multiple Concurrent Users",
+      "notes": "Multiple users should not interfere with each other",
+      "flowId": "FLOW-8-1749112310226",
+      "status": "SUCCESS",
+      "result": {
+        "steps": [
+          "start_concurrent_users",
+          "await_all_users",
+          "analyze_results"
+        ],
+        "totalUsers": 5,
+        "successfulUsers": 5,
+        "failedUsers": 0,
+        "userResults": [
+          {
+            "userId": "USER-CONCURRENT-0-1749112310227",
+            "success": true,
+            "userState": {
+              "userId": "USER-CONCURRENT-0-1749112310227",
+              "currentStep": "steam_validated",
+              "data": {
+                "steamUsername": "user0",
+                "concurrentTest": true
+              },
+              "createdAt": "2025-06-05T08:31:50.227Z",
+              "updatedAt": "2025-06-05T08:31:51.131Z",
+              "expiresAt": "2025-06-05T09:01:50.227Z",
+              "isExpired": false
+            }
+          },
+          {
+            "userId": "USER-CONCURRENT-1-1749112310227",
+            "success": true,
+            "userState": {
+              "userId": "USER-CONCURRENT-1-1749112310227",
+              "currentStep": "steam_validated",
+              "data": {
+                "steamUsername": "user1",
+                "concurrentTest": true,
+                "transactionId": "f2377530-7fcc-43a0-bd2a-5171950355de"
+              },
+              "createdAt": "2025-06-05T08:31:50.227Z",
+              "updatedAt": "2025-06-05T08:31:51.124Z",
+              "expiresAt": "2025-06-05T09:01:50.227Z",
+              "isExpired": false
+            }
+          },
+          {
+            "userId": "USER-CONCURRENT-2-1749112310230",
+            "success": true,
+            "userState": {
+              "userId": "USER-CONCURRENT-2-1749112310230",
+              "currentStep": "steam_validated",
+              "data": {
+                "steamUsername": "user2",
+                "concurrentTest": true,
+                "transactionId": "3d4d3da6-4853-466d-a5f6-ceb6c8d2ac47"
+              },
+              "createdAt": "2025-06-05T08:31:50.230Z",
+              "updatedAt": "2025-06-05T08:31:51.113Z",
+              "expiresAt": "2025-06-05T09:01:50.230Z",
+              "isExpired": false
+            }
+          },
+          {
+            "userId": "USER-CONCURRENT-3-1749112310234",
+            "success": true,
+            "userState": {
+              "userId": "USER-CONCURRENT-3-1749112310234",
+              "currentStep": "steam_validated",
+              "data": {
+                "steamUsername": "user3",
+                "concurrentTest": true,
+                "transactionId": "c1a5ccdc-ca33-411c-b592-3b79aa673645"
+              },
+              "createdAt": "2025-06-05T08:31:50.234Z",
+              "updatedAt": "2025-06-05T08:31:51.157Z",
+              "expiresAt": "2025-06-05T09:01:50.234Z",
+              "isExpired": false
+            }
+          },
+          {
+            "userId": "USER-CONCURRENT-4-1749112310236",
+            "success": true,
+            "userState": {
+              "userId": "USER-CONCURRENT-4-1749112310236",
+              "currentStep": "steam_validated",
+              "data": {
+                "steamUsername": "user4",
+                "concurrentTest": true
+              },
+              "createdAt": "2025-06-05T08:31:50.236Z",
+              "updatedAt": "2025-06-05T08:31:51.077Z",
+              "expiresAt": "2025-06-05T09:01:50.236Z",
+              "isExpired": false
+            }
+          }
+        ],
+        "totalSteps": 3
+      },
+      "duration": 932,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "start_concurrent_users",
+        "await_all_users",
+        "analyze_results"
+      ],
+      "finalState": null
+    },
+    {
+      "testNumber": 9,
+      "testName": "Multiple Users Same Steam Username",
+      "notes": "Same Steam username should be handled properly",
+      "flowId": "FLOW-9-1749112311158",
+      "status": "SUCCESS",
+      "result": {
+        "steps": [
+          "start_same_username_test",
+          "await_both_users",
+          "analyze_same_username_results"
+        ],
+        "steamUsername": "admin",
+        "userResults": [
+          {
+            "userId": "USER-SAME-STEAM-0-1749112311158",
+            "userState": {
+              "userId": "USER-SAME-STEAM-0-1749112311158",
+              "currentStep": "payment_attempted",
+              "data": {
+                "steamUsername": "admin",
+                "paymentSuccess": true,
+                "orderId": "LP-SAME-STEAM-0-FLOW-9-1749112311158-1749112311890"
+              },
+              "createdAt": "2025-06-05T08:31:51.158Z",
+              "updatedAt": "2025-06-05T08:31:52.823Z",
+              "expiresAt": "2025-06-05T09:01:51.158Z",
+              "isExpired": false
+            }
+          },
+          {
+            "userId": "USER-SAME-STEAM-1-1749112311159",
+            "userState": {
+              "userId": "USER-SAME-STEAM-1-1749112311159",
+              "currentStep": "payment_attempted",
+              "data": {
+                "steamUsername": "admin",
+                "paymentSuccess": true,
+                "orderId": "LP-SAME-STEAM-1-FLOW-9-1749112311158-1749112311893"
+              },
+              "createdAt": "2025-06-05T08:31:51.159Z",
+              "updatedAt": "2025-06-05T08:31:52.849Z",
+              "expiresAt": "2025-06-05T09:01:51.159Z",
+              "isExpired": false
+            }
+          }
+        ],
+        "totalSteps": 3
+      },
+      "duration": 1691,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true,
+      "steps": [
+        "start_same_username_test",
+        "await_both_users",
+        "analyze_same_username_results"
+      ],
+      "finalState": null
+    }
+  ]
+}

@@ -1,0 +1,407 @@
+[
+  {
+    "testNumber": 1,
+    "testName": "First Payment with Fresh TransactionId",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "RUB",
+      "transactionId": "e7a8ea74-6efd-43c9-b66e-8bfad0a5b78d",
+      "orderId": "test-order-1749073824217",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Разница между оплачиваемой и зачисляемой суммой составляет менее 5.5 %",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "success",
+    "actualOutcome": "error",
+    "passed": false
+  },
+  {
+    "testNumber": 2,
+    "testName": "Second Payment with Same TransactionId (REUSE BUG)",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "RUB",
+      "transactionId": "e7a8ea74-6efd-43c9-b66e-8bfad0a5b78d",
+      "orderId": "test-order-1749073824243-2",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Транзакция с таким ID уже обработана",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 3,
+    "testName": "Payment with Zero Amount",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 0,
+      "netAmount": 0,
+      "currency": "RUB",
+      "transactionId": "7121da1b-ca72-4b66-a9de-9013bc1c93b4",
+      "orderId": "test-order-1749073824964",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Сумма должна быть от 1 до 100000 RUB",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 4,
+    "testName": "Payment with Negative Amount",
+    "input": {
+      "steamUsername": "admin",
+      "amount": -100,
+      "netAmount": -100,
+      "currency": "RUB",
+      "transactionId": "9cd4b49c-19fe-441b-bd23-dededca88794",
+      "orderId": "test-order-1749073825689",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Сумма должна быть от 1 до 100000 RUB",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 5,
+    "testName": "Payment with Very Large Amount",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 999999999,
+      "netAmount": 999999999,
+      "currency": "RUB",
+      "transactionId": "9027777a-7674-4058-8446-8c963bce8023",
+      "orderId": "test-order-1749073826468",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Сумма должна быть от 1 до 100000 RUB",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 6,
+    "testName": "Payment with Invalid Currency USD",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "USD",
+      "transactionId": "33f5f05f-a80c-40a2-8013-10d7fde5b017",
+      "orderId": "test-order-1749073827287",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Неподдерживаемая валюта",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 7,
+    "testName": "Payment with Invalid Currency EUR",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "EUR",
+      "transactionId": "273ecca7-29be-44b9-bdba-852d1d431c3b",
+      "orderId": "test-order-1749073828097",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Неподдерживаемая валюта",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 8,
+    "testName": "Payment with Empty Currency",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "",
+      "transactionId": "7ee81546-0eff-45f6-bd41-c0c15df59823",
+      "orderId": "test-order-1749073828847",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 9,
+    "testName": "Payment with Mismatched Username",
+    "input": {
+      "steamUsername": "thisuserdoesnotexist99999",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "RUB",
+      "transactionId": "a1fb1544-bf2d-4a08-a914-f7beca63b080",
+      "orderId": "test-order-1749073829642",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Имя аккаунта Steam не совпадает с именем на шаге проверки наличия аккаунта",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 10,
+    "testName": "Payment with Empty Order ID",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "RUB",
+      "transactionId": "ca542df6-5682-44aa-a4d9-2d7248f5d644",
+      "orderId": "",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Разница между оплачиваемой и зачисляемой суммой составляет менее 5.5 %",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 11,
+    "testName": "Payment with Very Long Order ID",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "RUB",
+      "transactionId": "dca133eb-9567-41da-a6b1-f02a6e5a3ae2",
+      "orderId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Разница между оплачиваемой и зачисляемой суммой составляет менее 5.5 %",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 12,
+    "testName": "Payment with Special Characters in Order ID",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "RUB",
+      "transactionId": "eee168c0-2e08-43fc-9f77-7b16f1d4d9f8",
+      "orderId": "order@#$%^&*()",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Разница между оплачиваемой и зачисляемой суммой составляет менее 5.5 %",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 13,
+    "testName": "Payment Missing Steam Username",
+    "input": {
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "RUB",
+      "transactionId": "59ce24bf-b596-4f9d-8cad-aefc54d15d8c",
+      "orderId": "test-order-1749073832655",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 14,
+    "testName": "Payment Missing Amount",
+    "input": {
+      "steamUsername": "admin",
+      "netAmount": 100,
+      "currency": "RUB",
+      "transactionId": "bfe80622-ea46-4ff8-8537-08a85c8d5144",
+      "orderId": "test-order-1749073833397",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 15,
+    "testName": "Payment Missing Transaction ID",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "RUB",
+      "orderId": "test-order-1749073833415",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 16,
+    "testName": "Payment with String Amount",
+    "input": {
+      "steamUsername": "admin",
+      "amount": "100",
+      "netAmount": "100",
+      "currency": "RUB",
+      "transactionId": "7294a013-06a8-4f92-9cce-4682315fe8dc",
+      "orderId": "test-order-1749073834212",
+      "directSuccess": false
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 17,
+    "testName": "Payment with Boolean Direct Success",
+    "input": {
+      "steamUsername": "admin",
+      "amount": 100,
+      "netAmount": 100,
+      "currency": "RUB",
+      "transactionId": "9233531d-63c0-4ed3-a045-b35acc576165",
+      "orderId": "test-order-1749073834966",
+      "directSuccess": "false"
+    },
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Разница между оплачиваемой и зачисляемой суммой составляет менее 5.5 %",
+      "path": "/steam/pay"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedOutcome": "error",
+    "actualOutcome": "error",
+    "passed": true
+  }
+]

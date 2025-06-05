@@ -3,6 +3,13 @@ import { logger } from '../../utils/logger';
 import { setState } from '../../services/state/stateService';
 import { payDigitalService } from '../../services/paydigital/paydigitalService';
 
+// Type for Steam validation result
+interface SteamValidationResult {
+  isValid: boolean;
+  transactionId?: string;
+  message?: string;
+}
+
 const STEAM_USERNAME_PROMPT = `🧩 Введите логин аккаунта Steam:
 ⚠️ *Внимание!* Пожалуйста, убедитесь, что логин введён правильно. Если вы допустите ошибку — средства могут уйти другому пользователю, и мы *не сможем вернуть деньги*. Проверьте логин дважды перед подтверждением!`;
 
@@ -36,7 +43,12 @@ const STEAM_USERNAME_SUCCESS = (username: string) => `✅ Аккаунт най�
 — Максимум: 100 USD
 Выберите один из вариантов ниже или введите свою сумму 👇`;
 
-// Export validateSteamUsername function
+// ✅ UPDATED: Export new validation function that returns transactionId
+export async function validateSteamUsernameWithTransactionId(username: string): Promise<SteamValidationResult> {
+  return await payDigitalService.validateSteamUsernameWithTransactionId(username);
+}
+
+// LEGACY: Export validateSteamUsername function for backward compatibility
 export async function validateSteamUsername(username: string): Promise<boolean> {
   return await payDigitalService.validateSteamUsername(username);
 }
@@ -65,9 +77,10 @@ export async function handleSteamUsernameRequest(
       return;
     }
 
-    // Validate username
-    const isValid = await validateSteamUsername(username);
-    if (!isValid) {
+    // ✅ UPDATED: Validate username AND get transactionId in single call
+    const validation = await validateSteamUsernameWithTransactionId(username);
+    
+    if (!validation.isValid) {
       await bot.sendMessage(chatId, STEAM_USERNAME_ERROR, {
         parse_mode: 'Markdown',
         reply_markup: {
@@ -79,8 +92,11 @@ export async function handleSteamUsernameRequest(
       return;
     }
 
-    // Store username and move to amount selection
-    await setState(userId, 'AMOUNT_SELECTION', { steamUsername: username });
+    // ✅ CRITICAL FIX: Store BOTH username AND transactionId for payment
+    await setState(userId, 'AMOUNT_SELECTION', { 
+      steamUsername: username,
+      transactionId: validation.transactionId // ✅ STORE transactionId for payment use
+    });
     
     // Send success message with amount selection buttons
     await bot.sendMessage(chatId, STEAM_USERNAME_SUCCESS(username), {
@@ -104,9 +120,10 @@ export async function handleSteamUsernameRequest(
       }
     });
 
-    logger.info('Steam username validated', {
+    logger.info('Steam username validated with transactionId stored', {
       userId,
-      username
+      username,
+      transactionId: validation.transactionId
     });
 
   } catch (error) {

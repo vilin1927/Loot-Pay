@@ -1,0 +1,831 @@
+[
+  {
+    "testNumber": 1,
+    "testName": "Valid Steam Username",
+    "input": "validsteamuser",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "validsteamuser",
+      "transactionId": "eb8f05c7-0125-4ae8-902c-14155b4c8c0e"
+    },
+    "expectedResult": "success",
+    "actualResult": "success",
+    "passed": true
+  },
+  {
+    "testNumber": 2,
+    "testName": "Steam Username with Numbers",
+    "input": "player123",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "player123",
+      "transactionId": "9c7aac42-ae76-44f6-977c-750fcedfb640"
+    },
+    "expectedResult": "success",
+    "actualResult": "success",
+    "passed": true
+  },
+  {
+    "testNumber": 3,
+    "testName": "Steam Username with Underscore",
+    "input": "steam_player",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "steam_player",
+      "transactionId": "d9bc34ed-b3ba-4b13-85f5-559fd3d28983"
+    },
+    "expectedResult": "success",
+    "actualResult": "success",
+    "passed": true
+  },
+  {
+    "testNumber": 4,
+    "testName": "Steam Username with Dash",
+    "input": "steam-player",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam steam-player не найден: User not found"
+    },
+    "expectedResult": "success",
+    "actualResult": "error",
+    "passed": false
+  },
+  {
+    "testNumber": 5,
+    "testName": "Short Valid Username",
+    "input": "abc",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "abc",
+      "transactionId": "d99a08c3-20bc-48c3-88db-544465b0505b"
+    },
+    "expectedResult": "success",
+    "actualResult": "success",
+    "passed": true
+  },
+  {
+    "testNumber": 6,
+    "testName": "Longer Valid Username",
+    "input": "verylongsteamusername123",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam verylongsteamusername123 не найден: User not found"
+    },
+    "expectedResult": "success",
+    "actualResult": "error",
+    "passed": false
+  },
+  {
+    "testNumber": 7,
+    "testName": "Numbers Only Username",
+    "input": "123456789",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam 123456789 не найден: User not found"
+    },
+    "expectedResult": "success",
+    "actualResult": "error",
+    "passed": false
+  },
+  {
+    "testNumber": 8,
+    "testName": "Mixed Case Username",
+    "input": "SteamPlayer123",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "SteamPlayer123",
+      "transactionId": "cec49a44-9886-4a22-a6b9-8a50b5e0b221"
+    },
+    "expectedResult": "success",
+    "actualResult": "success",
+    "passed": true
+  },
+  {
+    "testNumber": 9,
+    "testName": "Non-existent Username",
+    "input": "thisuserdoesnotexist99999",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam thisuserdoesnotexist99999 не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 10,
+    "testName": "Previously Tested Invalid",
+    "input": "2343кввыавыцвцу22",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam 2343кввыавыцвцу22 не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 11,
+    "testName": "Random Invalid Username",
+    "input": "zxcvbnmasdfghjkl999",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "zxcvbnmasdfghjkl999",
+      "transactionId": "ec8fcbdc-81f8-44cf-93ee-5a5dcfc4edd9"
+    },
+    "expectedResult": "error",
+    "actualResult": "success",
+    "passed": false
+  },
+  {
+    "testNumber": 12,
+    "testName": "Empty String",
+    "input": "",
+    "inputType": "string",
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/check"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedResult": "error",
+    "actualResult": "ERROR",
+    "passed": true
+  },
+  {
+    "testNumber": 13,
+    "testName": "Just Spaces",
+    "input": "   ",
+    "inputType": "string",
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/check"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedResult": "error",
+    "actualResult": "ERROR",
+    "passed": true
+  },
+  {
+    "testNumber": 14,
+    "testName": "Single Space",
+    "input": " ",
+    "inputType": "string",
+    "status": "ERROR",
+    "httpStatus": 400,
+    "responseData": {
+      "statusCode": 400,
+      "message": "Bad Request Exception",
+      "path": "/steam/check"
+    },
+    "errorMessage": "Request failed with status code 400",
+    "expectedResult": "error",
+    "actualResult": "ERROR",
+    "passed": true
+  },
+  {
+    "testNumber": 15,
+    "testName": "Username with @",
+    "input": "user@steam",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user@steam не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 16,
+    "testName": "Username with #",
+    "input": "user#123",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user#123 не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 17,
+    "testName": "Username with $",
+    "input": "user$money",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user$money не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 18,
+    "testName": "Username with %",
+    "input": "user%20",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user%20 не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 19,
+    "testName": "Username with &",
+    "input": "user&co",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user&co не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 20,
+    "testName": "Username with +",
+    "input": "user+plus",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user+plus не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 21,
+    "testName": "Username with =",
+    "input": "user=equal",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user=equal не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 22,
+    "testName": "Username with ?",
+    "input": "user?question",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user?question не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 23,
+    "testName": "Username with !",
+    "input": "user!exclaim",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user!exclaim не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 24,
+    "testName": "Very Long Username (100 chars)",
+    "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 25,
+    "testName": "Extremely Long Username (500 chars)",
+    "input": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 26,
+    "testName": "Single Character",
+    "input": "a",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam a не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 27,
+    "testName": "Two Characters",
+    "input": "ab",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam ab не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 28,
+    "testName": "Cyrillic Username",
+    "input": "пользователь",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam пользователь не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 29,
+    "testName": "Mixed Cyrillic/Latin",
+    "input": "userпривет",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam userпривет не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 30,
+    "testName": "Chinese Characters",
+    "input": "用户名",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam 用户名 не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 31,
+    "testName": "Arabic Characters",
+    "input": "مستخدم",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam مستخدم не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 32,
+    "testName": "Emoji Username",
+    "input": "user😀emoji",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user😀emoji не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 33,
+    "testName": "Unicode Username",
+    "input": "user™®©",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user™®© не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 34,
+    "testName": "Email Address",
+    "input": "user@example.com",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user@example.com не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 35,
+    "testName": "Email Without TLD",
+    "input": "user@domain",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user@domain не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 36,
+    "testName": "Gmail Address",
+    "input": "testuser@gmail.com",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam testuser@gmail.com не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 37,
+    "testName": "SQL Injection Attempt",
+    "input": "admin'; DROP TABLE users; --",
+    "inputType": "string",
+    "status": "ERROR",
+    "httpStatus": 500,
+    "responseData": {
+      "statusCode": 500,
+      "message": "Внутренняя ошибка сервера при проверке наличия аккаунта Steam",
+      "path": "/steam/check"
+    },
+    "errorMessage": "Request failed with status code 500",
+    "expectedResult": "error",
+    "actualResult": "ERROR",
+    "passed": true
+  },
+  {
+    "testNumber": 38,
+    "testName": "XSS Attempt",
+    "input": "<script>alert(\"xss\")</script>",
+    "inputType": "string",
+    "status": "ERROR",
+    "httpStatus": 500,
+    "responseData": {
+      "statusCode": 500,
+      "message": "Внутренняя ошибка сервера при проверке наличия аккаунта Steam",
+      "path": "/steam/check"
+    },
+    "errorMessage": "Request failed with status code 500",
+    "expectedResult": "error",
+    "actualResult": "ERROR",
+    "passed": true
+  },
+  {
+    "testNumber": 39,
+    "testName": "Path Traversal",
+    "input": "../../../etc/passwd",
+    "inputType": "string",
+    "status": "ERROR",
+    "httpStatus": 500,
+    "responseData": {
+      "statusCode": 500,
+      "message": "Внутренняя ошибка сервера при проверке наличия аккаунта Steam",
+      "path": "/steam/check"
+    },
+    "errorMessage": "Request failed with status code 500",
+    "expectedResult": "error",
+    "actualResult": "ERROR",
+    "passed": true
+  },
+  {
+    "testNumber": 40,
+    "testName": "Command Injection",
+    "input": "user; rm -rf /",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user; rm -rf / не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 41,
+    "testName": "LDAP Injection",
+    "input": "user*)(uid=*))(|(uid=*",
+    "inputType": "string",
+    "status": "ERROR",
+    "httpStatus": 500,
+    "responseData": {
+      "statusCode": 500,
+      "message": "Внутренняя ошибка сервера при проверке наличия аккаунта Steam",
+      "path": "/steam/check"
+    },
+    "errorMessage": "Request failed with status code 500",
+    "expectedResult": "error",
+    "actualResult": "ERROR",
+    "passed": true
+  },
+  {
+    "testNumber": 42,
+    "testName": "Username with Leading Space",
+    "input": " validuser",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam validuser не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 43,
+    "testName": "Username with Trailing Space",
+    "input": "validuser ",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam validuser не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 44,
+    "testName": "Username with Tab",
+    "input": "user\tname",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user\tname не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 45,
+    "testName": "Username with Newline",
+    "input": "user\nname",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user\nname не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 46,
+    "testName": "Username with Carriage Return",
+    "input": "user\rname",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user\rname не найден: md5 error"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 47,
+    "testName": "URL Encoded Characters",
+    "input": "user%20name",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user%20name не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 48,
+    "testName": "Double URL Encoded",
+    "input": "user%2520name",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam user%2520name не найден: User not found"
+    },
+    "expectedResult": "error",
+    "actualResult": "error",
+    "passed": true
+  },
+  {
+    "testNumber": 49,
+    "testName": "Common Username 1",
+    "input": "admin",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "admin",
+      "transactionId": "09da9f1c-71f1-4cc7-b62a-7459d8763172"
+    },
+    "expectedResult": "success",
+    "actualResult": "success",
+    "passed": true
+  },
+  {
+    "testNumber": 50,
+    "testName": "Common Username 2",
+    "input": "test",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "test",
+      "transactionId": "bf3f8eb6-3d9e-41fb-9729-038cc9086159"
+    },
+    "expectedResult": "success",
+    "actualResult": "success",
+    "passed": true
+  },
+  {
+    "testNumber": 51,
+    "testName": "Common Username 3",
+    "input": "user",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "user",
+      "transactionId": "d0be4c56-3054-4d1a-88b9-5f8ce685693a"
+    },
+    "expectedResult": "success",
+    "actualResult": "success",
+    "passed": true
+  },
+  {
+    "testNumber": 52,
+    "testName": "Common Username 4",
+    "input": "steam",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "error",
+      "message": "Аккаунт Steam steam не найден: User not found"
+    },
+    "expectedResult": "success",
+    "actualResult": "error",
+    "passed": false
+  },
+  {
+    "testNumber": 53,
+    "testName": "Common Username 5",
+    "input": "player1",
+    "inputType": "string",
+    "status": "SUCCESS",
+    "httpStatus": 200,
+    "responseData": {
+      "status": "success",
+      "message": "Аккаунт Steam успешно найден",
+      "steamUsername": "player1",
+      "transactionId": "e1d6baa6-ff81-4e7d-8ea7-206ad88960cb"
+    },
+    "expectedResult": "success",
+    "actualResult": "success",
+    "passed": true
+  }
+]

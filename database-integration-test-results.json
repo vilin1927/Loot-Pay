@@ -1,0 +1,802 @@
+{
+  "summary": {
+    "totalDbTests": 29,
+    "successfulOps": 17,
+    "failedOps": 12,
+    "passedTests": 29,
+    "failedTests": 0,
+    "untestedOps": 0
+  },
+  "categories": {
+    "userTests": 14,
+    "transactionTests": 17,
+    "stateTests": 5,
+    "concurrentTests": 2
+  },
+  "performance": {
+    "average": 0.4482758620689655,
+    "slowest": {
+      "testNumber": 1,
+      "testName": "Create Valid User",
+      "notes": "Creating user with all valid fields",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 1,
+          "telegram_id": 123456789,
+          "username": "testuser",
+          "first_name": "Test",
+          "last_name": "User",
+          "created_at": "2025-06-05T08:31:16.644Z",
+          "updated_at": "2025-06-05T08:31:16.653Z",
+          "questionnaire_completed": false,
+          "preferred_steam_username": null
+        }
+      },
+      "duration": 11,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    "fastest": {
+      "testNumber": 2,
+      "testName": "Create User Missing Fields",
+      "notes": "Users should be created even with missing optional fields",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 2,
+          "telegram_id": 987654321,
+          "created_at": "2025-06-05T08:31:16.655Z",
+          "updated_at": "2025-06-05T08:31:16.655Z",
+          "questionnaire_completed": false,
+          "preferred_steam_username": null
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    }
+  },
+  "testData": {
+    "usersCreated": 3,
+    "transactionsCreated": 7,
+    "users": [
+      {
+        "id": 1,
+        "telegram_id": 123456789,
+        "username": "testuser",
+        "first_name": "Test",
+        "last_name": "User",
+        "created_at": "2025-06-05T08:31:16.644Z",
+        "updated_at": "2025-06-05T08:31:16.655Z",
+        "questionnaire_completed": true,
+        "preferred_steam_username": "preferred_username"
+      },
+      {
+        "id": 2,
+        "telegram_id": 987654321,
+        "created_at": "2025-06-05T08:31:16.655Z",
+        "updated_at": "2025-06-05T08:31:16.655Z",
+        "questionnaire_completed": false,
+        "preferred_steam_username": null
+      },
+      {
+        "id": 3,
+        "telegram_id": 123456789,
+        "username": "duplicate",
+        "first_name": "Duplicate",
+        "last_name": "User",
+        "created_at": "2025-06-05T08:31:16.655Z",
+        "updated_at": "2025-06-05T08:31:16.655Z",
+        "questionnaire_completed": false,
+        "preferred_steam_username": null
+      }
+    ],
+    "transactions": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "steam_username": "teststeamuser",
+        "amount_usd": 15,
+        "amount_rub": 1200,
+        "amount_rub_total": 1333.33,
+        "commission_rub": 133.33,
+        "order_id": "LP-TEST-1749112276655",
+        "paydigital_transaction_id": "pd-1749112276655",
+        "status": "paid",
+        "created_at": "2025-06-05T08:31:16.655Z",
+        "updated_at": "2025-06-05T08:31:16.656Z",
+        "payment_url": "https://pay.example.com/payment123",
+        "webhook_received_at": "2025-06-05T08:31:16.656Z",
+        "completed_at": "2025-06-05T08:31:16.656Z"
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "steam_username": "testuser2",
+        "amount_usd": 10,
+        "amount_rub": 800,
+        "order_id": "LP-FAIL-TEST-1749112276656",
+        "paydigital_transaction_id": null,
+        "status": "failed",
+        "created_at": "2025-06-05T08:31:16.656Z",
+        "updated_at": "2025-06-05T08:31:16.656Z",
+        "payment_url": null,
+        "webhook_received_at": "2025-06-05T08:31:16.656Z",
+        "completed_at": null,
+        "failure_reason": "Payment declined"
+      },
+      {
+        "id": 3,
+        "user_id": 1,
+        "steam_username": "concurrent_user_0",
+        "amount_usd": 10,
+        "amount_rub": 800,
+        "order_id": "LP-CONCURRENT-0-1749112276658",
+        "paydigital_transaction_id": null,
+        "status": "paid",
+        "created_at": "2025-06-05T08:31:16.658Z",
+        "updated_at": "2025-06-05T08:31:16.658Z",
+        "payment_url": null,
+        "webhook_received_at": "2025-06-05T08:31:16.658Z",
+        "completed_at": "2025-06-05T08:31:16.658Z",
+        "concurrent_test": true
+      },
+      {
+        "id": 4,
+        "user_id": 1,
+        "steam_username": "concurrent_user_1",
+        "amount_usd": 10,
+        "amount_rub": 800,
+        "order_id": "LP-CONCURRENT-1-1749112276658",
+        "paydigital_transaction_id": null,
+        "status": "failed",
+        "created_at": "2025-06-05T08:31:16.658Z",
+        "updated_at": "2025-06-05T08:31:16.658Z",
+        "payment_url": null,
+        "webhook_received_at": "2025-06-05T08:31:16.658Z",
+        "completed_at": null,
+        "concurrent_test": true
+      },
+      {
+        "id": 5,
+        "user_id": 1,
+        "steam_username": "concurrent_user_2",
+        "amount_usd": 10,
+        "amount_rub": 800,
+        "order_id": "LP-CONCURRENT-2-1749112276658",
+        "paydigital_transaction_id": null,
+        "status": "refunded",
+        "created_at": "2025-06-05T08:31:16.658Z",
+        "updated_at": "2025-06-05T08:31:16.658Z",
+        "payment_url": null,
+        "webhook_received_at": "2025-06-05T08:31:16.658Z",
+        "completed_at": null,
+        "concurrent_test": true
+      },
+      {
+        "id": 6,
+        "user_id": 1,
+        "steam_username": "concurrent_user_3",
+        "amount_usd": 10,
+        "amount_rub": 800,
+        "order_id": "LP-CONCURRENT-3-1749112276658",
+        "paydigital_transaction_id": null,
+        "status": "pending",
+        "created_at": "2025-06-05T08:31:16.658Z",
+        "updated_at": "2025-06-05T08:31:16.658Z",
+        "payment_url": null,
+        "webhook_received_at": null,
+        "completed_at": null
+      },
+      {
+        "id": 7,
+        "user_id": 1,
+        "steam_username": "concurrent_user_4",
+        "amount_usd": 10,
+        "amount_rub": 800,
+        "order_id": "LP-CONCURRENT-4-1749112276658",
+        "paydigital_transaction_id": null,
+        "status": "pending",
+        "created_at": "2025-06-05T08:31:16.658Z",
+        "updated_at": "2025-06-05T08:31:16.658Z",
+        "payment_url": null,
+        "webhook_received_at": null,
+        "completed_at": null
+      }
+    ]
+  },
+  "detailedResults": [
+    {
+      "testNumber": 1,
+      "testName": "Create Valid User",
+      "notes": "Creating user with all valid fields",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 1,
+          "telegram_id": 123456789,
+          "username": "testuser",
+          "first_name": "Test",
+          "last_name": "User",
+          "created_at": "2025-06-05T08:31:16.644Z",
+          "updated_at": "2025-06-05T08:31:16.653Z",
+          "questionnaire_completed": false,
+          "preferred_steam_username": null
+        }
+      },
+      "duration": 11,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 2,
+      "testName": "Create User Missing Fields",
+      "notes": "Users should be created even with missing optional fields",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 2,
+          "telegram_id": 987654321,
+          "created_at": "2025-06-05T08:31:16.655Z",
+          "updated_at": "2025-06-05T08:31:16.655Z",
+          "questionnaire_completed": false,
+          "preferred_steam_username": null
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 3,
+      "testName": "Create Duplicate User",
+      "notes": "System should allow multiple users (for testing, real system might prevent)",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 3,
+          "telegram_id": 123456789,
+          "username": "duplicate",
+          "first_name": "Duplicate",
+          "last_name": "User",
+          "created_at": "2025-06-05T08:31:16.655Z",
+          "updated_at": "2025-06-05T08:31:16.655Z",
+          "questionnaire_completed": false,
+          "preferred_steam_username": null
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 4,
+      "testName": "Get User By ID",
+      "notes": "Retrieving existing user by ID",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 1,
+          "telegram_id": 123456789,
+          "username": "testuser",
+          "first_name": "Test",
+          "last_name": "User",
+          "created_at": "2025-06-05T08:31:16.644Z",
+          "updated_at": "2025-06-05T08:31:16.653Z",
+          "questionnaire_completed": false,
+          "preferred_steam_username": null
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 5,
+      "testName": "Get Non-existent User",
+      "notes": "Should fail when user does not exist",
+      "status": "ERROR",
+      "error": "User with ID 999999 not found",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 6,
+      "testName": "Update User",
+      "notes": "Updating user with valid data",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 1,
+          "telegram_id": 123456789,
+          "username": "testuser",
+          "first_name": "Test",
+          "last_name": "User",
+          "created_at": "2025-06-05T08:31:16.644Z",
+          "updated_at": "2025-06-05T08:31:16.655Z",
+          "questionnaire_completed": true,
+          "preferred_steam_username": "preferred_username"
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 7,
+      "testName": "Update Non-existent User",
+      "notes": "Should fail when updating non-existent user",
+      "status": "ERROR",
+      "error": "User with ID 999999 not found",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 8,
+      "testName": "Create Valid Transaction",
+      "notes": "Creating transaction with all valid fields",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 1,
+          "user_id": 1,
+          "steam_username": "teststeamuser",
+          "amount_usd": 15,
+          "amount_rub": 1200,
+          "amount_rub_total": 1333.33,
+          "commission_rub": 133.33,
+          "order_id": "LP-TEST-1749112276655",
+          "paydigital_transaction_id": "pd-1749112276655",
+          "status": "pending",
+          "created_at": "2025-06-05T08:31:16.655Z",
+          "updated_at": "2025-06-05T08:31:16.655Z",
+          "payment_url": "https://pay.example.com/payment123",
+          "webhook_received_at": null,
+          "completed_at": null
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 9,
+      "testName": "Create Transaction Missing Fields",
+      "notes": "Should fail when required fields are missing",
+      "status": "ERROR",
+      "error": "Missing required field: amount_usd",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 10,
+      "testName": "Create Transaction Invalid User",
+      "notes": "Should fail when user does not exist",
+      "status": "ERROR",
+      "error": "User with ID 999999 does not exist",
+      "duration": 1,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 11,
+      "testName": "Create Transaction Negative Amount",
+      "notes": "Should fail when amounts are negative",
+      "status": "ERROR",
+      "error": "Amounts must be positive",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 12,
+      "testName": "Create Transaction Duplicate Order ID",
+      "notes": "Should fail when order_id already exists",
+      "status": "ERROR",
+      "error": "Transaction with order_id LP-TEST-1749112276655 already exists",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 13,
+      "testName": "Create Transaction Zero Amount",
+      "notes": "Should fail when amounts are zero",
+      "status": "ERROR",
+      "error": "Missing required field: amount_usd",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 14,
+      "testName": "Update Transaction Status to Paid",
+      "notes": "Updating transaction status to paid",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 1,
+          "user_id": 1,
+          "steam_username": "teststeamuser",
+          "amount_usd": 15,
+          "amount_rub": 1200,
+          "amount_rub_total": 1333.33,
+          "commission_rub": 133.33,
+          "order_id": "LP-TEST-1749112276655",
+          "paydigital_transaction_id": "pd-1749112276655",
+          "status": "paid",
+          "created_at": "2025-06-05T08:31:16.655Z",
+          "updated_at": "2025-06-05T08:31:16.656Z",
+          "payment_url": "https://pay.example.com/payment123",
+          "webhook_received_at": "2025-06-05T08:31:16.656Z",
+          "completed_at": "2025-06-05T08:31:16.656Z"
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 15,
+      "testName": "Update Transaction Status to Failed",
+      "notes": "Updating transaction status to failed",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 2,
+          "user_id": 1,
+          "steam_username": "testuser2",
+          "amount_usd": 10,
+          "amount_rub": 800,
+          "order_id": "LP-FAIL-TEST-1749112276656",
+          "paydigital_transaction_id": null,
+          "status": "failed",
+          "created_at": "2025-06-05T08:31:16.656Z",
+          "updated_at": "2025-06-05T08:31:16.656Z",
+          "payment_url": null,
+          "webhook_received_at": "2025-06-05T08:31:16.656Z",
+          "completed_at": null,
+          "failure_reason": "Payment declined"
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 16,
+      "testName": "Update Transaction Invalid Status",
+      "notes": "Should fail when status is invalid",
+      "status": "ERROR",
+      "error": "Invalid status: invalid_status. Must be one of: pending, paid, failed, refunded",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 17,
+      "testName": "Update Non-existent Transaction",
+      "notes": "Should fail when transaction does not exist",
+      "status": "ERROR",
+      "error": "Transaction with ID 999999 not found",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 18,
+      "testName": "Get Transaction By ID",
+      "notes": "Retrieving existing transaction by ID",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 1,
+          "user_id": 1,
+          "steam_username": "teststeamuser",
+          "amount_usd": 15,
+          "amount_rub": 1200,
+          "amount_rub_total": 1333.33,
+          "commission_rub": 133.33,
+          "order_id": "LP-TEST-1749112276655",
+          "paydigital_transaction_id": "pd-1749112276655",
+          "status": "paid",
+          "created_at": "2025-06-05T08:31:16.655Z",
+          "updated_at": "2025-06-05T08:31:16.656Z",
+          "payment_url": "https://pay.example.com/payment123",
+          "webhook_received_at": "2025-06-05T08:31:16.656Z",
+          "completed_at": "2025-06-05T08:31:16.656Z"
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 19,
+      "testName": "Get Transaction By Order ID",
+      "notes": "Retrieving existing transaction by order ID",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "id": 1,
+          "user_id": 1,
+          "steam_username": "teststeamuser",
+          "amount_usd": 15,
+          "amount_rub": 1200,
+          "amount_rub_total": 1333.33,
+          "commission_rub": 133.33,
+          "order_id": "LP-TEST-1749112276655",
+          "paydigital_transaction_id": "pd-1749112276655",
+          "status": "paid",
+          "created_at": "2025-06-05T08:31:16.655Z",
+          "updated_at": "2025-06-05T08:31:16.656Z",
+          "payment_url": "https://pay.example.com/payment123",
+          "webhook_received_at": "2025-06-05T08:31:16.656Z",
+          "completed_at": "2025-06-05T08:31:16.656Z"
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 20,
+      "testName": "Get Transactions By User ID",
+      "notes": "Retrieving user transaction history",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": [
+          {
+            "id": 2,
+            "user_id": 1,
+            "steam_username": "testuser2",
+            "amount_usd": 10,
+            "amount_rub": 800,
+            "order_id": "LP-FAIL-TEST-1749112276656",
+            "paydigital_transaction_id": null,
+            "status": "failed",
+            "created_at": "2025-06-05T08:31:16.656Z",
+            "updated_at": "2025-06-05T08:31:16.656Z",
+            "payment_url": null,
+            "webhook_received_at": "2025-06-05T08:31:16.656Z",
+            "completed_at": null,
+            "failure_reason": "Payment declined"
+          },
+          {
+            "id": 1,
+            "user_id": 1,
+            "steam_username": "teststeamuser",
+            "amount_usd": 15,
+            "amount_rub": 1200,
+            "amount_rub_total": 1333.33,
+            "commission_rub": 133.33,
+            "order_id": "LP-TEST-1749112276655",
+            "paydigital_transaction_id": "pd-1749112276655",
+            "status": "paid",
+            "created_at": "2025-06-05T08:31:16.655Z",
+            "updated_at": "2025-06-05T08:31:16.656Z",
+            "payment_url": "https://pay.example.com/payment123",
+            "webhook_received_at": "2025-06-05T08:31:16.656Z",
+            "completed_at": "2025-06-05T08:31:16.656Z"
+          }
+        ]
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 21,
+      "testName": "Get Non-existent Transaction",
+      "notes": "Should fail when transaction does not exist",
+      "status": "ERROR",
+      "error": "Transaction with ID 999999 not found",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 22,
+      "testName": "Get Transaction Non-existent Order ID",
+      "notes": "Should fail when order ID does not exist",
+      "status": "ERROR",
+      "error": "Transaction with order_id NON-EXISTENT-ORDER-ID not found",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 23,
+      "testName": "Save User State",
+      "notes": "Saving user state data",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "user_id": 1,
+          "current_step": "amount_selection",
+          "state_data": "{\"steamUsername\":\"testuser\",\"steamValid\":true}",
+          "expires_at": "2025-06-05T09:01:16.657Z",
+          "created_at": "2025-06-05T08:31:16.657Z",
+          "updated_at": "2025-06-05T08:31:16.657Z"
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 24,
+      "testName": "Get User State",
+      "notes": "Retrieving saved user state",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "user_id": 1,
+          "current_step": "amount_selection",
+          "state_data": "{\"steamUsername\":\"testuser\",\"steamValid\":true}",
+          "expires_at": "2025-06-05T09:01:16.657Z",
+          "created_at": "2025-06-05T08:31:16.657Z",
+          "updated_at": "2025-06-05T08:31:16.657Z"
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 25,
+      "testName": "Save Expired User State",
+      "notes": "Testing expired state cleanup",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "message": "Expired state properly handled"
+      },
+      "duration": 1,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 26,
+      "testName": "Delete User State",
+      "notes": "Deleting user state",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "data": {
+          "deleted": true
+        }
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 27,
+      "testName": "Get Deleted User State",
+      "notes": "Should fail when state has been deleted",
+      "status": "ERROR",
+      "error": "User state for user 1 not found",
+      "duration": 0,
+      "expectedOutcome": "error",
+      "actualOutcome": "error",
+      "passed": true
+    },
+    {
+      "testNumber": 28,
+      "testName": "Concurrent Transaction Creation",
+      "notes": "Multiple concurrent transaction creations",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "totalAttempts": 5,
+        "successful": 5,
+        "results": [
+          {
+            "success": true,
+            "id": 3
+          },
+          {
+            "success": true,
+            "id": 4
+          },
+          {
+            "success": true,
+            "id": 5
+          },
+          {
+            "success": true,
+            "id": 6
+          },
+          {
+            "success": true,
+            "id": 7
+          }
+        ]
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    },
+    {
+      "testNumber": 29,
+      "testName": "Concurrent Transaction Updates",
+      "notes": "Multiple concurrent transaction status updates",
+      "status": "SUCCESS",
+      "result": {
+        "success": true,
+        "totalAttempts": 3,
+        "successful": 3,
+        "results": [
+          {
+            "success": true,
+            "status": "paid",
+            "id": 3
+          },
+          {
+            "success": true,
+            "status": "failed",
+            "id": 4
+          },
+          {
+            "success": true,
+            "status": "refunded",
+            "id": 5
+          }
+        ]
+      },
+      "duration": 0,
+      "expectedOutcome": "success",
+      "actualOutcome": "success",
+      "passed": true
+    }
+  ]
+}

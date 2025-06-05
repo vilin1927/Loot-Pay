@@ -20,6 +20,13 @@ interface PayDigitalError {
   code: string;
 }
 
+// New interface for validation with transactionId
+interface SteamValidationResult {
+  isValid: boolean;
+  transactionId?: string;
+  message?: string;
+}
+
 export class PayDigitalService {
   private client: AxiosInstance;
 
@@ -69,12 +76,12 @@ export class PayDigitalService {
   }
 
   /**
-   * Phase 1: Validate Steam username (user experience)
-   * This is used to show "Account found" to the user
+   * ✅ NEW METHOD: Validate Steam username AND get transactionId
+   * This replaces the old two-phase approach
    * @param username Steam username to check
-   * @returns true if valid, false otherwise
+   * @returns validation result with transactionId if valid
    */
-  async validateSteamUsername(username: string): Promise<boolean> {
+  async validateSteamUsernameWithTransactionId(username: string): Promise<SteamValidationResult> {
     try {
       const response = await this.client.post<any>('/steam/check', {
         steamUsername: username
@@ -86,7 +93,10 @@ export class PayDigitalService {
           username,
           message: response.data.message
         });
-        return false;
+        return {
+          isValid: false,
+          message: response.data.message
+        };
       }
 
       // Check if response contains transactionId (success indicator)
@@ -95,16 +105,22 @@ export class PayDigitalService {
           username,
           responseData: response.data
         });
-        return false;
+        return {
+          isValid: false,
+          message: 'Invalid response from PayDigital'
+        };
       }
 
-      logger.info('Steam username validation successful', {
+      logger.info('Steam username validation successful with transactionId', {
         username,
         transactionId: response.data.transactionId
       });
 
-      // We don't store the transactionId from this call (Phase 1)
-      return true;
+      // ✅ RETURN BOTH validation result AND transactionId
+      return {
+        isValid: true,
+        transactionId: response.data.transactionId
+      };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const apiError = error.response?.data as PayDigitalError;
@@ -118,7 +134,10 @@ export class PayDigitalService {
         
         // Handle specific API errors
         if (apiError?.code === 'INVALID_USERNAME') {
-          return false;
+          return {
+            isValid: false,
+            message: 'Недействительный логин Steam'
+          };
         }
 
         if (apiError?.code === 'RATE_LIMIT') {
@@ -136,8 +155,21 @@ export class PayDigitalService {
   }
 
   /**
-   * Phase 2: Get fresh transactionId for payment
-   * This is called right before creating the payment
+   * LEGACY METHOD: Phase 1: Validate Steam username (user experience)
+   * This is used to show "Account found" to the user
+   * @deprecated Use validateSteamUsernameWithTransactionId instead
+   * @param username Steam username to check
+   * @returns true if valid, false otherwise
+   */
+  async validateSteamUsername(username: string): Promise<boolean> {
+    const result = await this.validateSteamUsernameWithTransactionId(username);
+    return result.isValid;
+  }
+
+  /**
+   * DEPRECATED: Phase 2: Get fresh transactionId for payment
+   * This caused "Transaction already processed" errors
+   * @deprecated Use stored transactionId from validateSteamUsernameWithTransactionId
    * @param username Valid Steam username
    * @returns transactionId for payment
    */
@@ -163,22 +195,40 @@ export class PayDigitalService {
   }
 
   /**
-   * Create Steam payment
+   * ✅ UPDATED: Create Steam payment using existing transactionId
    * @param username Valid Steam username
    * @param amountUSD Amount in USD
    * @param amountRUB Total amount in RUB including commission
    * @param orderId Unique order ID
+   * @param existingTransactionId TransactionId from validation step
    * @returns Payment URL
    */
   async createSteamPayment(
     username: string,
     amountUSD: number,
     amountRUB: number,
-    orderId: string
+    orderId: string,
+    existingTransactionId?: string
   ): Promise<string> {
     try {
-      // Phase 2: Get fresh transactionId right before payment
-      const transactionId = await this.getPaymentTransactionId(username);
+      let transactionId: string;
+
+      if (existingTransactionId) {
+        // ✅ USE EXISTING transactionId (new approach)
+        transactionId = existingTransactionId;
+        logger.info('Using existing transactionId for payment', {
+          username,
+          transactionId,
+          orderId
+        });
+      } else {
+        // ❌ FALLBACK: Get fresh transactionId (old approach - causes errors)
+        logger.warn('No existing transactionId provided, falling back to fresh call', {
+          username,
+          orderId
+        });
+        transactionId = await this.getPaymentTransactionId(username);
+      }
 
       // Create payment
       const response = await this.client.post('/steam/pay', {
@@ -191,12 +241,13 @@ export class PayDigitalService {
         directSuccess: false
       });
 
-      logger.info('Steam payment created', {
+      logger.info('Steam payment created successfully', {
         username,
         amountUSD,
         amountRUB,
         orderId,
-        transactionId
+        transactionId,
+        paymentUrl: response.data.paymentUrl
       });
 
       return response.data.paymentUrl;
@@ -206,8 +257,25 @@ export class PayDigitalService {
         
         // Handle specific API errors
         if (apiError?.code === 'TRANSACTION_USED') {
+          logger.error('TransactionId already used', {
+            username,
+            orderId,
+            transactionId: existingTransactionId
+          });
           throw new Error('Ошибка создания платежа. Пожалуйста, попробуйте снова.');
         }
+
+        // Log the specific error for debugging
+        logger.error('PayDigital API error during payment creation', {
+          error: apiError,
+          username,
+          amountUSD,
+          amountRUB,
+          orderId,
+          transactionId: existingTransactionId,
+          status: error.response?.status,
+          data: error.response?.data
+        });
       }
 
       logger.error('Error creating Steam payment', {
@@ -215,7 +283,8 @@ export class PayDigitalService {
         username,
         amountUSD,
         amountRUB,
-        orderId
+        orderId,
+        transactionId: existingTransactionId
       });
       throw new Error('Ошибка создания платежа. Пожалуйста, попробуйте позже.');
     }

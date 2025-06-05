@@ -1,0 +1,546 @@
+[
+  {
+    "testNumber": 1,
+    "testName": "Valid Webhook - Status Paid",
+    "notes": "Payment successfully completed",
+    "payload": {
+      "order_uuid": "LP-TEST-1749112280498",
+      "status": "Paid",
+      "amount": 1000.5,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.498Z",
+      "paid_at": "2025-06-05T08:31:20.499Z",
+      "transaction_id": "TXN-1749112280499",
+      "commission": 55.03
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "85d3946864a17b6e7e3e30c32c8a6b34bdfca29338f8f3b2320051e90af5ec4b"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 2,
+    "testName": "Valid Webhook - Status Pending",
+    "notes": "Payment pending processing",
+    "payload": {
+      "order_uuid": "LP-PENDING-1749112280540",
+      "status": "Pending",
+      "amount": 800,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.540Z",
+      "transaction_id": "TXN-PENDING-1749112280540",
+      "commission": 44
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "a792f830b2821a2e40f502fa757c825a8b12ad65c2c82bfc8f05faee260e5948"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 3,
+    "testName": "Valid Webhook - Status Failed",
+    "notes": "Payment failed with error message",
+    "payload": {
+      "order_uuid": "LP-FAILED-1749112280543",
+      "status": "Failed",
+      "amount": 1200,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.543Z",
+      "failed_at": "2025-06-05T08:31:20.543Z",
+      "transaction_id": "TXN-FAILED-1749112280543",
+      "commission": 66,
+      "error_message": "Insufficient funds"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "812802e97ef2f4e84726eb10f2299ff8c192a9db152f5026339ecf1e658c0dd7"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 4,
+    "testName": "Valid Webhook - All Fields",
+    "notes": "Complete webhook with all optional fields",
+    "payload": {
+      "order_uuid": "LP-COMPLETE-1749112280545",
+      "status": "Paid",
+      "amount": 1500.75,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.545Z",
+      "paid_at": "2025-06-05T08:31:20.545Z",
+      "transaction_id": "TXN-COMPLETE-1749112280545",
+      "commission": 82.54,
+      "customer_email": "test@example.com",
+      "customer_phone": "+79991234567",
+      "payment_method": "SBP",
+      "bank_name": "Sberbank",
+      "reference_id": "REF-123456",
+      "metadata": {
+        "steam_username": "testuser",
+        "lootpay_user_id": 12345
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "253018fde5f7754b247258ab7450bc6525d336471cfb3bdcaa77065521bb26b7"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 5,
+    "testName": "Invalid Webhook - Unknown Status",
+    "notes": "Status not in [Paid, Pending, Failed]",
+    "payload": {
+      "order_uuid": "LP-INVALID-STATUS-1749112280547",
+      "status": "InvalidStatus",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.547Z",
+      "transaction_id": "TXN-INVALID-1749112280547"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "20ecc63698c45785c98591f0610944e398e80b6e93810a8fc56ef7f05d24ce83"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 400,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 6,
+    "testName": "Invalid Webhook - Missing Order UUID",
+    "notes": "Required field order_uuid missing",
+    "payload": {
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.549Z",
+      "transaction_id": "TXN-NO-ORDER-1749112280549"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "4f805870853618ba488eae5476e5ae9c1046b28d6eb945fdf5ac63ab1bfca76d"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 400,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 7,
+    "testName": "Invalid Webhook - Non-existent Order",
+    "notes": "Order UUID not found in database",
+    "payload": {
+      "order_uuid": "LP-NONEXISTENT-999999",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.550Z",
+      "transaction_id": "TXN-NONEXISTENT-1749112280550"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "d1c4164f6222e57dd7c23cce6618f4a25dba674b76277552a6f82c9f258b7e4d"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 404,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 8,
+    "testName": "Invalid Webhook - Missing Amount",
+    "notes": "Required field amount missing",
+    "payload": {
+      "order_uuid": "LP-NO-AMOUNT-1749112280551",
+      "status": "Paid",
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.551Z",
+      "transaction_id": "TXN-NO-AMOUNT-1749112280551"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "70b8a0a9a1eb740c6f4649cedc16cf42f108b1421fab4af3843873b675030cf1"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 400,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 9,
+    "testName": "Invalid Webhook - Negative Amount",
+    "notes": "Amount must be positive",
+    "payload": {
+      "order_uuid": "LP-NEGATIVE-1749112280553",
+      "status": "Paid",
+      "amount": -500,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.553Z",
+      "transaction_id": "TXN-NEGATIVE-1749112280553"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "12faa7641581f3179869cf73e8ad73e7b641f296f9b941dd517fb76563fd2541"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 400,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 10,
+    "testName": "Invalid Webhook - Malformed JSON",
+    "notes": "Invalid JSON payload",
+    "payload": "not-json-data",
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "invalid-signature"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 400,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 11,
+    "testName": "Invalid Webhook - Extra Fields",
+    "notes": "Should ignore extra fields but process valid ones",
+    "payload": {
+      "order_uuid": "LP-EXTRA-1749112280558",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.558Z",
+      "transaction_id": "TXN-EXTRA-1749112280558",
+      "malicious_field": "<script>alert(\"xss\")</script>",
+      "sql_injection": "'; DROP TABLE transactions; --",
+      "huge_field": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "1d3de3bbdec036b57fdaaed1d7d4bd35f4c7258d5d81a3ffe9dd745478af82e2"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 12,
+    "testName": "Invalid Webhook - Wrong Content-Type",
+    "notes": "Should reject non-JSON content-type",
+    "payload": {
+      "order_uuid": "LP-WRONG-CT-1749112280559",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.559Z",
+      "transaction_id": "TXN-WRONG-CT-1749112280559"
+    },
+    "headers": {
+      "Content-Type": "text/plain",
+      "X-Signature": "4ab4667558db1f230df4b78b84429ab2ff9cc78c76732664744f0ce420fe4b28"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 400,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 13,
+    "testName": "Security - No Signature",
+    "notes": "Should reject webhook without signature",
+    "payload": {
+      "order_uuid": "LP-NO-SIG-1749112280560",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.560Z",
+      "transaction_id": "TXN-NO-SIG-1749112280560"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 401,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 14,
+    "testName": "Security - Invalid Signature",
+    "notes": "Should reject webhook with invalid signature",
+    "payload": {
+      "order_uuid": "LP-INVALID-SIG-1749112280561",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.561Z",
+      "transaction_id": "TXN-INVALID-SIG-1749112280561"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "invalid-signature-hash"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 401,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 15,
+    "testName": "Security - Tampered Payload",
+    "notes": "Should detect payload tampering",
+    "payload": {
+      "order_uuid": "LP-TAMPERED-1749112280562",
+      "status": "Paid",
+      "amount": 5000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.562Z",
+      "transaction_id": "TXN-TAMPERED-1749112280562"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "c85e8b83418a8bcfc26f9badb4001f0b97a5a230df95fe5039d192cbfa0366eb"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 401,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 16,
+    "testName": "Security - First Webhook",
+    "notes": "First webhook should be processed",
+    "payload": {
+      "order_uuid": "LP-REPLAY-1749112280562",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.562Z",
+      "transaction_id": "TXN-REPLAY-1749112280562"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "be41f88f50a024483e2e3f9d4332ca55d9b52b1ff56b7a893d41e431788e91b0"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 17,
+    "testName": "Security - Replay Attack",
+    "notes": "Replay of same webhook should be rejected",
+    "payload": {
+      "order_uuid": "LP-REPLAY-1749112280562",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.562Z",
+      "transaction_id": "TXN-REPLAY-1749112280562"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "be41f88f50a024483e2e3f9d4332ca55d9b52b1ff56b7a893d41e431788e91b0"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 409,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 18,
+    "testName": "Security - XSS Attempts",
+    "notes": "Should sanitize XSS attempts but process webhook",
+    "payload": {
+      "order_uuid": "LP-XSS-1749112280564",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.564Z",
+      "transaction_id": "<script>alert('xss')</script>",
+      "customer_email": "<img src=x onerror=alert(\"xss\")>",
+      "error_message": "javascript:alert(\"xss\")"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "8581889cf4f096008955c935f816f3900aaadeaa65b798c80fe1c39980f528d4"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 19,
+    "testName": "Security - SQL Injection",
+    "notes": "Should escape SQL injection but process webhook",
+    "payload": {
+      "order_uuid": "LP-SQL-1749112280566",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.566Z",
+      "transaction_id": "'; DROP TABLE transactions; --",
+      "customer_email": "admin'/**/OR/**/1=1--",
+      "error_message": "1' UNION SELECT password FROM users--"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "7371bd024de1c20768cd3c4bea6512bb155c2ee620f6007171619fb08c60a833"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 20,
+    "testName": "Multiple - First Webhook (Pending)",
+    "notes": "First webhook for same transaction",
+    "payload": {
+      "order_uuid": "LP-MULTI-1749112280567",
+      "status": "Pending",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.567Z",
+      "transaction_id": "TXN-MULTI-1-1749112280567"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "9c8842de04137d045978f586579fdce409efded84bb90f45381fbc950701b6b4"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 21,
+    "testName": "Multiple - Second Webhook (Paid)",
+    "notes": "Status update for same transaction",
+    "payload": {
+      "order_uuid": "LP-MULTI-1749112280567",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.568Z",
+      "paid_at": "2025-06-05T08:31:20.568Z",
+      "transaction_id": "TXN-MULTI-2-1749112280568"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "14d23702094a8d7e930d25d3e868d2bec1f2cc7c6d7e665338ef6a92a51866d0"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  },
+  {
+    "testNumber": 22,
+    "testName": "Multiple - Third Webhook (Duplicate Paid)",
+    "notes": "Duplicate paid status should be idempotent",
+    "payload": {
+      "order_uuid": "LP-MULTI-1749112280567",
+      "status": "Paid",
+      "amount": 1000,
+      "currency": "RUB",
+      "created_at": "2025-06-05T08:31:20.569Z",
+      "paid_at": "2025-06-05T08:31:20.569Z",
+      "transaction_id": "TXN-MULTI-3-1749112280569"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Signature": "1c860b0f79ef1f16ddbdc83f1312022b22dbbbb3f4604987c0f08b2723a47670"
+    },
+    "status": "ERROR",
+    "httpStatus": "NO_RESPONSE",
+    "responseData": null,
+    "errorMessage": "",
+    "expectedStatus": 200,
+    "actualStatus": "ERROR",
+    "passed": false
+  }
+]

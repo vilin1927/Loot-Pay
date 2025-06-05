@@ -12,15 +12,23 @@ import { Message } from 'node-telegram-bot-api';
 
 // Helper functions
 export async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: number, amount: number) {
-  // Get existing state to preserve steamUsername
+  // Get existing state to preserve steamUsername AND transactionId
   const currentState = await getState(userId);
   const existingData = currentState?.state_data || {};
   
-  // Store amount in state and show payment confirmation
+  // ✅ CRITICAL FIX: Preserve transactionId when storing amount
   await setState(userId, 'AMOUNT_SELECTED', { 
     ...existingData,
     amountUSD: amount 
   });
+  
+  logger.info('Amount selected, preserving transactionId', {
+    userId,
+    amount,
+    transactionId: existingData.transactionId,
+    steamUsername: existingData.steamUsername
+  });
+  
   await showPaymentConfirmation(bot, chatId, userId);
 }
 
@@ -232,11 +240,22 @@ async function handlePaymentConfirmation(bot: TelegramBot, chatId: number, userI
       return;
     }
 
+    // ✅ CRITICAL FIX: Check if transactionId is available
+    if (!state.state_data.transactionId) {
+      logger.error('TransactionId missing in payment confirmation - this should not happen', { 
+        userId, 
+        stateData: state.state_data 
+      });
+      await bot.sendMessage(chatId, '❌ Ошибка: необходимо заново ввести логин Steam. Нажмите /start');
+      return;
+    }
+
     await bot.sendMessage(chatId, '⏳ Создаем платеж...');
 
-    const { steamUsername, amountUSD } = state.state_data;
+    const { steamUsername, amountUSD, transactionId } = state.state_data;
     
-    const payment = await createPayment(userId, steamUsername, amountUSD);
+    // ✅ CRITICAL FIX: Pass stored transactionId to payment creation
+    const payment = await createPayment(userId, steamUsername, amountUSD, transactionId);
 
     await bot.sendMessage(chatId, `💳 Платеж создан!
 
@@ -247,6 +266,14 @@ async function handlePaymentConfirmation(bot: TelegramBot, chatId: number, userI
           [{ text: '🛠 Поддержка', callback_data: 'support' }]
         ]
       }
+    });
+
+    logger.info('Payment created successfully with stored transactionId', {
+      userId,
+      steamUsername,
+      amountUSD,
+      transactionId,
+      paymentUrl: payment.paymentUrl
     });
 
   } catch (error) {

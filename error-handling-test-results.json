@@ -1,0 +1,4280 @@
+{
+  "summary": {
+    "totalTests": 165,
+    "successfulCalls": 152,
+    "errorCalls": 13,
+    "passedTests": 5,
+    "failedTests": 8,
+    "untestedTests": 152
+  },
+  "errorTypes": {
+    "TIMEOUT": 1,
+    "DNS_ERROR": 1,
+    "CONNECTION_REFUSED": 1,
+    "UNKNOWN_ERROR": 7,
+    "BAD_GATEWAY": 1,
+    "SERVER_ERROR": 1,
+    "MALFORMED_JSON": 1
+  },
+  "performanceMetrics": {
+    "average": 849.293616630303,
+    "slowest": {
+      "test": "API 404 Error",
+      "duration": 3124.716084,
+      "success": false
+    },
+    "fastest": {
+      "test": "Connection Refused",
+      "duration": 14.227249999999998,
+      "success": false
+    }
+  },
+  "rateLimitTests": {
+    "totalCalls": 100,
+    "successfulCalls": 100,
+    "rateLimitErrors": 0,
+    "averageResponseTime": 843.7330553900002,
+    "results": [
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 1",
+        "notes": "Batch 1, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-1-1749112287561 не найден: User not found"
+        },
+        "duration": 900.1065000000008,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 2",
+        "notes": "Batch 1, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-2-1749112287561 не найден: User not found"
+        },
+        "duration": 901.7804999999998,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 3",
+        "notes": "Batch 1, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-3-1749112287563 не найден: User not found"
+        },
+        "duration": 885.5315419999997,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 4",
+        "notes": "Batch 1, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-4-1749112287565 не найден: User not found"
+        },
+        "duration": 877.882208,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 5",
+        "notes": "Batch 1, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-5-1749112287566 не найден: User not found"
+        },
+        "duration": 883.4483339999997,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 6",
+        "notes": "Batch 1, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-6-1749112287568 не найден: User not found"
+        },
+        "duration": 881.8134999999993,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 7",
+        "notes": "Batch 1, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-7-1749112287570 не найден: User not found"
+        },
+        "duration": 914.5363749999997,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 8",
+        "notes": "Batch 1, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-8-1749112287571 не найден: User not found"
+        },
+        "duration": 876.7341660000002,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 9",
+        "notes": "Batch 1, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-9-1749112287572 не найден: User not found"
+        },
+        "duration": 891.2479160000003,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 21,
+        "testName": "Rapid Call 10",
+        "notes": "Batch 1, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-10-1749112287573 не найден: User not found"
+        },
+        "duration": 875.586875,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 11",
+        "notes": "Batch 2, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-11-1749112288586 не найден: User not found"
+        },
+        "duration": 837.3230000000003,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 12",
+        "notes": "Batch 2, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-12-1749112288587 не найден: User not found"
+        },
+        "duration": 819.4864580000003,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 13",
+        "notes": "Batch 2, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-13-1749112288587 не найден: User not found"
+        },
+        "duration": 829.1505000000006,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 14",
+        "notes": "Batch 2, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-14-1749112288588 не найден: User not found"
+        },
+        "duration": 861.3503329999994,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 15",
+        "notes": "Batch 2, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-15-1749112288588 не найден: User not found"
+        },
+        "duration": 828.6930000000002,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 16",
+        "notes": "Batch 2, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-16-1749112288588 не найден: User not found"
+        },
+        "duration": 818.3118750000003,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 17",
+        "notes": "Batch 2, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-17-1749112288589 не найден: User not found"
+        },
+        "duration": 833.1980000000003,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 18",
+        "notes": "Batch 2, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-18-1749112288589 не найден: User not found"
+        },
+        "duration": 865.4912089999998,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 19",
+        "notes": "Batch 2, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-19-1749112288589 не найден: User not found"
+        },
+        "duration": 832.9352909999998,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 31,
+        "testName": "Rapid Call 20",
+        "notes": "Batch 2, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-20-1749112288589 не найден: User not found"
+        },
+        "duration": 833.1830840000002,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 21",
+        "notes": "Batch 3, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-21-1749112289555 не найден: User not found"
+        },
+        "duration": 822.9870410000012,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 22",
+        "notes": "Batch 3, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-22-1749112289556 не найден: User not found"
+        },
+        "duration": 806.0312499999991,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 23",
+        "notes": "Batch 3, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-23-1749112289556 не найден: User not found"
+        },
+        "duration": 850.6273329999995,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 24",
+        "notes": "Batch 3, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-24-1749112289556 не найден: User not found"
+        },
+        "duration": 811.1548749999993,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 25",
+        "notes": "Batch 3, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-25-1749112289556 не найден: User not found"
+        },
+        "duration": 825.7020829999992,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 26",
+        "notes": "Batch 3, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-26-1749112289557 не найден: User not found"
+        },
+        "duration": 854.2381249999999,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 27",
+        "notes": "Batch 3, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-27-1749112289557 не найден: User not found"
+        },
+        "duration": 824.6192920000003,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 28",
+        "notes": "Batch 3, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-28-1749112289557 не найден: User not found"
+        },
+        "duration": 819.1984169999996,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 29",
+        "notes": "Batch 3, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-29-1749112289557 не найден: User not found"
+        },
+        "duration": 900.177416999999,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 41,
+        "testName": "Rapid Call 30",
+        "notes": "Batch 3, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-30-1749112289557 не найден: User not found"
+        },
+        "duration": 848.1034169999994,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 31",
+        "notes": "Batch 4, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-31-1749112290559 не найден: User not found"
+        },
+        "duration": 854.7191249999996,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 32",
+        "notes": "Batch 4, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-32-1749112290561 не найден: User not found"
+        },
+        "duration": 855.6636660000004,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 33",
+        "notes": "Batch 4, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-33-1749112290561 не найден: User not found"
+        },
+        "duration": 854.9050829999996,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 34",
+        "notes": "Batch 4, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-34-1749112290561 не найден: User not found"
+        },
+        "duration": 854.241,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 35",
+        "notes": "Batch 4, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-35-1749112290562 не найден: User not found"
+        },
+        "duration": 853.5618749999994,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 36",
+        "notes": "Batch 4, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-36-1749112290562 не найден: User not found"
+        },
+        "duration": 852.4849589999994,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 37",
+        "notes": "Batch 4, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-37-1749112290562 не найден: User not found"
+        },
+        "duration": 854.4286250000005,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 38",
+        "notes": "Batch 4, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-38-1749112290562 не найден: User not found"
+        },
+        "duration": 859.3119580000002,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 39",
+        "notes": "Batch 4, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-39-1749112290563 не найден: User not found"
+        },
+        "duration": 855.9045000000006,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 51,
+        "testName": "Rapid Call 40",
+        "notes": "Batch 4, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-40-1749112290563 не найден: User not found"
+        },
+        "duration": 850.1010420000002,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 41",
+        "notes": "Batch 5, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-41-1749112291523 не найден: User not found"
+        },
+        "duration": 813.0515829999986,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 42",
+        "notes": "Batch 5, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-42-1749112291524 не найден: User not found"
+        },
+        "duration": 824.2216670000016,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 43",
+        "notes": "Batch 5, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-43-1749112291524 не найден: User not found"
+        },
+        "duration": 836.2727500000001,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 44",
+        "notes": "Batch 5, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-44-1749112291525 не найден: User not found"
+        },
+        "duration": 815.5698749999992,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 45",
+        "notes": "Batch 5, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-45-1749112291525 не найден: User not found"
+        },
+        "duration": 828.3844580000004,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 46",
+        "notes": "Batch 5, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-46-1749112291525 не найден: User not found"
+        },
+        "duration": 851.9145830000016,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 47",
+        "notes": "Batch 5, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-47-1749112291525 не найден: User not found"
+        },
+        "duration": 862.265707999999,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 48",
+        "notes": "Batch 5, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-48-1749112291526 не найден: User not found"
+        },
+        "duration": 886.1509999999998,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 49",
+        "notes": "Batch 5, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-49-1749112291526 не найден: User not found"
+        },
+        "duration": 845.319207999999,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 61,
+        "testName": "Rapid Call 50",
+        "notes": "Batch 5, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-50-1749112291526 не найден: User not found"
+        },
+        "duration": 800.747625,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 51",
+        "notes": "Batch 6, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-51-1749112292513 не найден: User not found"
+        },
+        "duration": 820.3330420000002,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 52",
+        "notes": "Batch 6, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-52-1749112292515 не найден: User not found"
+        },
+        "duration": 887.1537919999992,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 53",
+        "notes": "Batch 6, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-53-1749112292515 не найден: User not found"
+        },
+        "duration": 815.038708,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 54",
+        "notes": "Batch 6, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-54-1749112292516 не найден: User not found"
+        },
+        "duration": 797.9313750000001,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 55",
+        "notes": "Batch 6, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-55-1749112292516 не найден: User not found"
+        },
+        "duration": 808.5846249999995,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 56",
+        "notes": "Batch 6, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-56-1749112292516 не найден: User not found"
+        },
+        "duration": 819.6750420000008,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 57",
+        "notes": "Batch 6, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-57-1749112292517 не найден: User not found"
+        },
+        "duration": 839.999041000001,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 58",
+        "notes": "Batch 6, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-58-1749112292517 не найден: User not found"
+        },
+        "duration": 834.0912499999995,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 59",
+        "notes": "Batch 6, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-59-1749112292518 не найден: User not found"
+        },
+        "duration": 891.3367499999986,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 71,
+        "testName": "Rapid Call 60",
+        "notes": "Batch 6, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-60-1749112292521 не найден: User not found"
+        },
+        "duration": 810.5801250000004,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 61",
+        "notes": "Batch 7, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-61-1749112293512 не найден: User not found"
+        },
+        "duration": 830.3554999999997,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 62",
+        "notes": "Batch 7, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-62-1749112293514 не найден: User not found"
+        },
+        "duration": 873.0845829999998,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 63",
+        "notes": "Batch 7, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-63-1749112293514 не найден: User not found"
+        },
+        "duration": 821.7873329999984,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 64",
+        "notes": "Batch 7, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-64-1749112293515 не найден: User not found"
+        },
+        "duration": 830.205750000001,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 65",
+        "notes": "Batch 7, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-65-1749112293515 не найден: User not found"
+        },
+        "duration": 826.4339579999996,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 66",
+        "notes": "Batch 7, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-66-1749112293515 не найден: User not found"
+        },
+        "duration": 842.507834,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 67",
+        "notes": "Batch 7, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-67-1749112293516 не найден: User not found"
+        },
+        "duration": 820.9380830000009,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 68",
+        "notes": "Batch 7, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-68-1749112293516 не найден: User not found"
+        },
+        "duration": 874.625,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 69",
+        "notes": "Batch 7, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-69-1749112293518 не найден: User not found"
+        },
+        "duration": 874.1822499999998,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 81,
+        "testName": "Rapid Call 70",
+        "notes": "Batch 7, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-70-1749112293520 не найден: User not found"
+        },
+        "duration": 810.5010829999992,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 71",
+        "notes": "Batch 8, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-71-1749112294494 не найден: User not found"
+        },
+        "duration": 830.9533749999991,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 72",
+        "notes": "Batch 8, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-72-1749112294495 не найден: User not found"
+        },
+        "duration": 819.7180410000001,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 73",
+        "notes": "Batch 8, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-73-1749112294496 не найден: User not found"
+        },
+        "duration": 807.975042,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 74",
+        "notes": "Batch 8, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-74-1749112294496 не найден: User not found"
+        },
+        "duration": 871.9779999999992,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 75",
+        "notes": "Batch 8, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-75-1749112294496 не найден: User not found"
+        },
+        "duration": 861.9185829999988,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 76",
+        "notes": "Batch 8, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-76-1749112294496 не найден: User not found"
+        },
+        "duration": 806.1049999999996,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 77",
+        "notes": "Batch 8, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-77-1749112294497 не найден: User not found"
+        },
+        "duration": 820.448042,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 78",
+        "notes": "Batch 8, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-78-1749112294498 не найден: User not found"
+        },
+        "duration": 884.7560410000006,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 79",
+        "notes": "Batch 8, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-79-1749112294498 не найден: User not found"
+        },
+        "duration": 854.6162499999991,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 91,
+        "testName": "Rapid Call 80",
+        "notes": "Batch 8, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-80-1749112294498 не найден: User not found"
+        },
+        "duration": 822.2290830000002,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 81",
+        "notes": "Batch 9, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-81-1749112295485 не найден: User not found"
+        },
+        "duration": 847.1837500000001,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 82",
+        "notes": "Batch 9, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-82-1749112295489 не найден: User not found"
+        },
+        "duration": 864.3827500000007,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 83",
+        "notes": "Batch 9, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-83-1749112295489 не найден: User not found"
+        },
+        "duration": 849.5185000000001,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 84",
+        "notes": "Batch 9, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-84-1749112295489 не найден: User not found"
+        },
+        "duration": 844.4341249999998,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 85",
+        "notes": "Batch 9, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-85-1749112295490 не найден: User not found"
+        },
+        "duration": 836.8753749999996,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 86",
+        "notes": "Batch 9, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-86-1749112295491 не найден: User not found"
+        },
+        "duration": 840.8976659999989,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 87",
+        "notes": "Batch 9, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-87-1749112295494 не найден: User not found"
+        },
+        "duration": 838.9415000000008,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 88",
+        "notes": "Batch 9, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-88-1749112295495 не найден: User not found"
+        },
+        "duration": 821.2635419999988,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 89",
+        "notes": "Batch 9, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-89-1749112295495 не найден: User not found"
+        },
+        "duration": 874.4305830000012,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 101,
+        "testName": "Rapid Call 90",
+        "notes": "Batch 9, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-90-1749112295496 не найден: User not found"
+        },
+        "duration": 840.8022089999995,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 91",
+        "notes": "Batch 10, Call 1",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-91-1749112296471 не найден: User not found"
+        },
+        "duration": 814.0007920000007,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 92",
+        "notes": "Batch 10, Call 2",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-92-1749112296473 не найден: User not found"
+        },
+        "duration": 822.1046249999999,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 93",
+        "notes": "Batch 10, Call 3",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-93-1749112296474 не найден: User not found"
+        },
+        "duration": 819.5076250000002,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 94",
+        "notes": "Batch 10, Call 4",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-94-1749112296474 не найден: User not found"
+        },
+        "duration": 819.6536250000008,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 95",
+        "notes": "Batch 10, Call 5",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-95-1749112296475 не найден: User not found"
+        },
+        "duration": 802.9965420000008,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 96",
+        "notes": "Batch 10, Call 6",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-96-1749112296475 не найден: User not found"
+        },
+        "duration": 831.0068339999998,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 97",
+        "notes": "Batch 10, Call 7",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-97-1749112296476 не найден: User not found"
+        },
+        "duration": 862.2194999999992,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 98",
+        "notes": "Batch 10, Call 8",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-98-1749112296476 не найден: User not found"
+        },
+        "duration": 877.7403749999994,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 99",
+        "notes": "Batch 10, Call 9",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-99-1749112296477 не найден: User not found"
+        },
+        "duration": 818.8413339999988,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      },
+      {
+        "testNumber": 111,
+        "testName": "Rapid Call 100",
+        "notes": "Batch 10, Call 10",
+        "status": "SUCCESS",
+        "httpStatus": 200,
+        "responseData": {
+          "status": "error",
+          "message": "Аккаунт Steam rapid-test-100-1749112296477 не найден: User not found"
+        },
+        "duration": 816.6115000000009,
+        "expectedError": null,
+        "actualOutcome": "success",
+        "passed": null,
+        "errorType": null
+      }
+    ]
+  },
+  "detailedResults": [
+    {
+      "testNumber": 1,
+      "testName": "API Timeout Test",
+      "notes": "Testing extremely short timeout (1ms)",
+      "status": "ERROR",
+      "httpStatus": "NO_RESPONSE",
+      "responseData": null,
+      "duration": 64.332375,
+      "errorMessage": "timeout of 1ms exceeded",
+      "errorType": "TIMEOUT",
+      "expectedError": "TIMEOUT",
+      "actualOutcome": "TIMEOUT",
+      "passed": true
+    },
+    {
+      "testNumber": 2,
+      "testName": "DNS Resolution Failure",
+      "notes": "Testing non-existent hostname",
+      "status": "ERROR",
+      "httpStatus": "NO_RESPONSE",
+      "responseData": null,
+      "duration": 18.644374999999997,
+      "errorMessage": "getaddrinfo ENOTFOUND nonexistent-paydigital-api.fake",
+      "errorType": "DNS_ERROR",
+      "expectedError": "DNS_ERROR",
+      "actualOutcome": "DNS_ERROR",
+      "passed": true
+    },
+    {
+      "testNumber": 3,
+      "testName": "Connection Refused",
+      "notes": "Testing wrong port",
+      "status": "ERROR",
+      "httpStatus": "NO_RESPONSE",
+      "responseData": null,
+      "duration": 14.227249999999998,
+      "errorMessage": "connect ECONNREFUSED 62.76.102.182:9999",
+      "errorType": "CONNECTION_REFUSED",
+      "expectedError": "CONNECTION_REFUSED",
+      "actualOutcome": "CONNECTION_REFUSED",
+      "passed": true
+    },
+    {
+      "testNumber": 4,
+      "testName": "SSL Certificate Issues",
+      "notes": "Testing invalid SSL certificate",
+      "status": "ERROR",
+      "httpStatus": "NO_RESPONSE",
+      "responseData": null,
+      "duration": 991.3117500000001,
+      "errorMessage": "self-signed certificate",
+      "errorType": "UNKNOWN_ERROR",
+      "expectedError": "SSL_ERROR",
+      "actualOutcome": "UNKNOWN_ERROR",
+      "passed": false
+    },
+    {
+      "testNumber": 5,
+      "testName": "API 404 Error",
+      "notes": "Testing non-existent API endpoint",
+      "status": "ERROR",
+      "httpStatus": 502,
+      "responseData": "<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n",
+      "duration": 3124.716084,
+      "errorMessage": "Request failed with status code 502",
+      "errorType": "BAD_GATEWAY",
+      "expectedError": "NOT_FOUND",
+      "actualOutcome": "BAD_GATEWAY",
+      "passed": false
+    },
+    {
+      "testNumber": 6,
+      "testName": "API 500 Error",
+      "notes": "Testing server error with malformed input",
+      "status": "ERROR",
+      "httpStatus": 500,
+      "responseData": {
+        "statusCode": 500,
+        "message": "Внутренняя ошибка сервера при проверке наличия аккаунта Steam",
+        "path": "/steam/check"
+      },
+      "duration": 610.6450830000003,
+      "errorMessage": "Request failed with status code 500",
+      "errorType": "SERVER_ERROR",
+      "expectedError": "SERVER_ERROR",
+      "actualOutcome": "SERVER_ERROR",
+      "passed": true
+    },
+    {
+      "testNumber": 7,
+      "testName": "Malformed JSON Response",
+      "notes": "Testing malformed JSON response handling",
+      "status": "ERROR",
+      "httpStatus": "NO_RESPONSE",
+      "responseData": null,
+      "duration": 875.622875,
+      "errorMessage": "JSON parse error: Unexpected token",
+      "errorType": "MALFORMED_JSON",
+      "expectedError": "MALFORMED_JSON",
+      "actualOutcome": "MALFORMED_JSON",
+      "passed": true
+    },
+    {
+      "testNumber": 8,
+      "testName": "Invalid API Key",
+      "notes": "Testing with invalid API key",
+      "status": "ERROR",
+      "httpStatus": 400,
+      "responseData": {
+        "statusCode": 400,
+        "message": "Партнер не найден",
+        "path": "/steam/pay"
+      },
+      "duration": 26.127833999999893,
+      "errorMessage": "Request failed with status code 400",
+      "errorType": "UNKNOWN_ERROR",
+      "expectedError": "AUTH_ERROR",
+      "actualOutcome": "UNKNOWN_ERROR",
+      "passed": false
+    },
+    {
+      "testNumber": 9,
+      "testName": "Missing API Key",
+      "notes": "Testing without API key header",
+      "status": "ERROR",
+      "httpStatus": 400,
+      "responseData": {
+        "statusCode": 400,
+        "message": "Не указан партнерский ID",
+        "path": "/steam/pay"
+      },
+      "duration": 25.611667000000125,
+      "errorMessage": "Request failed with status code 400",
+      "errorType": "UNKNOWN_ERROR",
+      "expectedError": "AUTH_ERROR",
+      "actualOutcome": "UNKNOWN_ERROR",
+      "passed": false
+    },
+    {
+      "testNumber": 10,
+      "testName": "Wrong API Key Format",
+      "notes": "Testing malformed API key",
+      "status": "ERROR",
+      "httpStatus": 400,
+      "responseData": {
+        "statusCode": 400,
+        "message": "Партнер не найден",
+        "path": "/steam/pay"
+      },
+      "duration": 20.45066599999973,
+      "errorMessage": "Request failed with status code 400",
+      "errorType": "UNKNOWN_ERROR",
+      "expectedError": "AUTH_ERROR",
+      "actualOutcome": "UNKNOWN_ERROR",
+      "passed": false
+    },
+    {
+      "testNumber": 11,
+      "testName": "Empty API Key",
+      "notes": "Testing empty API key",
+      "status": "ERROR",
+      "httpStatus": 400,
+      "responseData": {
+        "statusCode": 400,
+        "message": "Не указан партнерский ID",
+        "path": "/steam/pay"
+      },
+      "duration": 20.830417000000125,
+      "errorMessage": "Request failed with status code 400",
+      "errorType": "UNKNOWN_ERROR",
+      "expectedError": "AUTH_ERROR",
+      "actualOutcome": "UNKNOWN_ERROR",
+      "passed": false
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 4",
+      "notes": "Batch 1, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-4-1749112287565 не найден: User not found"
+      },
+      "duration": 877.882208,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 8",
+      "notes": "Batch 1, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-8-1749112287571 не найден: User not found"
+      },
+      "duration": 876.7341660000002,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 10",
+      "notes": "Batch 1, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-10-1749112287573 не найден: User not found"
+      },
+      "duration": 875.586875,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 3",
+      "notes": "Batch 1, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-3-1749112287563 не найден: User not found"
+      },
+      "duration": 885.5315419999997,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 5",
+      "notes": "Batch 1, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-5-1749112287566 не найден: User not found"
+      },
+      "duration": 883.4483339999997,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 6",
+      "notes": "Batch 1, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-6-1749112287568 не найден: User not found"
+      },
+      "duration": 881.8134999999993,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 1",
+      "notes": "Batch 1, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-1-1749112287561 не найден: User not found"
+      },
+      "duration": 900.1065000000008,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 9",
+      "notes": "Batch 1, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-9-1749112287572 не найден: User not found"
+      },
+      "duration": 891.2479160000003,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 2",
+      "notes": "Batch 1, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-2-1749112287561 не найден: User not found"
+      },
+      "duration": 901.7804999999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 21,
+      "testName": "Rapid Call 7",
+      "notes": "Batch 1, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-7-1749112287570 не найден: User not found"
+      },
+      "duration": 914.5363749999997,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 12",
+      "notes": "Batch 2, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-12-1749112288587 не найден: User not found"
+      },
+      "duration": 819.4864580000003,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 16",
+      "notes": "Batch 2, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-16-1749112288588 не найден: User not found"
+      },
+      "duration": 818.3118750000003,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 13",
+      "notes": "Batch 2, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-13-1749112288587 не найден: User not found"
+      },
+      "duration": 829.1505000000006,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 15",
+      "notes": "Batch 2, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-15-1749112288588 не найден: User not found"
+      },
+      "duration": 828.6930000000002,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 17",
+      "notes": "Batch 2, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-17-1749112288589 не найден: User not found"
+      },
+      "duration": 833.1980000000003,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 19",
+      "notes": "Batch 2, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-19-1749112288589 не найден: User not found"
+      },
+      "duration": 832.9352909999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 20",
+      "notes": "Batch 2, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-20-1749112288589 не найден: User not found"
+      },
+      "duration": 833.1830840000002,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 11",
+      "notes": "Batch 2, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-11-1749112288586 не найден: User not found"
+      },
+      "duration": 837.3230000000003,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 14",
+      "notes": "Batch 2, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-14-1749112288588 не найден: User not found"
+      },
+      "duration": 861.3503329999994,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 31,
+      "testName": "Rapid Call 18",
+      "notes": "Batch 2, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-18-1749112288589 не найден: User not found"
+      },
+      "duration": 865.4912089999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 22",
+      "notes": "Batch 3, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-22-1749112289556 не найден: User not found"
+      },
+      "duration": 806.0312499999991,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 24",
+      "notes": "Batch 3, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-24-1749112289556 не найден: User not found"
+      },
+      "duration": 811.1548749999993,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 28",
+      "notes": "Batch 3, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-28-1749112289557 не найден: User not found"
+      },
+      "duration": 819.1984169999996,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 21",
+      "notes": "Batch 3, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-21-1749112289555 не найден: User not found"
+      },
+      "duration": 822.9870410000012,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 27",
+      "notes": "Batch 3, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-27-1749112289557 не найден: User not found"
+      },
+      "duration": 824.6192920000003,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 25",
+      "notes": "Batch 3, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-25-1749112289556 не найден: User not found"
+      },
+      "duration": 825.7020829999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 30",
+      "notes": "Batch 3, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-30-1749112289557 не найден: User not found"
+      },
+      "duration": 848.1034169999994,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 23",
+      "notes": "Batch 3, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-23-1749112289556 не найден: User not found"
+      },
+      "duration": 850.6273329999995,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 26",
+      "notes": "Batch 3, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-26-1749112289557 не найден: User not found"
+      },
+      "duration": 854.2381249999999,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 41,
+      "testName": "Rapid Call 29",
+      "notes": "Batch 3, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-29-1749112289557 не найден: User not found"
+      },
+      "duration": 900.177416999999,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 40",
+      "notes": "Batch 4, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-40-1749112290563 не найден: User not found"
+      },
+      "duration": 850.1010420000002,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 31",
+      "notes": "Batch 4, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-31-1749112290559 не найден: User not found"
+      },
+      "duration": 854.7191249999996,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 36",
+      "notes": "Batch 4, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-36-1749112290562 не найден: User not found"
+      },
+      "duration": 852.4849589999994,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 35",
+      "notes": "Batch 4, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-35-1749112290562 не найден: User not found"
+      },
+      "duration": 853.5618749999994,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 34",
+      "notes": "Batch 4, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-34-1749112290561 не найден: User not found"
+      },
+      "duration": 854.241,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 33",
+      "notes": "Batch 4, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-33-1749112290561 не найден: User not found"
+      },
+      "duration": 854.9050829999996,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 32",
+      "notes": "Batch 4, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-32-1749112290561 не найден: User not found"
+      },
+      "duration": 855.6636660000004,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 37",
+      "notes": "Batch 4, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-37-1749112290562 не найден: User not found"
+      },
+      "duration": 854.4286250000005,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 39",
+      "notes": "Batch 4, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-39-1749112290563 не найден: User not found"
+      },
+      "duration": 855.9045000000006,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 51,
+      "testName": "Rapid Call 38",
+      "notes": "Batch 4, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-38-1749112290562 не найден: User not found"
+      },
+      "duration": 859.3119580000002,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 50",
+      "notes": "Batch 5, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-50-1749112291526 не найден: User not found"
+      },
+      "duration": 800.747625,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 41",
+      "notes": "Batch 5, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-41-1749112291523 не найден: User not found"
+      },
+      "duration": 813.0515829999986,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 44",
+      "notes": "Batch 5, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-44-1749112291525 не найден: User not found"
+      },
+      "duration": 815.5698749999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 42",
+      "notes": "Batch 5, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-42-1749112291524 не найден: User not found"
+      },
+      "duration": 824.2216670000016,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 45",
+      "notes": "Batch 5, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-45-1749112291525 не найден: User not found"
+      },
+      "duration": 828.3844580000004,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 43",
+      "notes": "Batch 5, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-43-1749112291524 не найден: User not found"
+      },
+      "duration": 836.2727500000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 49",
+      "notes": "Batch 5, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-49-1749112291526 не найден: User not found"
+      },
+      "duration": 845.319207999999,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 46",
+      "notes": "Batch 5, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-46-1749112291525 не найден: User not found"
+      },
+      "duration": 851.9145830000016,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 47",
+      "notes": "Batch 5, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-47-1749112291525 не найден: User not found"
+      },
+      "duration": 862.265707999999,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 61,
+      "testName": "Rapid Call 48",
+      "notes": "Batch 5, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-48-1749112291526 не найден: User not found"
+      },
+      "duration": 886.1509999999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 54",
+      "notes": "Batch 6, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-54-1749112292516 не найден: User not found"
+      },
+      "duration": 797.9313750000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 55",
+      "notes": "Batch 6, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-55-1749112292516 не найден: User not found"
+      },
+      "duration": 808.5846249999995,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 60",
+      "notes": "Batch 6, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-60-1749112292521 не найден: User not found"
+      },
+      "duration": 810.5801250000004,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 53",
+      "notes": "Batch 6, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-53-1749112292515 не найден: User not found"
+      },
+      "duration": 815.038708,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 51",
+      "notes": "Batch 6, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-51-1749112292513 не найден: User not found"
+      },
+      "duration": 820.3330420000002,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 56",
+      "notes": "Batch 6, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-56-1749112292516 не найден: User not found"
+      },
+      "duration": 819.6750420000008,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 58",
+      "notes": "Batch 6, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-58-1749112292517 не найден: User not found"
+      },
+      "duration": 834.0912499999995,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 57",
+      "notes": "Batch 6, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-57-1749112292517 не найден: User not found"
+      },
+      "duration": 839.999041000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 52",
+      "notes": "Batch 6, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-52-1749112292515 не найден: User not found"
+      },
+      "duration": 887.1537919999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 71,
+      "testName": "Rapid Call 59",
+      "notes": "Batch 6, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-59-1749112292518 не найден: User not found"
+      },
+      "duration": 891.3367499999986,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 70",
+      "notes": "Batch 7, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-70-1749112293520 не найден: User not found"
+      },
+      "duration": 810.5010829999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 63",
+      "notes": "Batch 7, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-63-1749112293514 не найден: User not found"
+      },
+      "duration": 821.7873329999984,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 67",
+      "notes": "Batch 7, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-67-1749112293516 не найден: User not found"
+      },
+      "duration": 820.9380830000009,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 65",
+      "notes": "Batch 7, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-65-1749112293515 не найден: User not found"
+      },
+      "duration": 826.4339579999996,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 61",
+      "notes": "Batch 7, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-61-1749112293512 не найден: User not found"
+      },
+      "duration": 830.3554999999997,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 64",
+      "notes": "Batch 7, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-64-1749112293515 не найден: User not found"
+      },
+      "duration": 830.205750000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 66",
+      "notes": "Batch 7, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-66-1749112293515 не найден: User not found"
+      },
+      "duration": 842.507834,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 62",
+      "notes": "Batch 7, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-62-1749112293514 не найден: User not found"
+      },
+      "duration": 873.0845829999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 68",
+      "notes": "Batch 7, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-68-1749112293516 не найден: User not found"
+      },
+      "duration": 874.625,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 81,
+      "testName": "Rapid Call 69",
+      "notes": "Batch 7, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-69-1749112293518 не найден: User not found"
+      },
+      "duration": 874.1822499999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 76",
+      "notes": "Batch 8, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-76-1749112294496 не найден: User not found"
+      },
+      "duration": 806.1049999999996,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 73",
+      "notes": "Batch 8, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-73-1749112294496 не найден: User not found"
+      },
+      "duration": 807.975042,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 72",
+      "notes": "Batch 8, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-72-1749112294495 не найден: User not found"
+      },
+      "duration": 819.7180410000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 77",
+      "notes": "Batch 8, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-77-1749112294497 не найден: User not found"
+      },
+      "duration": 820.448042,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 80",
+      "notes": "Batch 8, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-80-1749112294498 не найден: User not found"
+      },
+      "duration": 822.2290830000002,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 71",
+      "notes": "Batch 8, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-71-1749112294494 не найден: User not found"
+      },
+      "duration": 830.9533749999991,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 79",
+      "notes": "Batch 8, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-79-1749112294498 не найден: User not found"
+      },
+      "duration": 854.6162499999991,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 75",
+      "notes": "Batch 8, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-75-1749112294496 не найден: User not found"
+      },
+      "duration": 861.9185829999988,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 74",
+      "notes": "Batch 8, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-74-1749112294496 не найден: User not found"
+      },
+      "duration": 871.9779999999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 91,
+      "testName": "Rapid Call 78",
+      "notes": "Batch 8, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-78-1749112294498 не найден: User not found"
+      },
+      "duration": 884.7560410000006,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 88",
+      "notes": "Batch 9, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-88-1749112295495 не найден: User not found"
+      },
+      "duration": 821.2635419999988,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 85",
+      "notes": "Batch 9, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-85-1749112295490 не найден: User not found"
+      },
+      "duration": 836.8753749999996,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 81",
+      "notes": "Batch 9, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-81-1749112295485 не найден: User not found"
+      },
+      "duration": 847.1837500000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 86",
+      "notes": "Batch 9, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-86-1749112295491 не найден: User not found"
+      },
+      "duration": 840.8976659999989,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 87",
+      "notes": "Batch 9, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-87-1749112295494 не найден: User not found"
+      },
+      "duration": 838.9415000000008,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 84",
+      "notes": "Batch 9, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-84-1749112295489 не найден: User not found"
+      },
+      "duration": 844.4341249999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 90",
+      "notes": "Batch 9, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-90-1749112295496 не найден: User not found"
+      },
+      "duration": 840.8022089999995,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 83",
+      "notes": "Batch 9, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-83-1749112295489 не найден: User not found"
+      },
+      "duration": 849.5185000000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 82",
+      "notes": "Batch 9, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-82-1749112295489 не найден: User not found"
+      },
+      "duration": 864.3827500000007,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 101,
+      "testName": "Rapid Call 89",
+      "notes": "Batch 9, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-89-1749112295495 не найден: User not found"
+      },
+      "duration": 874.4305830000012,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 95",
+      "notes": "Batch 10, Call 5",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-95-1749112296475 не найден: User not found"
+      },
+      "duration": 802.9965420000008,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 91",
+      "notes": "Batch 10, Call 1",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-91-1749112296471 не найден: User not found"
+      },
+      "duration": 814.0007920000007,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 93",
+      "notes": "Batch 10, Call 3",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-93-1749112296474 не найден: User not found"
+      },
+      "duration": 819.5076250000002,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 100",
+      "notes": "Batch 10, Call 10",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-100-1749112296477 не найден: User not found"
+      },
+      "duration": 816.6115000000009,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 94",
+      "notes": "Batch 10, Call 4",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-94-1749112296474 не найден: User not found"
+      },
+      "duration": 819.6536250000008,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 92",
+      "notes": "Batch 10, Call 2",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-92-1749112296473 не найден: User not found"
+      },
+      "duration": 822.1046249999999,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 99",
+      "notes": "Batch 10, Call 9",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-99-1749112296477 не найден: User not found"
+      },
+      "duration": 818.8413339999988,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 96",
+      "notes": "Batch 10, Call 6",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-96-1749112296475 не найден: User not found"
+      },
+      "duration": 831.0068339999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 97",
+      "notes": "Batch 10, Call 7",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-97-1749112296476 не найден: User not found"
+      },
+      "duration": 862.2194999999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 111,
+      "testName": "Rapid Call 98",
+      "notes": "Batch 10, Call 8",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam rapid-test-98-1749112296476 не найден: User not found"
+      },
+      "duration": 877.7403749999994,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 112,
+      "testName": "Very Long Payload",
+      "notes": "Testing payload size limits",
+      "status": "ERROR",
+      "httpStatus": 413,
+      "responseData": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n",
+      "duration": 20.78570900000159,
+      "errorMessage": "Request failed with status code 413",
+      "errorType": "UNKNOWN_ERROR",
+      "expectedError": "SERVER_ERROR",
+      "actualOutcome": "UNKNOWN_ERROR",
+      "passed": false
+    },
+    {
+      "testNumber": 113,
+      "testName": "Too Many Headers",
+      "notes": "Testing header limits",
+      "status": "ERROR",
+      "httpStatus": 431,
+      "responseData": null,
+      "duration": 320.6605419999996,
+      "errorMessage": "Request failed with status code 431",
+      "errorType": "UNKNOWN_ERROR",
+      "expectedError": "SERVER_ERROR",
+      "actualOutcome": "UNKNOWN_ERROR",
+      "passed": false
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 8",
+      "notes": "Concurrent request 8/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-7-1749112297799 не найден: User not found"
+      },
+      "duration": 884.1209999999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 1",
+      "notes": "Concurrent request 1/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-0-1749112297797 не найден: User not found"
+      },
+      "duration": 886.4282090000015,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 9",
+      "notes": "Concurrent request 9/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-8-1749112297799 не найден: User not found"
+      },
+      "duration": 884.6331250000003,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 2",
+      "notes": "Concurrent request 2/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-1-1749112297798 не найден: User not found"
+      },
+      "duration": 886.2090829999997,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 7",
+      "notes": "Concurrent request 7/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-6-1749112297799 не найден: User not found"
+      },
+      "duration": 885.4857079999983,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 24",
+      "notes": "Concurrent request 24/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-23-1749112297813 не найден: User not found"
+      },
+      "duration": 871.1416659999995,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 34",
+      "notes": "Concurrent request 34/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-33-1749112297822 не найден: User not found"
+      },
+      "duration": 862.7869160000009,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 5",
+      "notes": "Concurrent request 5/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-4-1749112297798 не найден: User not found"
+      },
+      "duration": 886.9841670000005,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 16",
+      "notes": "Concurrent request 16/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-15-1749112297806 не найден: User not found"
+      },
+      "duration": 879.2835829999985,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 23",
+      "notes": "Concurrent request 23/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-22-1749112297812 не найден: User not found"
+      },
+      "duration": 873.2992909999994,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 14",
+      "notes": "Concurrent request 14/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-13-1749112297805 не найден: User not found"
+      },
+      "duration": 881.2991669999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 6",
+      "notes": "Concurrent request 6/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-5-1749112297798 не найден: User not found"
+      },
+      "duration": 887.6292909999993,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 22",
+      "notes": "Concurrent request 22/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-21-1749112297812 не найден: User not found"
+      },
+      "duration": 877.0329580000016,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 29",
+      "notes": "Concurrent request 29/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-28-1749112297818 не найден: User not found"
+      },
+      "duration": 877.130416,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 38",
+      "notes": "Concurrent request 38/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-37-1749112297825 не найден: User not found"
+      },
+      "duration": 876.889541999999,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 36",
+      "notes": "Concurrent request 36/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-35-1749112297824 не найден: User not found"
+      },
+      "duration": 878.574125000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 28",
+      "notes": "Concurrent request 28/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-27-1749112297817 не найден: User not found"
+      },
+      "duration": 887.7060410000013,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 13",
+      "notes": "Concurrent request 13/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-12-1749112297804 не найден: User not found"
+      },
+      "duration": 922.7067499999994,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 21",
+      "notes": "Concurrent request 21/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-20-1749112297811 не найден: User not found"
+      },
+      "duration": 915.796875,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 50",
+      "notes": "Concurrent request 50/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-49-1749112297834 не найден: User not found"
+      },
+      "duration": 892.3955839999999,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 44",
+      "notes": "Concurrent request 44/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-43-1749112297830 не найден: User not found"
+      },
+      "duration": 897.2697090000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 25",
+      "notes": "Concurrent request 25/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-24-1749112297814 не найден: User not found"
+      },
+      "duration": 912.9510829999981,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 3",
+      "notes": "Concurrent request 3/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-2-1749112297798 не найден: User not found"
+      },
+      "duration": 929.2955829999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 4",
+      "notes": "Concurrent request 4/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-3-1749112297798 не найден: User not found"
+      },
+      "duration": 937.7750420000011,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 17",
+      "notes": "Concurrent request 17/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-16-1749112297807 не найден: User not found"
+      },
+      "duration": 929.3430000000008,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 42",
+      "notes": "Concurrent request 42/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-41-1749112297828 не найден: User not found"
+      },
+      "duration": 908.4694999999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 27",
+      "notes": "Concurrent request 27/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-26-1749112297816 не найден: User not found"
+      },
+      "duration": 920.831959000001,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 19",
+      "notes": "Concurrent request 19/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-18-1749112297809 не найден: User not found"
+      },
+      "duration": 928.0887080000011,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 12",
+      "notes": "Concurrent request 12/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-11-1749112297802 не найден: User not found"
+      },
+      "duration": 940.8731250000019,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 46",
+      "notes": "Concurrent request 46/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-45-1749112297831 не найден: User not found"
+      },
+      "duration": 912.0207499999997,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 40",
+      "notes": "Concurrent request 40/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-39-1749112297827 не найден: User not found"
+      },
+      "duration": 916.626041999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 31",
+      "notes": "Concurrent request 31/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-30-1749112297820 не найден: User not found"
+      },
+      "duration": 924.0594580000015,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 43",
+      "notes": "Concurrent request 43/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-42-1749112297829 не найден: User not found"
+      },
+      "duration": 928.9779169999983,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 15",
+      "notes": "Concurrent request 15/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-14-1749112297805 не найден: User not found"
+      },
+      "duration": 952.6432080000013,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 32",
+      "notes": "Concurrent request 32/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-31-1749112297821 не найден: User not found"
+      },
+      "duration": 937.592290999999,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 26",
+      "notes": "Concurrent request 26/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-25-1749112297815 не найден: User not found"
+      },
+      "duration": 943.3205000000016,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 35",
+      "notes": "Concurrent request 35/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-34-1749112297823 не найден: User not found"
+      },
+      "duration": 935.6460829999996,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 39",
+      "notes": "Concurrent request 39/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-38-1749112297826 не найден: User not found"
+      },
+      "duration": 939.6514999999999,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 30",
+      "notes": "Concurrent request 30/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-29-1749112297819 не найден: User not found"
+      },
+      "duration": 953.0897499999992,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 11",
+      "notes": "Concurrent request 11/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-10-1749112297801 не найден: User not found"
+      },
+      "duration": 973.8446669999994,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 49",
+      "notes": "Concurrent request 49/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-48-1749112297834 не найден: User not found"
+      },
+      "duration": 944.0837909999991,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 41",
+      "notes": "Concurrent request 41/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-40-1749112297827 не найден: User not found"
+      },
+      "duration": 957.5443749999995,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 10",
+      "notes": "Concurrent request 10/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-9-1749112297799 не найден: User not found"
+      },
+      "duration": 986.5587499999983,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 18",
+      "notes": "Concurrent request 18/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-17-1749112297808 не найден: User not found"
+      },
+      "duration": 979.4469170000011,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 47",
+      "notes": "Concurrent request 47/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-46-1749112297832 не найден: User not found"
+      },
+      "duration": 958.9979999999996,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 48",
+      "notes": "Concurrent request 48/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-47-1749112297833 не найден: User not found"
+      },
+      "duration": 965.4081660000011,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 37",
+      "notes": "Concurrent request 37/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-36-1749112297824 не найден: User not found"
+      },
+      "duration": 973.8863330000004,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 33",
+      "notes": "Concurrent request 33/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-32-1749112297821 не найден: User not found"
+      },
+      "duration": 990.8724579999998,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 20",
+      "notes": "Concurrent request 20/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-19-1749112297810 не найден: User not found"
+      },
+      "duration": 1013.8749160000025,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 163,
+      "testName": "Concurrent 45",
+      "notes": "Concurrent request 45/50",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "error",
+        "message": "Аккаунт Steam concurrent-44-1749112297830 не найден: User not found"
+      },
+      "duration": 997.7992079999985,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 164,
+      "testName": "Retry Logic Test",
+      "notes": "Testing retry logic with eventual success",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "success",
+        "message": "Аккаунт Steam успешно найден",
+        "steamUsername": "admin",
+        "transactionId": "8c342a01-1c97-4bf5-9020-07683d8ca198"
+      },
+      "duration": 2722.8251249999994,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    },
+    {
+      "testNumber": 165,
+      "testName": "Exponential Backoff Test",
+      "notes": "Testing exponential backoff pattern",
+      "status": "SUCCESS",
+      "httpStatus": 200,
+      "responseData": {
+        "status": "success",
+        "message": "Аккаунт Steam успешно найден",
+        "steamUsername": "admin",
+        "transactionId": "b215bb91-ff83-4925-afdb-5a4d92604f48"
+      },
+      "duration": 814.9731669999965,
+      "expectedError": null,
+      "actualOutcome": "success",
+      "passed": null,
+      "errorType": null
+    }
+  ]
+}
