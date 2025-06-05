@@ -198,7 +198,8 @@ export class PayDigitalService {
    * ✅ UPDATED: Create Steam payment using required transactionId
    * @param username Valid Steam username
    * @param amountUSD Amount in USD
-   * @param amountRUB Total amount in RUB including commission
+   * @param totalAmountRUB Total amount in RUB including commission (user pays)
+   * @param netAmountRUB Net amount in RUB going to Steam (without commission)
    * @param orderId Unique order ID
    * @param transactionId TransactionId from validation step (REQUIRED)
    * @returns Payment URL
@@ -206,7 +207,8 @@ export class PayDigitalService {
   async createSteamPayment(
     username: string,
     amountUSD: number,
-    amountRUB: number,
+    totalAmountRUB: number,
+    netAmountRUB: number,
     orderId: string,
     transactionId: string  // ✅ REQUIRED PARAMETER - NO FALLBACK
   ): Promise<string> {
@@ -217,14 +219,17 @@ export class PayDigitalService {
         transactionId,
         orderId,
         amountUSD,
-        amountRUB
+        totalAmountRUB,
+        netAmountRUB
       });
 
-      // Create payment
+      // ✅ FIXED: Send correct commission structure
+      // amount: Total amount user pays (with commission)
+      // netAmount: Amount that goes to Steam (without commission)
       const response = await this.client.post('/steam/pay', {
         steamUsername: username,
-        amount: amountRUB,
-        netAmount: amountRUB,
+        amount: totalAmountRUB,     // User pays (with commission)
+        netAmount: netAmountRUB,    // Steam receives (without commission)
         currency: 'RUB',
         transactionId,
         orderId,
@@ -234,7 +239,8 @@ export class PayDigitalService {
       logger.info('Steam payment created successfully', {
         username,
         amountUSD,
-        amountRUB,
+        totalAmountRUB,
+        netAmountRUB,
         orderId,
         transactionId,
         paymentUrl: response.data.paymentUrl
@@ -260,7 +266,8 @@ export class PayDigitalService {
           error: apiError,
           username,
           amountUSD,
-          amountRUB,
+          totalAmountRUB,
+          netAmountRUB,
           orderId,
           transactionId,
           status: error.response?.status,
@@ -272,7 +279,8 @@ export class PayDigitalService {
         error,
         username,
         amountUSD,
-        amountRUB,
+        totalAmountRUB,
+        netAmountRUB,
         orderId,
         transactionId
       });

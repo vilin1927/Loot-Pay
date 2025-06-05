@@ -59,12 +59,14 @@ export async function createPayment(
     });
 
     // ✅ CRITICAL FIX: Use required transactionId from Steam validation
+    // ✅ COMMISSION FIX: Pass both total amount (user pays) and net amount (Steam receives)
     const paymentUrl = await payDigitalService.createSteamPayment(
       steamUsername,
       amountUSD,
-      commission.totalAmountRUB,
-      `LP-${transaction.id}`, // Use transaction ID as order ID
-      transactionId  // ✅ USE STORED TRANSACTION ID (REQUIRED)
+      commission.totalAmountRUB,  // Total amount user pays (with commission)
+      commission.netAmountRUB,    // Net amount Steam receives (without commission)
+      `LP-${transaction.id}`,     // Use transaction ID as order ID
+      transactionId               // ✅ USE STORED TRANSACTION ID (REQUIRED)
     );
 
     // 5. Update transaction with payment URL
