@@ -132,25 +132,17 @@ export async function handleStartPayment(
     // Check if user completed questionnaire
     const user = await getUserById(userId);
     
-    if (user.questionnaire_completed) {
+    if (user && user.questionnaire_completed) {
       // Returning user - skip to Steam username
-      logger.info('Returning user, skipping questionnaire', { userId });
+      logger.info('Returning user detected, skipping questionnaire', { userId });
       await handleSteamUsernameRequest(bot, chatId, userId);
     } else {
       // New user - start questionnaire
-      logger.info('New user, starting questionnaire', { userId });
+      logger.info('New user detected, starting questionnaire', { userId });
       await sendQuestion(bot, chatId, userId, 1);
     }
-
-    logger.info('Started payment flow', {
-      userId,
-      questionnaireCompleted: user.questionnaire_completed
-    });
   } catch (error) {
-    logger.error('Error starting payment flow', {
-      error,
-      userId
-    });
+    logger.error('Error starting payment flow', { error, userId });
     await handleError(chatId, error as Error);
   }
 }
