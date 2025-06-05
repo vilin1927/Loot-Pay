@@ -243,10 +243,11 @@ export class PayDigitalService {
         netAmountRUB,
         orderId,
         transactionId,
-        paymentUrl: response.data.paymentUrl
+        paymentUrl: response.data.payUrl
       });
 
-      return response.data.paymentUrl;
+      // ✅ FIX: PayDigital returns 'payUrl', not 'paymentUrl'
+      return response.data.payUrl;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const apiError = error.response?.data as PayDigitalError;
