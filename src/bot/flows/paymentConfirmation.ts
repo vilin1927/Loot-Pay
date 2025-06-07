@@ -5,6 +5,9 @@ import { createPayment } from '../../services/payment/paymentService';
 import { handleSteamUsernameRequest } from './steamUsername';
 import { handleAmountSelection } from './amountSelection';
 import { formatRussianCurrency } from '../../utils/locale';
+import { getSystemSetting } from '../../services/settings/settingsService';
+import { exchangeRateService } from '../../services/exchangeRate/exchangeRateService';
+import { calculateCommission } from '../../services/commission/commissionService';
 
 const PAYMENT_ERROR = `🚫 Произошла ошибка при создании оплаты.
 
@@ -12,15 +15,18 @@ const PAYMENT_ERROR = `🚫 Произошла ошибка при создан�
 Если проблема повторяется — обратитесь в поддержку.`;
 
 // Payment confirmation message
-const PAYMENT_DETAILS = (username: string, amountUSD: number, amountRUB: number) => `🔎 Проверь данные перед оплатой:
+const PAYMENT_DETAILS = async (username: string, amountUSD: number, amountRUB: number) => {
+  const commissionPercent = await getSystemSetting('commission_percent') || '10';
+  return `🔎 Проверь данные перед оплатой:
 
 🧾 Услуга: Пополнение Steam 
 👤 Аккаунт: ${username}
-💵 Сумма: ${amountUSD} USD (≈${formatRussianCurrency(amountRUB)}) — **комиссия 10% уже включена**
+💵 Сумма: ${amountUSD} USD (≈${formatRussianCurrency(amountRUB)}) — **комиссия ${commissionPercent}% уже включена**
 
 ❗️Пожалуйста, убедитесь, что логин и сумма указаны верно. 
 В случае ошибки средства могут уйти другому пользователю.
 Если всё правильно — выберите способ оплаты ниже 👇`;
+};
 
 // Handle payment confirmation
 export async function handlePaymentConfirmation(
@@ -35,11 +41,11 @@ export async function handlePaymentConfirmation(
       throw new Error('Invalid state for payment confirmation');
     }
 
-    // ✅ CHECK: Ensure we have required data including transactionId
+    // Check we have required data including transactionId
     const { steamUsername, amountUSD, transactionId } = state.state_data;
     
     if (!steamUsername || !amountUSD || !transactionId) {
-      logger.error('Missing required payment data in legacy flow', {
+      logger.error('Missing required payment data', {
         userId,
         hasUsername: !!steamUsername,
         hasAmount: !!amountUSD,
@@ -48,7 +54,7 @@ export async function handlePaymentConfirmation(
       throw new Error('Missing required payment data');
     }
 
-    // ✅ USE: New centralized payment service with required transactionId
+    // Create payment (service handles exchange rate internally)
     const payment = await createPayment(userId, steamUsername, amountUSD, transactionId);
 
     // Update state
@@ -59,9 +65,10 @@ export async function handlePaymentConfirmation(
     });
 
     // Send payment confirmation
+    const paymentDetailsText = await PAYMENT_DETAILS(steamUsername, amountUSD, payment.totalAmountRUB);
     await bot.sendMessage(
       chatId,
-      PAYMENT_DETAILS(steamUsername, amountUSD, payment.totalAmountRUB),
+      paymentDetailsText,
       {
         parse_mode: 'Markdown',
         reply_markup: {
@@ -149,33 +156,28 @@ export async function showPaymentConfirmation(
 
     const { steamUsername, amountUSD } = state.state_data;
     
-    // ✅ FIX: Use correct exchange rate and commission calculation
-    const { exchangeRateService } = require('../../services/exchangeRate/exchangeRateService');
-    const { calculateCommission } = require('../../services/commission/commissionService');
-    
-    // Get current exchange rate with new PRD-compliant system
-  const rateResult = await exchangeRateService.getCurrentUSDRUBRate();
-  if (!rateResult.success || !rateResult.rate) {
-    logger.error('Failed to get exchange rate for payment confirmation', { error: rateResult.error });
-    throw new Error('Exchange rate service unavailable');
-  }
-  const exchangeRate = rateResult.rate.rate;
+    // Get current exchange rate using standardized logic
+    const rateResult = await exchangeRateService.getCurrentUSDRUBRate();
+    if (!rateResult.success || !rateResult.rate) {
+      logger.error('Failed to get exchange rate for payment confirmation');
+      throw new Error('Exchange rate service unavailable');
+    }
+    const exchangeRate = rateResult.rate.rate;
     const commission = calculateCommission(amountUSD, exchangeRate);
-    const totalRUB = Math.round(commission.totalAmountRUB);
 
     const message = `🔎 Проверь данные перед оплатой:
 
 🧾 Услуга: Пополнение Steam 
 👤 Аккаунт: ${steamUsername}
-💵 Сумма: ${amountUSD} USD (≈${totalRUB}₽)
-💰 Комиссия: 10% (уже включена)
+💵 Сумма: ${amountUSD} USD (≈${formatRussianCurrency(commission.totalAmountRUB)})
+💰 Комиссия: ${await getSystemSetting('commission_percent') || '10'}% (уже включена)
 
 ❗️ Убедитесь, что данные верны!`;
 
     await bot.sendMessage(chatId, message, {
       reply_markup: {
         inline_keyboard: [
-          [{ text: `✅ Оплатить ${totalRUB}₽`, callback_data: 'confirm_payment' }],
+          [{ text: `✅ Оплатить ${formatRussianCurrency(commission.totalAmountRUB)}`, callback_data: 'confirm_payment' }],
           [
             { text: '🔁 Изменить логин', callback_data: 'steam_username' },
             { text: '💵 Изменить сумму', callback_data: 'amount_custom' }

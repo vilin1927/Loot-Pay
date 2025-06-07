@@ -1,55 +1,68 @@
 import { logger } from '../../utils/logger';
 import { setState } from '../../services/state/stateService';
 import { getBotInstance } from '../botInstance';
+import { getSystemSetting } from '../../services/settings/settingsService';
 
-// Amount limits
-const MIN_AMOUNT = 2;
-const MAX_AMOUNT = 100;
+// Dynamic message functions
+const getCustomAmountMessage = async () => {
+  const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
+  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
 
-// Messages
-const CUSTOM_AMOUNT_MESSAGE = `
-💰 Введите сумму пополнения в долларах (USD):
+  return `💰 Введите сумму пополнения в долларах (USD):
 
-Минимальная сумма: ${MIN_AMOUNT}$
-Максимальная сумма: ${MAX_AMOUNT}$
+Минимальная сумма: ${minAmount}$
+Максимальная сумма: ${maxAmount}$
 
-Например: 25.50
-`;
-
-const TOO_SMALL_MESSAGE = `
-❌ Сумма слишком маленькая.
-
-Минимальная сумма: ${MIN_AMOUNT}$
-
-Выберите минимальную сумму или введите другую:
-`;
-
-const TOO_LARGE_MESSAGE = `
-❌ Сумма слишком большая.
-
-Максимальная сумма: ${MAX_AMOUNT}$
-
-Выберите максимальную сумму или введите другую:
-`;
-
-const INVALID_FORMAT_MESSAGE = `
-❌ Неверный формат суммы.
-
-Введите число от ${MIN_AMOUNT} до ${MAX_AMOUNT}$.
-Например: 25.50
-
-Попробуйте снова:
-`;
-
-// Quick-fix buttons
-const MIN_AMOUNT_BUTTON = {
-  text: `Минимум (${MIN_AMOUNT}$)`,
-  callback_data: `amount_${MIN_AMOUNT}`
+Например: 25.50`;
 };
 
-const MAX_AMOUNT_BUTTON = {
-  text: `Максимум (${MAX_AMOUNT}$)`,
-  callback_data: `amount_${MAX_AMOUNT}`
+const getTooSmallMessage = async () => {
+  const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
+  
+  return `❌ Сумма слишком маленькая.
+
+Минимальная сумма: ${minAmount}$
+
+Выберите минимальную сумму или введите другую:`;
+};
+
+const getTooLargeMessage = async () => {
+  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+  
+  return `❌ Сумма слишком большая.
+
+Максимальная сумма: ${maxAmount}$
+
+Выберите максимальную сумму или введите другую:`;
+};
+
+const getInvalidFormatMessage = async () => {
+  const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
+  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+  
+  return `❌ Неверный формат суммы.
+
+Введите число от ${minAmount} до ${maxAmount}$.
+Например: 25.50
+
+Попробуйте снова:`;
+};
+
+// Dynamic button functions
+const getMinAmountButton = async () => {
+  const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
+  return {
+    text: `Минимум (${minAmount}$)`,
+    callback_data: `amount_${minAmount}`
+  };
+};
+
+const getMaxAmountButton = async () => {
+  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+  return {
+    text: `Максимум (${maxAmount}$)`,
+    callback_data: `amount_${maxAmount}`
+  };
 };
 
 // Handle custom amount request
@@ -65,7 +78,8 @@ export async function handleCustomAmountRequest(
 
     // Get bot instance and show message
     const bot = await getBotInstance();
-    await bot.sendMessage(chatId, CUSTOM_AMOUNT_MESSAGE);
+    const message = await getCustomAmountMessage();
+    await bot.sendMessage(chatId, message);
 
     logger.info('Custom amount requested', { userId });
 
@@ -92,31 +106,42 @@ export async function handleCustomAmountInput(
 ) {
   try {
     const bot = await getBotInstance();
+    
+    // Get dynamic limits from database
+    const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
+    const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
 
     // Parse amount
     const amount = parseFloat(input);
 
     // Validate format
     if (isNaN(amount)) {
-      await bot.sendMessage(chatId, INVALID_FORMAT_MESSAGE);
+      const message = await getInvalidFormatMessage();
+      await bot.sendMessage(chatId, message);
       return;
     }
 
     // Validate minimum
-    if (amount < MIN_AMOUNT) {
-      await bot.sendMessage(chatId, TOO_SMALL_MESSAGE, {
+    if (amount < minAmount) {
+      const message = await getTooSmallMessage();
+      const button = await getMinAmountButton();
+      
+      await bot.sendMessage(chatId, message, {
         reply_markup: {
-          inline_keyboard: [[MIN_AMOUNT_BUTTON]]
+          inline_keyboard: [[button]]
         }
       });
       return;
     }
 
     // Validate maximum
-    if (amount > MAX_AMOUNT) {
-      await bot.sendMessage(chatId, TOO_LARGE_MESSAGE, {
+    if (amount > maxAmount) {
+      const message = await getTooLargeMessage();
+      const button = await getMaxAmountButton();
+      
+      await bot.sendMessage(chatId, message, {
         reply_markup: {
-          inline_keyboard: [[MAX_AMOUNT_BUTTON]]
+          inline_keyboard: [[button]]
         }
       });
       return;

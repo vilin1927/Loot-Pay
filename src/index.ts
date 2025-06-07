@@ -96,10 +96,10 @@ async function startServer() {
     // Start bot
     await startBot();
     
-    // Start exchange rate background job (PRD requirement: Daily updates)
+    // Start exchange rate background job (PRD requirement: Automated updates)
     exchangeRateJobService.startJob();
     logger.info('Exchange rate background job started', {
-      schedule: 'Daily at 6:00 AM UTC (9:00 AM Moscow)'
+      schedule: 'Every 4 hours'
     });
     
     // Start server

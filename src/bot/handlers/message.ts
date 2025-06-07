@@ -6,6 +6,7 @@ import { handleSteamUsernameRequest } from '../flows/steamUsername';
 import { handleAmountSelection } from '../flows/amountSelection';
 import { findOrCreateUser } from '../../services/user/userService';
 import { handleAmountSelected } from './callbackQuery';
+import { getSystemSetting } from '../../services/settings/settingsService';
 
 export async function handleMessage(
   bot: TelegramBot,
@@ -59,8 +60,11 @@ export async function handleMessage(
 
       case 'AWAITING_CUSTOM_AMOUNT':
         const amount = parseFloat(text);
-        if (isNaN(amount) || amount < 5 || amount > 100) {
-          await bot.sendMessage(chatId, `❌ Неверная сумма. Введите число от 5 до 100:`);
+        const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
+        const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+        
+        if (isNaN(amount) || amount < minAmount || amount > maxAmount) {
+          await bot.sendMessage(chatId, `❌ Неверная сумма. Введите число от ${minAmount} до ${maxAmount}:`);
           return;
         }
         await handleAmountSelected(bot, chatId, userId, amount);

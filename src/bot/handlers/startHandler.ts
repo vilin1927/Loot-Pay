@@ -24,9 +24,10 @@ export async function handleStartCommand(msg: Message) {
     // Get bot instance
     const bot = await getBotInstance();
 
-    // Get minimum amounts from settings
-    const minAmountUSD = Number(await getSystemSetting('min_amount_usd')) || 5;
-    const minAmountRUB = Number(await getSystemSetting('min_amount_rub')) || 450;
+    // Get minimum amounts and commission from settings
+    const minAmountUSD = Number(await getSystemSetting('min_amount_usd')) || 1;
+    const minAmountRUB = Number(await getSystemSetting('min_amount_rub')) || (minAmountUSD * 80); // Fallback: USD * approx exchange rate
+    const commissionPercent = Number(await getSystemSetting('commission_percent')) || 10;
 
     // Welcome message with inline keyboard
     const welcomeMessage = `Привет, это 🎮 LootPay!
@@ -41,7 +42,7 @@ export async function handleStartCommand(msg: Message) {
 Пополняй Steam за 15 минут
 с удобной оплатой, честным курсом и без риска быть обманутым ⏱️
 
-🔹 Минимальная и прозрачная комиссия **10%** — без скрытых наценок 
+🔹 Минимальная и прозрачная комиссия **${commissionPercent}%** — без скрытых наценок 
 🔹 Гарантия возврата при сбоях 
 🔹 Поддержка 24/7
 ⋯⋯⋯⋯⋯⋯⋯⋯

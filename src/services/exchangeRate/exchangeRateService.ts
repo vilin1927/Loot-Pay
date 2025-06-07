@@ -228,17 +228,45 @@ class ExchangeRateService {
   /**
    * Create fallback rate when all else fails
    * PRD Requirement: Always have a working rate
+   * Updated: Use previous PayDigital rate as fallback instead of hardcoded value
    */
   private async createFallbackRate(): Promise<RateUpdateResult> {
     try {
+      // First, try to get the most recent PayDigital rate
+      const lastPayDigitalRate = await db('exchange_rates')
+        .where('currency_pair', 'USD_RUB')
+        .where('source', 'paydigital_api')
+        .orderBy('created_at', 'desc')
+        .first();
+
+      let fallbackRateValue = this.DEFAULT_FALLBACK_RATE;
+      let fallbackNote = 'Emergency hardcoded fallback rate';
+
+      if (lastPayDigitalRate && this.isValidRate(lastPayDigitalRate.rate)) {
+        fallbackRateValue = lastPayDigitalRate.rate;
+        fallbackNote = `Fallback using previous PayDigital rate from ${lastPayDigitalRate.created_at}`;
+        
+        logger.info('Using previous PayDigital rate as fallback', {
+          rate: fallbackRateValue,
+          original_date: lastPayDigitalRate.created_at,
+          age_hours: this.getAgeInHours(lastPayDigitalRate.created_at)
+        });
+      } else {
+        logger.warn('No previous PayDigital rate found, using hardcoded fallback', {
+          rate: fallbackRateValue
+        });
+      }
+
       const fallbackRate = await this.saveRateToDatabase({
         currency_pair: 'USD_RUB',
-        rate: this.DEFAULT_FALLBACK_RATE,
+        rate: fallbackRateValue,
         source: 'fallback',
         status: 'active',
         api_response: { 
-          note: 'Emergency fallback rate',
-          timestamp: new Date().toISOString()
+          note: fallbackNote,
+          timestamp: new Date().toISOString(),
+          previous_paydigital_rate: lastPayDigitalRate?.rate || null,
+          previous_paydigital_date: lastPayDigitalRate?.created_at || null
         },
         expires_at: new Date(Date.now() + (this.CACHE_DURATION_HOURS * 60 * 60 * 1000))
       });
@@ -305,7 +333,8 @@ class ExchangeRateService {
           updated_at: trx.fn.now()
         };
 
-        const [rateId] = await trx('exchange_rates').insert(newRateData);
+        const insertResult = await trx('exchange_rates').insert(newRateData).returning('id');
+        const rateId = insertResult[0].id || insertResult[0];
         const savedRate = await trx('exchange_rates').where('id', rateId).first();
 
         // Create history record
@@ -358,19 +387,27 @@ class ExchangeRateService {
    */
   private async recordFailedAPIAttempt(error: any): Promise<void> {
     try {
-      await this.createHistoryRecord(db, {
-        exchange_rate_id: 0, // No associated rate
-        event_type: 'failed',
-        event_source: 'cron_job',
-        currency_pair: 'USD_RUB',
-        rate: 0,
-        source: 'paydigital_api',
-        metadata: {
-          error_message: error instanceof Error ? error.message : error,
-          timestamp: new Date().toISOString()
-        },
-        notes: 'PayDigital API request failed'
-      });
+      // Get the most recent exchange rate ID for foreign key constraint
+      const recentRate = await db('exchange_rates')
+        .where('currency_pair', 'USD_RUB')
+        .orderBy('created_at', 'desc')
+        .first();
+
+      if (recentRate) {
+        await this.createHistoryRecord(db, {
+          exchange_rate_id: recentRate.id,
+          event_type: 'failed',
+          event_source: 'cron_job',
+          currency_pair: 'USD_RUB',
+          rate: 0,
+          source: 'paydigital_api',
+          metadata: {
+            error_message: error instanceof Error ? error.message : error,
+            timestamp: new Date().toISOString()
+          },
+          notes: 'PayDigital API request failed'
+        });
+      }
     } catch (historyError) {
       logger.error('Failed to record API failure in history', { historyError });
     }

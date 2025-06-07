@@ -4,6 +4,7 @@ import { setState } from '../../../services/state/stateService';
 import { saveResponse, isQuestionnaireComplete, QUESTIONS, ANSWER_TEXTS } from '../../../services/questionnaire/questionnaireService';
 import { handleError } from '../../../utils/errorHandler';
 import { db } from '../../../database/connection';
+import { analyticsService } from '../../../services/analytics/analyticsService';
 
 // Completion message according to PRD
 const COMPLETION_MESSAGE = `🎉 Готово! Ты прошёл опрос — красавчик! Спасибо, что поделился своими предпочтениями 🙌 
@@ -74,6 +75,9 @@ export async function handleQuestionResponse(
     // Save response with full text
     await saveResponse(userId, questionNumber, questionText, answerText);
 
+    // Track question answered event
+    await analyticsService.trackQuestionnaireQuestionAnswered(userId, questionNumber, answerText);
+
     // Check if questionnaire is complete
     const isComplete = await isQuestionnaireComplete(userId);
 
@@ -85,6 +89,18 @@ export async function handleQuestionResponse(
           questionnaire_completed: true,
           questionnaire_completed_at: new Date()
         });
+
+      // Track questionnaire completion
+      const allResponses = await db('questionnaire_responses')
+        .where('user_id', userId)
+        .select('question_number', 'answer_text');
+      
+      const answersMap: Record<string, string> = {};
+      allResponses.forEach(response => {
+        answersMap[`question_${response.question_number}`] = response.answer_text;
+      });
+      
+      await analyticsService.trackQuestionnaireCompleted(userId, answersMap);
 
       // Send completion message according to PRD
       await bot.sendMessage(chatId, COMPLETION_MESSAGE, {

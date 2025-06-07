@@ -11,6 +11,8 @@ import { Message } from 'node-telegram-bot-api';
 import { getBotInstance } from '../botInstance';
 import { getSystemSetting } from '../../services/settings/settingsService';
 import { getUserById } from '../../services/user/userService';
+import { formatRussianCurrency } from '../../utils/locale';
+import { analyticsService } from '../../services/analytics/analyticsService';
 
 // Messages
 const MAIN_MENU_MESSAGE = `
@@ -45,12 +47,16 @@ export async function handleStartCommand(msg: Message) {
       last_name: msg.from?.last_name
     });
 
+    // Track bot start event
+    await analyticsService.trackBotStart(user.id, 'telegram');
+
     // Get bot instance
     const bot = await getBotInstance();
 
-    // Get minimum amounts from system settings
-    const minAmountRUB = await getSystemSetting('min_amount_rub') || '500';
-    const minAmountUSD = await getSystemSetting('min_amount_usd') || '5';
+    // Get minimum amounts and commission from system settings
+    const minAmountUSD = Number(await getSystemSetting('min_amount_usd')) || 1;
+    const minAmountRUB = Number(await getSystemSetting('min_amount_rub')) || (minAmountUSD * 80); // Fallback: USD * approx exchange rate
+    const commissionPercent = Number(await getSystemSetting('commission_percent')) || 10;
 
     // Welcome message with inline keyboard
     const welcomeMessage = `Привет, это 🎮 LootPay!
@@ -65,11 +71,11 @@ export async function handleStartCommand(msg: Message) {
 Пополняй Steam за 15 минут
 с удобной оплатой, честным курсом и без риска быть обманутым ⏱️
 
-🔹 Минимальная и прозрачная комиссия **10%** — без скрытых наценок 
+🔹 Минимальная и прозрачная комиссия **${commissionPercent}%** — без скрытых наценок 
 🔹 Гарантия возврата при сбоях 
 🔹 Поддержка 24/7
 ⋯⋯⋯⋯⋯⋯⋯⋯
-💳 Автоматическое зачисление от ${minAmountRUB} ₽ / ${minAmountUSD} USD — любые РФ-карты или СБП
+💳 Автоматическое зачисление от ${formatRussianCurrency(minAmountRUB)} / ${minAmountUSD} USD — любые РФ-карты или СБП
 
 🔸 Как это работает?
 1️⃣ Запусти бота, включи уведомления, введи Steam ID 

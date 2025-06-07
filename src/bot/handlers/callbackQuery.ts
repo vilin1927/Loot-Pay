@@ -9,6 +9,7 @@ import { showPaymentConfirmation } from '../flows/paymentConfirmation';
 import { createPayment } from '../../services/payment/paymentService';
 import { showTransactionHistory } from '../flows/transactionHistory';
 import { Message } from 'node-telegram-bot-api';
+import { getSystemSetting } from '../../services/settings/settingsService';
 
 // Helper functions
 export async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: number, amount: number) {
@@ -37,7 +38,11 @@ async function handleCustomAmountPrompt(bot: TelegramBot, chatId: number, userId
   const currentState = await getState(userId);
   const existingData = currentState?.state_data || {};
   
-  await bot.sendMessage(chatId, `💰 Введите сумму в USD (от 5 до 100):`);
+  // Get dynamic limits from database
+  const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
+  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+  
+  await bot.sendMessage(chatId, `💰 Введите сумму в USD (от ${minAmount} до ${maxAmount}):`);
   await setState(userId, 'AWAITING_CUSTOM_AMOUNT', existingData);
   
   logger.info('Custom amount prompt shown, preserving state', {
@@ -189,13 +194,14 @@ support@lootpay.ru - Email
 
       case 'show_info':
       case 'about':
+        const minAmountForInfo = Number(await getSystemSetting('min_amount_usd')) || 1;
         await bot.sendMessage(chatId, `
 📄 О LootPay
 
 LootPay - это сервис для быстрого и безопасного пополнения Steam кошелька через СБП.
 
-💰 Комиссия: 10% от суммы
-💳 Минимальная сумма: 5$
+💰 Комиссия: ${await getSystemSetting('commission_percent') || '10'}% от суммы
+💳 Минимальная сумма: ${minAmountForInfo}$
 ⚡️ Мгновенное зачисление
 🛡️ Безопасные платежи
 

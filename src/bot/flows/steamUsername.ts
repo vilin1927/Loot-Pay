@@ -2,12 +2,51 @@ import TelegramBot from 'node-telegram-bot-api';
 import { logger } from '../../utils/logger';
 import { setState } from '../../services/state/stateService';
 import { payDigitalService } from '../../services/paydigital/paydigitalService';
+import { getSystemSetting } from '../../services/settings/settingsService';
+import { analyticsService } from '../../services/analytics/analyticsService';
 
 // Type for Steam validation result
 interface SteamValidationResult {
   isValid: boolean;
   transactionId?: string;
   message?: string;
+}
+
+// Input validation and sanitization
+function sanitizeSteamUsername(input: string): string {
+  // Remove leading/trailing whitespace
+  let sanitized = input.trim();
+  
+  // Remove potentially dangerous characters
+  sanitized = sanitized.replace(/[<>'"&]/g, '');
+  
+  // Steam usernames are alphanumeric with underscores, hyphens, and dots
+  sanitized = sanitized.replace(/[^a-zA-Z0-9_.-]/g, '');
+  
+  return sanitized;
+}
+
+function validateSteamUsernameFormat(username: string): { isValid: boolean; message?: string } {
+  // Basic format validation
+  if (!username || username.length === 0) {
+    return { isValid: false, message: 'Логин не может быть пустым' };
+  }
+  
+  if (username.length < 2) {
+    return { isValid: false, message: 'Логин слишком короткий (минимум 2 символа)' };
+  }
+  
+  if (username.length > 32) {
+    return { isValid: false, message: 'Логин слишком длинный (максимум 32 символа)' };
+  }
+  
+  // Check for valid Steam username characters
+  const validPattern = /^[a-zA-Z0-9_.-]+$/;
+  if (!validPattern.test(username)) {
+    return { isValid: false, message: 'Логин содержит недопустимые символы. Используйте только буквы, цифры, точки, дефисы и подчёркивания' };
+  }
+  
+  return { isValid: true };
 }
 
 const STEAM_USERNAME_PROMPT = `🧩 Введите логин аккаунта Steam:
@@ -34,18 +73,66 @@ const STEAM_USERNAME_ERROR = `⚠️ Не удалось найти такой �
 
 Если не получается — [вот инструкция, где найти логин](https://store.steampowered.com/account/)`;
 
-const STEAM_USERNAME_SUCCESS = (username: string) => `✅ Аккаунт найден!
+const STEAM_USERNAME_SUCCESS = async (username: string) => {
+  const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
+  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+  
+  return `✅ Аккаунт найден!
 👤 Логин: ${username}
 🎮 Всё готово к пополнению!
 
 💰 Выберите сумму пополнения ниже:
-— Минимум: 5 USD 
-— Максимум: 100 USD
+— Минимум: ${minAmount} USD 
+— Максимум: ${maxAmount} USD
 Выберите один из вариантов ниже или введите свою сумму 👇`;
+};
 
-// ✅ UPDATED: Export new validation function that returns transactionId
+// Enhanced validation function with better error handling
 export async function validateSteamUsernameWithTransactionId(username: string): Promise<SteamValidationResult> {
-  return await payDigitalService.validateSteamUsernameWithTransactionId(username);
+  try {
+    const result = await payDigitalService.validateSteamUsernameWithTransactionId(username);
+    
+    // If validation failed, provide specific error messages based on common issues
+    if (!result.isValid) {
+      // Check for specific error patterns in the result
+      if (result.message?.includes('not found') || result.message?.includes('404')) {
+        return { 
+          isValid: false, 
+          message: 'Steam аккаунт не найден. Проверьте правильность логина и убедитесь, что профиль публичный.' 
+        };
+      }
+      
+      if (result.message?.includes('restricted') || result.message?.includes('limited')) {
+        return { 
+          isValid: false, 
+          message: 'Аккаунт Steam ограничен. Обратитесь в поддержку для получения помощи.' 
+        };
+      }
+      
+      if (result.message?.includes('timeout') || result.message?.includes('network')) {
+        return { 
+          isValid: false, 
+          message: 'Временная ошибка подключения к Steam. Попробуйте через несколько секунд.' 
+        };
+      }
+      
+      // Default error message
+      return { 
+        isValid: false, 
+        message: 'Не удалось проверить аккаунт Steam. Проверьте логин и попробуйте снова.' 
+      };
+    }
+    
+    return result;
+  } catch (error) {
+    logger.error('Error in Steam validation', { error, username });
+    
+    // Return user-friendly error for any validation failures
+    return { 
+      isValid: false, 
+      message: 'Временная ошибка при проверке аккаунта. Попробуйте позже или обратитесь в поддержку.' 
+    };
+  }
 }
 
 // LEGACY: Export validateSteamUsername function for backward compatibility
@@ -77,46 +164,124 @@ export async function handleSteamUsernameRequest(
       return;
     }
 
-    // ✅ UPDATED: Validate username AND get transactionId in single call
-    const validation = await validateSteamUsernameWithTransactionId(username);
+    // Sanitize input to prevent injection attacks
+    const sanitizedUsername = sanitizeSteamUsername(username);
     
-    if (!validation.isValid) {
-      await bot.sendMessage(chatId, STEAM_USERNAME_ERROR, {
-        parse_mode: 'Markdown',
+    // Validate username format first
+    const formatValidation = validateSteamUsernameFormat(sanitizedUsername);
+    if (!formatValidation.isValid) {
+      await analyticsService.trackEvent(userId, 'steam_validation_failed', {
+        reason: 'invalid_format',
+        originalInput: username,
+        sanitizedInput: sanitizedUsername,
+        error: formatValidation.message
+      });
+      
+      await bot.sendMessage(chatId, `❌ ${formatValidation.message}
+
+Попробуйте ещё раз и убедитесь, что логин введён правильно.`, {
         reply_markup: {
           inline_keyboard: [
-            [{ text: '🧠 Как найти логин?', callback_data: 'steam_login_help' }]
+            [
+              { text: '🧠 Как найти логин?', callback_data: 'steam_login_help' },
+              { text: '🔄 Попробовать снова', callback_data: 'steam_username' }
+            ]
           ]
         }
       });
       return;
     }
 
-    // ✅ CRITICAL FIX: Store BOTH username AND transactionId for payment
+    // Track validation attempt
+    await analyticsService.trackSteamValidationAttempted(userId, sanitizedUsername);
+
+    // Validate username with PayDigital service
+    const validation = await validateSteamUsernameWithTransactionId(sanitizedUsername);
+    
+    if (!validation.isValid) {
+      await analyticsService.trackEvent(userId, 'steam_validation_failed', {
+        reason: 'service_validation_failed',
+        username: sanitizedUsername,
+        error: validation.message
+      });
+      
+      // Use specific error message from validation or fallback to default
+      const errorMessage = validation.message || STEAM_USERNAME_ERROR;
+      
+      await bot.sendMessage(chatId, `❌ ${errorMessage}`, {
+        parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: [
+            [
+              { text: '🧠 Как найти логин?', callback_data: 'steam_login_help' },
+              { text: '🔄 Попробовать снова', callback_data: 'steam_username' }
+            ],
+            [
+              { text: '❓ Поддержка', callback_data: 'support' }
+            ]
+          ]
+        }
+      });
+      return;
+    }
+
+    // Track successful validation
+    await analyticsService.trackSteamValidationSuccess(userId, sanitizedUsername, validation.transactionId);
+
+    // Store BOTH sanitized username AND transactionId for payment
     await setState(userId, 'AMOUNT_SELECTION', { 
-      steamUsername: username,
-      transactionId: validation.transactionId // ✅ STORE transactionId for payment use
+      steamUsername: sanitizedUsername,
+      transactionId: validation.transactionId
     });
     
+    // Get dynamic preset amounts for buttons
+    const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
+    const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+    
+    // Dynamic preset amounts based on min/max range
+    function getPresetAmounts(minAmount: number, maxAmount: number): number[] {
+      const presets: number[] = [];
+      
+      // Always include minimum amount
+      presets.push(minAmount);
+      
+      // Add preset amounts that fit within the range
+      const possiblePresets = [2, 3, 5, 10, 15, 20, 25];
+      
+      for (const preset of possiblePresets) {
+        if (preset > minAmount && preset <= maxAmount && !presets.includes(preset)) {
+          presets.push(preset);
+        }
+      }
+      
+      // Limit to 4 presets maximum
+      return presets.slice(0, 4);
+    }
+    
+    const presetAmounts = getPresetAmounts(minAmount, maxAmount);
+    
+    // Build dynamic keyboard
+    const keyboard: any[][] = [];
+    
+    // Add preset amounts in rows of 2
+    for (let i = 0; i < presetAmounts.length; i += 2) {
+      const row = [];
+      row.push({ text: `${presetAmounts[i]} USD`, callback_data: `amount_${presetAmounts[i]}` });
+      if (presetAmounts[i + 1]) {
+        row.push({ text: `${presetAmounts[i + 1]} USD`, callback_data: `amount_${presetAmounts[i + 1]}` });
+      }
+      keyboard.push(row);
+    }
+    
+    // Add custom amount and change login buttons
+    keyboard.push([{ text: 'Своя сумма 🪙', callback_data: 'amount_custom' }]);
+    keyboard.push([{ text: 'Ввести другой логин 🔄', callback_data: 'steam_username' }]);
+
     // Send success message with amount selection buttons
-    await bot.sendMessage(chatId, STEAM_USERNAME_SUCCESS(username), {
+    const successMessage = await STEAM_USERNAME_SUCCESS(sanitizedUsername);
+    await bot.sendMessage(chatId, successMessage, {
       reply_markup: {
-        inline_keyboard: [
-          [
-            { text: '5 USD', callback_data: 'amount_5' },
-            { text: '10 USD', callback_data: 'amount_10' }
-          ],
-          [
-            { text: '15 USD', callback_data: 'amount_15' },
-            { text: '20 USD', callback_data: 'amount_20' }
-          ],
-          [
-            { text: 'Своя сумма 🪙', callback_data: 'amount_custom' }
-          ],
-          [
-            { text: 'Ввести другой логин 🔄', callback_data: 'steam_username' }
-          ]
-        ]
+        inline_keyboard: keyboard
       }
     });
 
