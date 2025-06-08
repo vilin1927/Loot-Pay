@@ -200,7 +200,14 @@ export class PayDigitalService {
         if (apiError?.code === 'INVALID_USERNAME') {
           return {
             isValid: false,
-            message: 'Недействительный логин Steam'
+            message: 'Steam аккаунт не найден. Проверьте правильность логина.'
+          };
+        }
+
+        if (apiError?.code === 'ACCOUNT_RESTRICTED') {
+          return {
+            isValid: false,
+            message: 'Аккаунт Steam ограничен. Обратитесь в поддержку.'
           };
         }
 
