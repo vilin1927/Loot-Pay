@@ -17,6 +17,62 @@ export interface AnalyticsEventRow {
 }
 
 class AnalyticsService {
+  private tableExists: boolean | null = null;
+  private tableCheckPromise: Promise<boolean> | null = null;
+
+  /**
+   * Check if analytics_events table exists and create if necessary
+   */
+  private async ensureTableExists(): Promise<boolean> {
+    if (this.tableExists !== null) {
+      return this.tableExists;
+    }
+    
+    if (this.tableCheckPromise) {
+      return await this.tableCheckPromise;
+    }
+
+    this.tableCheckPromise = this.createTableIfNotExists();
+    this.tableExists = await this.tableCheckPromise;
+    return this.tableExists;
+  }
+
+  private async createTableIfNotExists(): Promise<boolean> {
+    try {
+      // Check if table exists
+      const exists = await db.schema.hasTable('analytics_events');
+      
+      if (!exists) {
+        logger.info('Analytics table missing, creating analytics_events table', { service: 'analytics' });
+        
+        await db.schema.createTable('analytics_events', (table) => {
+          table.increments('id').primary();
+          table.integer('user_id').notNullable();
+          table.string('event_name').notNullable();
+          table.text('event_data').notNullable(); // JSON string
+          table.timestamp('created_at').defaultTo(db.fn.now());
+          
+          // Add indexes for common queries
+          table.index('user_id');
+          table.index('event_name');
+          table.index('created_at');
+          table.index(['user_id', 'created_at']);
+        });
+        
+        logger.info('Analytics_events table created successfully', { service: 'analytics' });
+        return true;
+      }
+      
+      return true;
+    } catch (error) {
+      logger.error('Failed to create analytics_events table', {
+        service: 'analytics',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+      return false;
+    }
+  }
+
   /**
    * Track an analytics event
    * This is async and non-blocking - errors won't affect user flow
@@ -30,6 +86,17 @@ class AnalyticsService {
       // Validate input
       if (!userId || !eventName) {
         logger.warn('Invalid analytics event parameters', { userId, eventName });
+        return;
+      }
+
+      // Ensure table exists before inserting
+      const tableReady = await this.ensureTableExists();
+      if (!tableReady) {
+        logger.warn('Analytics table not available, skipping event tracking', {
+          service: 'analytics',
+          userId,
+          eventName
+        });
         return;
       }
 
@@ -169,6 +236,13 @@ class AnalyticsService {
     limit: number = 50
   ): Promise<AnalyticsEventRow[]> {
     try {
+      // Check if table exists first
+      const tableReady = await this.ensureTableExists();
+      if (!tableReady) {
+        logger.warn('Analytics table not available for getUserEvents', { userId });
+        return [];
+      }
+
       const events = await db('analytics_events')
         .where('user_id', userId)
         .orderBy('created_at', 'desc')
@@ -199,6 +273,13 @@ class AnalyticsService {
     endDate?: Date
   ): Promise<Record<string, number>> {
     try {
+      // Check if table exists first
+      const tableReady = await this.ensureTableExists();
+      if (!tableReady) {
+        logger.warn('Analytics table not available for getEventCounts');
+        return {};
+      }
+
       let query = db('analytics_events')
         .select('event_name')
         .count('* as count')
