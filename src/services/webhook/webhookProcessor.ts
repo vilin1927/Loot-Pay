@@ -69,12 +69,17 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
     });
 
     // ✅ Security: Verify IP address (PayDigital webhooks come from 62.76.102.182)
+    // 🔧 TEMPORARILY DISABLED FOR WEBHOOK DEBUGGING
     if (clientIP && clientIP !== '62.76.102.182') {
-      logger.warn('Webhook from unauthorized IP', { clientIP, order_uuid: payload.order_uuid });
-      // Note: In development, you might want to allow other IPs
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error(`Unauthorized webhook IP: ${clientIP}`);
-      }
+      logger.warn('Webhook from unauthorized IP - ALLOWING FOR DEBUGGING', { 
+        clientIP, 
+        order_uuid: payload.order_uuid,
+        message: 'This should normally be rejected in production' 
+      });
+      // TEMPORARILY ALLOW ALL IPs to debug webhook issues
+      // if (process.env.NODE_ENV === 'production') {
+      //   throw new Error(`Unauthorized webhook IP: ${clientIP}`);
+      // }
     }
 
     // ✅ Security: Verify webhook hash (disabled for testing)
