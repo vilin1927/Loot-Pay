@@ -68,18 +68,19 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
       clientIP
     });
 
-    // ✅ Security: Verify IP address (PayDigital webhooks come from 62.76.102.182)
-    // 🔧 TEMPORARILY DISABLED FOR WEBHOOK DEBUGGING
-    if (clientIP && clientIP !== '62.76.102.182') {
-      logger.warn('Webhook from unauthorized IP - ALLOWING FOR DEBUGGING', { 
+    // ✅ Security: Verify IP address (PayDigital webhooks come from authorized IPs)
+    const authorizedIPs = ['62.76.102.182', '195.210.170.29'];
+    
+    if (clientIP && !authorizedIPs.includes(clientIP)) {
+      logger.warn('Webhook from unauthorized IP', { 
         clientIP, 
         order_uuid: payload.order_uuid,
-        message: 'This should normally be rejected in production' 
+        authorizedIPs
       });
-      // TEMPORARILY ALLOW ALL IPs to debug webhook issues
-      // if (process.env.NODE_ENV === 'production') {
-      //   throw new Error(`Unauthorized webhook IP: ${clientIP}`);
-      // }
+      
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`Unauthorized webhook IP: ${clientIP}`);
+      }
     }
 
     // ✅ Security: Verify webhook hash (disabled for testing)
@@ -99,15 +100,24 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
       throw new Error(`Invalid status in webhook: ${status}`);
     }
 
-    // Find transaction by order_uuid (LP-{id} format or raw {id})
+    // Find transaction by order_uuid using the correct field mapping
     let transaction;
     
+    // PayDigital sends either order_uuid or order_id in the webhook
+    // We need to check both our order_id field and handle the LP-{id} format
     if (order_uuid.startsWith('LP-')) {
-      const id = order_uuid.substring(3); // Remove 'LP-' prefix
-      transaction = await db('transactions').where('id', id).first();
+      // If it's in LP-{id} format, search by order_id field directly
+      transaction = await db('transactions').where('order_id', order_uuid).first();
     } else {
-      // Also check if order_uuid matches our internal order_id format
-      transaction = await db('transactions').where('id', order_uuid).first();
+      // If it's a raw UUID, it could be either:
+      // 1. A direct order_id value 
+      // 2. Need to try both order_id and the LP-prefixed format
+      transaction = await db('transactions').where('order_id', order_uuid).first();
+      
+      if (!transaction) {
+        // Try with LP- prefix in case the webhook sends raw UUID
+        transaction = await db('transactions').where('order_id', `LP-${order_uuid}`).first();
+      }
     }
 
     if (!transaction) {
