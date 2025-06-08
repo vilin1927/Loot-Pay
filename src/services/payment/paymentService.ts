@@ -124,7 +124,7 @@ export async function createPayment(
         amountUSD,
         commission.totalAmountRUB,  // Total amount user pays (with commission)
         commission.netAmountRUB,    // Net amount Steam receives (without commission)
-        `LP-${transaction.id}`,     // Use transaction ID as order ID
+        transaction.paydigital_order_id,  // ✅ Use stored UUID-based order ID
         transactionId               // Use stored transaction ID (required)
       );
     } catch (payDigitalError) {

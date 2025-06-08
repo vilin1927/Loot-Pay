@@ -46,6 +46,9 @@ export async function createTransaction(data: CreateTransactionData) {
     // Calculate commission from the total amount
     const commissionRUB = data.totalAmountRUB - data.amountRUB;
     
+    // Generate UUID-based order ID for better security
+    const orderId = `LP-${uuidv4()}`;
+    
     const [transaction] = await db('transactions')
       .insert({
         user_id: data.userId,
@@ -54,12 +57,16 @@ export async function createTransaction(data: CreateTransactionData) {
         amount_rub: data.amountRUB,
         commission_rub: commissionRUB,
         exchange_rate: data.exchangeRate,
+        paydigital_order_id: orderId,  // ✅ STORE UUID-BASED ORDER ID
         status: 'pending',
         sbp_payment_expires_at: new Date(Date.now() + 30 * 60 * 1000)
       })
       .returning('*');
 
-    logger.info('Transaction created', { transactionId: transaction.id });
+    logger.info('Transaction created with UUID order ID', { 
+      transactionId: transaction.id,
+      orderId: orderId
+    });
     return transaction;
   } catch (error) {
     logger.error('Error creating transaction', { error });

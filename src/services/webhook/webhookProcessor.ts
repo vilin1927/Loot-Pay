@@ -2,7 +2,7 @@ import { updateTransactionStatus } from '../transaction/transactionService';
 import { getBotInstance } from '../../bot/botInstance';
 import { logger } from '../../utils/logger';
 import { db } from '../../database/connection';
-// import crypto from 'crypto'; // Temporarily disabled for testing
+import crypto from 'crypto';
 
 // ✅ UPDATED: PayDigital webhook format from official documentation
 interface PayDigitalWebhookPayload {
@@ -21,40 +21,40 @@ interface InlineKeyboardButton {
 }
 
 /**
- * ✅ ENHANCED: Verify PayDigital webhook hash (disabled for testing)
+ * ✅ ENHANCED: Verify PayDigital webhook hash
  */
-// function verifyWebhookHash(payload: PayDigitalWebhookPayload): boolean {
-//   try {
-//     const { order_uuid, hash } = payload;
-//     const webhookSecret = process.env.PAYDIGITAL_WEBHOOK_SECRET;
+function verifyWebhookHash(payload: PayDigitalWebhookPayload): boolean {
+  try {
+    const { order_uuid, hash } = payload;
+    const webhookSecret = process.env.PAYDIGITAL_WEBHOOK_SECRET;
     
-//     if (!webhookSecret) {
-//       logger.warn('PayDigital webhook secret not configured');
-//       return false; // In production, you might want to reject if no secret
-//     }
+    if (!webhookSecret) {
+      logger.warn('PayDigital webhook secret not configured');
+      return false; // In production, you might want to reject if no secret
+    }
     
-//     // PayDigital hash: SHA256(order_uuid + webhook_secret)
-//     const expectedHash = crypto
-//       .createHash('sha256')
-//       .update(order_uuid + webhookSecret)
-//       .digest('hex');
+    // PayDigital hash: SHA256(order_uuid + webhook_secret)
+    const expectedHash = crypto
+      .createHash('sha256')
+      .update(order_uuid + webhookSecret)
+      .digest('hex');
       
-//     const isValid = expectedHash === hash;
+    const isValid = expectedHash === hash;
     
-//     if (!isValid) {
-//       logger.error('Invalid webhook hash', {
-//         order_uuid,
-//         expectedHash: expectedHash.substring(0, 8) + '...',
-//         receivedHash: hash?.substring(0, 8) + '...'
-//       });
-//     }
+    if (!isValid) {
+      logger.error('Invalid webhook hash', {
+        order_uuid,
+        expectedHash: expectedHash.substring(0, 8) + '...',
+        receivedHash: hash?.substring(0, 8) + '...'
+      });
+    }
     
-//     return isValid;
-//   } catch (error) {
-//     logger.error('Error verifying webhook hash', { error, payload });
-//     return false;
-//   }
-// }
+    return isValid;
+  } catch (error) {
+    logger.error('Error verifying webhook hash', { error, payload });
+    return false;
+  }
+}
 
 /**
  * ✅ ENHANCED: Process PayDigital payment webhook with official format
@@ -63,6 +63,7 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
   try {
     logger.info('Processing PayDigital webhook', { 
       order_uuid: payload.order_uuid,
+      order_id: payload.order_id,
       status: payload.status,
       amount: payload.amount,
       clientIP
@@ -96,14 +97,12 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
       }
     }
 
-    // ✅ Security: Verify webhook hash (disabled for testing)
-    // TODO: Re-enable hash verification in production
-    console.log('🔧 TESTING MODE: Hash verification disabled');
-    // if (!verifyWebhookHash(payload)) {
-    //   throw new Error('Invalid webhook signature');
-    // }
+    // ✅ Security: Verify webhook hash
+    if (!verifyWebhookHash(payload)) {
+      throw new Error('Invalid webhook signature');
+    }
 
-    const { order_uuid, status, amount, paid_date_msk } = payload;
+    const { order_uuid, order_id, status, amount, paid_date_msk } = payload;
 
     if (!order_uuid) {
       throw new Error('Missing order_uuid in webhook payload');
@@ -113,32 +112,31 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
       throw new Error(`Invalid status in webhook: ${status}`);
     }
 
-    // Find transaction by order_uuid using the correct database field
+    // ✅ FIXED: Find transaction by order_id (our reference) instead of order_uuid (PayDigital's internal ID)
     let transaction;
     
-    // PayDigital sends either order_uuid or order_id in the webhook
-    // Our database stores this in the 'paydigital_order_id' field
-    if (order_uuid.startsWith('LP-')) {
-      // If it's in LP-{id} format, search by paydigital_order_id field directly
+    // PayDigital webhook contains:
+    // - order_uuid: PayDigital's internal UUID (for hash verification)
+    // - order_id: Our reference UUID that we sent (for database lookup)
+    if (order_id) {
+      // Use order_id if available (this is our reference)
+      transaction = await db('transactions').where('paydigital_order_id', order_id).first();
+      logger.info('Webhook lookup using order_id', { order_id, found: !!transaction });
+    }
+    
+    // Fallback: try order_uuid if order_id lookup failed (backward compatibility)
+    if (!transaction) {
       transaction = await db('transactions').where('paydigital_order_id', order_uuid).first();
-    } else {
-      // If it's a raw UUID, it could be either:
-      // 1. A direct paydigital_order_id value 
-      // 2. Need to try both paydigital_order_id and the LP-prefixed format
-      transaction = await db('transactions').where('paydigital_order_id', order_uuid).first();
-      
-      if (!transaction) {
-        // Try with LP- prefix in case the webhook sends raw UUID
-        transaction = await db('transactions').where('paydigital_order_id', `LP-${order_uuid}`).first();
-      }
+      logger.info('Webhook fallback lookup using order_uuid', { order_uuid, found: !!transaction });
     }
 
     if (!transaction) {
       logger.error('Transaction not found for webhook', { 
-        order_uuid, 
-        searchedId: order_uuid.startsWith('LP-') ? order_uuid.substring(3) : order_uuid 
+        order_uuid,
+        order_id,
+        searchedFields: ['paydigital_order_id']
       });
-      throw new Error(`Transaction not found: ${order_uuid}`);
+      throw new Error(`Transaction not found: ${order_id || order_uuid}`);
     }
 
     // ✅ Update transaction with PayDigital data
@@ -172,7 +170,8 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
     await notifyUser(transaction.user_id, transaction, updates.status);
 
     logger.info('PayDigital webhook processed successfully', { 
-      order_uuid, 
+      order_uuid,
+      order_id,
       status, 
       transactionId: transaction.id,
       amount,
