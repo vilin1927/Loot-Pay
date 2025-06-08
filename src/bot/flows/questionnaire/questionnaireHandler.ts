@@ -91,7 +91,7 @@ export async function handleQuestionResponse(
         });
 
       // Track questionnaire completion
-      const allResponses = await db('questionnaire_responses')
+      const allResponses = await db('user_responses')
         .where('user_id', userId)
         .select('question_number', 'answer_text');
       
