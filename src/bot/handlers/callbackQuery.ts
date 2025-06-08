@@ -173,9 +173,10 @@ support@lootpay.ru - Email
 📱 Среднее время ответа: 15 минут
         `, {
           reply_markup: {
-            inline_keyboard: [[
-              { text: '📞 Написать в поддержку', url: 'https://t.me/lootpay_support' }
-            ]]
+            inline_keyboard: [
+              [{ text: '📞 Написать в поддержку', url: 'https://t.me/lootpay_support' }],
+              [{ text: '🏠 Главное меню', callback_data: 'main_menu' }]
+            ]
           }
         });
         break;
@@ -231,7 +232,13 @@ LootPay - это сервис для быстрого и безопасного 
 🛡️ Безопасные платежи
 
 📋 Оферта: https://telegra.ph/LootPay-05-31 
-❓ FAQ: https://telegra.ph/LootPay-05-31#FAQ`);
+❓ FAQ: https://telegra.ph/LootPay-05-31#FAQ`, {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '🏠 Главное меню', callback_data: 'main_menu' }]
+            ]
+          }
+        });
         break;
 
       default:
