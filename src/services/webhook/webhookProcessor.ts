@@ -69,17 +69,30 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
     });
 
     // ✅ Security: Verify IP address (PayDigital webhooks come from authorized IPs)
-    const authorizedIPs = ['62.76.102.182', '195.210.170.29', '89.113.156.153'];
+    const authorizedIPs = ['62.76.102.182', '195.210.170.29'];
     
-    if (clientIP && !authorizedIPs.includes(clientIP)) {
-      logger.warn('Webhook from unauthorized IP', { 
-        clientIP, 
-        order_uuid: payload.order_uuid,
-        authorizedIPs
-      });
+    if (clientIP) {
+      // Handle comma-separated IP lists (proxy chains)
+      const clientIPs = clientIP.split(',').map(ip => ip.trim());
+      const hasAuthorizedIP = clientIPs.some(ip => authorizedIPs.includes(ip));
       
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error(`Unauthorized webhook IP: ${clientIP}`);
+      if (!hasAuthorizedIP) {
+        logger.warn('Webhook from unauthorized IP', { 
+          clientIP, 
+          clientIPs,
+          order_uuid: payload.order_uuid,
+          authorizedIPs
+        });
+        
+        if (process.env.NODE_ENV === 'production') {
+          throw new Error(`Unauthorized webhook IP: ${clientIP}`);
+        }
+      } else {
+        logger.info('Webhook from authorized IP', { 
+          clientIP, 
+          clientIPs,
+          authorizedIP: clientIPs.find(ip => authorizedIPs.includes(ip))
+        });
       }
     }
 
