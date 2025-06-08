@@ -2,6 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { getUserTransactions } from '../../services/transaction/transactionService';
 import { logger } from '../../utils/logger';
 import { formatRussianCurrency, formatMoscowTime } from '../../utils/locale';
+import { analyticsService } from '../../services/analytics/analyticsService';
 
 export async function showTransactionHistory(
   bot: TelegramBot,
@@ -11,6 +12,19 @@ export async function showTransactionHistory(
 ) {
   try {
     const { transactions, total, hasMore } = await getUserTransactions(userId, 3, page * 3);
+
+    // Track transaction history viewing analytics
+    try {
+      await analyticsService.trackEvent(userId, 'transaction_history_viewed', {
+        page: page,
+        total_transactions: total,
+        transactions_on_page: transactions.length,
+        has_more: hasMore,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      logger.warn('Transaction history analytics failed', { error, userId, page });
+    }
 
     if (transactions.length === 0) {
       await bot.sendMessage(chatId, `🔍 История пополнений пуста

@@ -10,8 +10,21 @@ import { createPayment } from '../../services/payment/paymentService';
 import { showTransactionHistory } from '../flows/transactionHistory';
 import { Message } from 'node-telegram-bot-api';
 import { getSystemSetting } from '../../services/settings/settingsService';
+import { analyticsService } from '../../services/analytics/analyticsService';
 
 // Helper functions
+async function trackAmountButtonClick(userId: number, amount: number) {
+  try {
+    await analyticsService.trackEvent(userId, 'amount_button_clicked', {
+      amount_usd: amount,
+      selection_method: 'preset_button',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    logger.warn('Amount button analytics failed', { error, userId, amount });
+  }
+}
+
 export async function handleAmountSelected(bot: TelegramBot, chatId: number, userId: number, amount: number) {
   // Get existing state to preserve steamUsername AND transactionId
   const currentState = await getState(userId);
@@ -84,6 +97,16 @@ export async function handleCallbackQuery(
 
     const userId = user.id; // Use database user.id, not telegram_id
 
+    // Track callback interaction for analytics
+    try {
+      await analyticsService.trackEvent(userId, 'callback_interaction', {
+        action: data,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      logger.warn('Callback analytics failed', { error, userId, action: data });
+    }
+
     // Handle questionnaire responses
     if (data.startsWith('q')) {
       const [questionPart, answer] = data.split('_');
@@ -103,15 +126,19 @@ export async function handleCallbackQuery(
 
       // Amount selection handlers
       case 'amount_5':
+        await trackAmountButtonClick(userId, 5);
         await handleAmountSelected(bot, chatId, userId, 5);
         break;
       case 'amount_10':
+        await trackAmountButtonClick(userId, 10);
         await handleAmountSelected(bot, chatId, userId, 10);
         break;
       case 'amount_15':
+        await trackAmountButtonClick(userId, 15);
         await handleAmountSelected(bot, chatId, userId, 15);
         break;
       case 'amount_20':
+        await trackAmountButtonClick(userId, 20);
         await handleAmountSelected(bot, chatId, userId, 20);
         break;
       case 'amount_custom':

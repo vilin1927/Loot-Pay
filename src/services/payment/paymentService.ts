@@ -159,7 +159,24 @@ export async function createPayment(
       throw new Error('Payment processing failed. Please try again or contact support.');
     }
 
-    // 5. Update transaction with payment URL
+    // 5. Track successful payment link generation
+    try {
+      await analyticsService.trackPaymentLinkGenerated(
+        userId, 
+        amountUSD, 
+        commission.totalAmountRUB, 
+        'paydigital'
+      );
+    } catch (analyticsError) {
+      // Don't break payment flow if analytics fails
+      logger.warn('Payment link analytics tracking failed', { 
+        error: analyticsError instanceof Error ? analyticsError.message : 'Unknown error',
+        userId,
+        transactionId: transaction.id
+      });
+    }
+
+    // 6. Update transaction with payment URL
     // Note: We'll implement updateTransactionStatus when needed
     
     logger.info('Payment created successfully using required transactionId', {
