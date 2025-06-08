@@ -88,11 +88,6 @@ export async function showTransactionHistory(
       { text: '💰 Новое пополнение', callback_data: 'fund_steam' }
     ]);
     
-    // Future expansion: transaction details
-    keyboard.push([
-      { text: '📋 Детали операций', callback_data: 'transaction_details' }
-    ]);
-    
     keyboard.push([
       { text: '🔄 Обновить', callback_data: 'my_transactions' },
       { text: '🏠 Главное меню', callback_data: 'main_menu' }
@@ -125,43 +120,4 @@ export async function showTransactionHistory(
   }
 }
 
-export async function showTransactionDetails(
-  bot: TelegramBot,
-  chatId: number,
-  userId: number
-) {
-  try {
-    await bot.sendMessage(chatId, `📋 Детализация операций
-
-🚧 **Функция в разработке**
-
-В ближайших обновлениях здесь будет доступна подробная информация о каждой операции:
-
-• 📄 Чеки и документы
-• 🔗 Ссылки на платежи  
-• ⏱️ Точное время обработки
-• 🆔 Номера заказов
-• 📞 История обращений в поддержку
-
-💡 **Пока что:** Вся информация об операциях доступна в основной истории пополнений.`, {
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: '📊 Вернуться к истории', callback_data: 'my_transactions' }],
-          [{ text: '❓ Поддержка', callback_data: 'support' }, { text: '🏠 Главное меню', callback_data: 'main_menu' }]
-        ]
-      }
-    });
-  } catch (error) {
-    logger.error('Error showing transaction details', { error, userId });
-    await bot.sendMessage(chatId, `❌ Не удалось загрузить детали операций
-
-Попробуйте вернуться к истории пополнений или обратитесь в поддержку.`, {
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: '📊 История пополнений', callback_data: 'my_transactions' }],
-          [{ text: '❓ Поддержка', callback_data: 'support' }]
-        ]
-      }
-    });
-  }
-} 
+ 
