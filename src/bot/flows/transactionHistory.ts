@@ -35,9 +35,9 @@ export async function showTransactionHistory(
       return;
     }
 
-    // Calculate summary statistics
-    const totalUSDSpent = transactions.reduce((sum, tx) => sum + tx.amount_usd, 0);
-    const totalRUBSpent = transactions.reduce((sum, tx) => sum + tx.amount_rub + tx.commission_rub, 0);
+    // Calculate summary statistics (convert strings to numbers)
+    const totalUSDSpent = transactions.reduce((sum, tx) => sum + parseFloat(tx.amount_usd.toString()), 0);
+    const totalRUBSpent = transactions.reduce((sum, tx) => sum + parseFloat(tx.amount_rub.toString()) + parseFloat(tx.commission_rub.toString()), 0);
     const averageUSD = transactions.length > 0 ? totalUSDSpent / transactions.length : 0;
     const mostRecentDate = transactions.length > 0 ? new Date(transactions[0].created_at) : null;
 
@@ -62,14 +62,17 @@ export async function showTransactionHistory(
       const moscowDateTime = formatMoscowTime(new Date(tx.created_at));
       const [date, time] = moscowDateTime.split(', ');
       
-      // Calculate commission percentage for display
-      const totalPaid = tx.amount_rub + tx.commission_rub;
-      const commissionPercent = ((tx.commission_rub / totalPaid) * 100).toFixed(1);
+      // Calculate commission percentage for display (convert strings to numbers)
+      const amountRub = parseFloat(tx.amount_rub.toString());
+      const commissionRub = parseFloat(tx.commission_rub.toString());
+      const totalPaid = amountRub + commissionRub;
+      const commissionPercent = ((commissionRub / totalPaid) * 100).toFixed(1);
       
       message += `${page * 3 + index + 1}. ✅ ${date} в ${time} (МСК)\n`;
       message += `   💰 ${tx.amount_usd} USD → ${formatRussianCurrency(totalPaid)}\n`;
       message += `   🎮 ${tx.steam_username}\n`;
-      message += `   📊 Курс: ${tx.exchange_rate?.toFixed(2) || 'н/д'}₽/$ • Комиссия: ${commissionPercent}%\n\n`;
+      const exchangeRate = tx.exchange_rate ? parseFloat(tx.exchange_rate.toString()) : null;
+      message += `   📊 Курс: ${exchangeRate?.toFixed(2) || 'н/д'}₽/$ • Комиссия: ${commissionPercent}%\n\n`;
     });
 
     const keyboard = [];
