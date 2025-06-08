@@ -194,20 +194,17 @@ support@lootpay.ru - Email
 
       case 'show_info':
       case 'about':
-        const minAmountForInfo = Number(await getSystemSetting('min_amount_usd')) || 1;
-        await bot.sendMessage(chatId, `
-📄 О LootPay
+        await bot.sendMessage(chatId, `📄 О LootPay
 
 LootPay - это сервис для быстрого и безопасного пополнения Steam кошелька через СБП.
 
-💰 Комиссия: ${await getSystemSetting('commission_percent') || '10'}% от суммы
-💳 Минимальная сумма: ${minAmountForInfo}$
+💰 Комиссия: 10% от суммы
+💳 Минимальная сумма: 1$
 ⚡️ Мгновенное зачисление
 🛡️ Безопасные платежи
 
-📋 Оферта: https://lootpay.ru/terms
-❓ FAQ: https://lootpay.ru/faq
-        `);
+📋 Оферта: https://telegra.ph/LootPay-05-31 
+❓ FAQ: https://telegra.ph/LootPay-05-31#FAQ`);
         break;
 
       default:
