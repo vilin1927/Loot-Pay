@@ -100,23 +100,23 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
       throw new Error(`Invalid status in webhook: ${status}`);
     }
 
-    // Find transaction by order_uuid using the correct field mapping
+    // Find transaction by order_uuid using the correct database field
     let transaction;
     
     // PayDigital sends either order_uuid or order_id in the webhook
-    // We need to check both our order_id field and handle the LP-{id} format
+    // Our database stores this in the 'paydigital_order_id' field
     if (order_uuid.startsWith('LP-')) {
-      // If it's in LP-{id} format, search by order_id field directly
-      transaction = await db('transactions').where('order_id', order_uuid).first();
+      // If it's in LP-{id} format, search by paydigital_order_id field directly
+      transaction = await db('transactions').where('paydigital_order_id', order_uuid).first();
     } else {
       // If it's a raw UUID, it could be either:
-      // 1. A direct order_id value 
-      // 2. Need to try both order_id and the LP-prefixed format
-      transaction = await db('transactions').where('order_id', order_uuid).first();
+      // 1. A direct paydigital_order_id value 
+      // 2. Need to try both paydigital_order_id and the LP-prefixed format
+      transaction = await db('transactions').where('paydigital_order_id', order_uuid).first();
       
       if (!transaction) {
         // Try with LP- prefix in case the webhook sends raw UUID
-        transaction = await db('transactions').where('order_id', `LP-${order_uuid}`).first();
+        transaction = await db('transactions').where('paydigital_order_id', `LP-${order_uuid}`).first();
       }
     }
 
