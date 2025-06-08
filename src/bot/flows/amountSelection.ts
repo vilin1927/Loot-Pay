@@ -34,24 +34,9 @@ const PAYMENT_DETAILS = async (username: string, amountUSD: number, amountRUB: n
 Если всё правильно — выберите способ оплаты ниже 👇`;
 };
 
-// Dynamic preset amounts based on min/max range
-function getPresetAmounts(minAmount: number, maxAmount: number): number[] {
-  const presets: number[] = [];
-  
-  // Always include minimum amount
-  presets.push(minAmount);
-  
-  // Add preset amounts that fit within the range
-  const possiblePresets = [2, 3, 5, 10, 15, 20, 25];
-  
-  for (const preset of possiblePresets) {
-    if (preset > minAmount && preset <= maxAmount && !presets.includes(preset)) {
-      presets.push(preset);
-    }
-  }
-  
-  // Limit to 4 presets maximum
-  return presets.slice(0, 4);
+// Fixed preset amounts: 1, 10, 15, 20 USD
+function getPresetAmounts(): number[] {
+  return [1, 10, 15, 20];
 }
 
 export async function handleAmountSelection(
@@ -66,8 +51,8 @@ export async function handleAmountSelection(
       const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
       const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
 
-      // Get dynamic preset amounts
-      const presetAmounts = getPresetAmounts(minAmount, maxAmount);
+      // Get preset amounts
+      const presetAmounts = getPresetAmounts();
       
       // Build dynamic keyboard
       const keyboard: any[][] = [];

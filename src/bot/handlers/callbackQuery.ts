@@ -213,6 +213,16 @@ LootPay - это сервис для быстрого и безопасного 
           await showTransactionHistory(bot, chatId, userId, page);
           return;
         }
+        
+        // Handle dynamic amount buttons (amount_1, amount_2, amount_3, etc.)
+        if (data.startsWith('amount_') && data !== 'amount_custom') {
+          const amount = parseFloat(data.replace('amount_', ''));
+          if (!isNaN(amount) && amount > 0) {
+            await handleAmountSelected(bot, chatId, userId, amount);
+            return;
+          }
+        }
+        
         logger.warn('Unknown callback data', { data, telegramId, userId });
         break;
     }
