@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { logger } from '../../utils/logger';
+import { performanceMonitor } from '../monitoring/performanceMonitor';
 
 // API configuration
 const API_CONFIG = {
@@ -82,6 +83,9 @@ export class PayDigitalService {
    * @returns validation result with transactionId if valid
    */
   async validateSteamUsernameWithTransactionId(username: string): Promise<SteamValidationResult> {
+    const startTime = Date.now();
+    const timer = performanceMonitor.startTimer('paydigital_steam_check');
+    
     try {
       const response = await this.client.post<any>('/steam/check', {
         steamUsername: username
@@ -93,6 +97,15 @@ export class PayDigitalService {
           username,
           message: response.data.message
         });
+        
+        // Record failed validation
+        timer.end({ 
+          success: false, 
+          endpoint: '/steam/check',
+          provider: 'paydigital',
+          errorType: 'account_not_found'
+        });
+        
         return {
           isValid: false,
           message: response.data.message
@@ -105,6 +118,15 @@ export class PayDigitalService {
           username,
           responseData: response.data
         });
+        
+        // Record invalid response
+        timer.end({ 
+          success: false, 
+          endpoint: '/steam/check',
+          provider: 'paydigital',
+          errorType: 'invalid_response'
+        });
+        
         return {
           isValid: false,
           message: 'Invalid response from PayDigital'
@@ -116,14 +138,56 @@ export class PayDigitalService {
         transactionId: response.data.transactionId
       });
 
+      // Record successful API call
+      timer.end({ 
+        success: true, 
+        endpoint: '/steam/check',
+        provider: 'paydigital',
+        statusCode: response.status 
+      });
+      
+      await performanceMonitor.recordApiResponseTime(
+        '/steam/check',
+        Date.now() - startTime,
+        true,
+        response.status,
+        'paydigital'
+      );
+
       // ✅ RETURN BOTH validation result AND transactionId
       return {
         isValid: true,
         transactionId: response.data.transactionId
       };
     } catch (error) {
+      // Record error performance data
+      timer.end({ 
+        success: false, 
+        endpoint: '/steam/check',
+        provider: 'paydigital',
+        errorType: 'api_error'
+      });
+      
       if (axios.isAxiosError(error)) {
         const apiError = error.response?.data as PayDigitalError;
+        
+        await performanceMonitor.recordApiResponseTime(
+          '/steam/check',
+          Date.now() - startTime,
+          false,
+          error.response?.status,
+          'paydigital'
+        );
+        
+        await performanceMonitor.recordError(
+          'paydigital_api_error',
+          'paydigital',
+          {
+            endpoint: '/steam/check',
+            statusCode: error.response?.status,
+            errorData: error.response?.data
+          }
+        );
         
         logger.error('Steam username validation API error', {
           username,
@@ -144,6 +208,16 @@ export class PayDigitalService {
           throw new Error('Слишком много попыток. Пожалуйста, подождите немного.');
         }
       }
+
+      // Record network/unknown error
+      await performanceMonitor.recordError(
+        'paydigital_network_error',
+        'paydigital',
+        {
+          endpoint: '/steam/check',
+          error: error instanceof Error ? error.message : 'Unknown error'
+        }
+      );
 
       // For network errors or unknown API errors, throw exception
       logger.error('Steam username validation network/unknown error', {
@@ -212,6 +286,9 @@ export class PayDigitalService {
     orderId: string,
     transactionId: string  // ✅ REQUIRED PARAMETER - NO FALLBACK
   ): Promise<string> {
+    const startTime = Date.now();
+    const timer = performanceMonitor.startTimer('paydigital_steam_payment');
+    
     try {
       // ✅ USE REQUIRED transactionId (new approach)
       logger.info('Creating payment with required transactionId', {
@@ -246,11 +323,57 @@ export class PayDigitalService {
         paymentUrl: response.data.payUrl
       });
 
+      // Record successful payment creation
+      timer.end({ 
+        success: true, 
+        endpoint: '/steam/pay',
+        provider: 'paydigital',
+        statusCode: response.status,
+        amountUSD,
+        totalAmountRUB
+      });
+      
+      await performanceMonitor.recordApiResponseTime(
+        '/steam/pay',
+        Date.now() - startTime,
+        true,
+        response.status,
+        'paydigital'
+      );
+
       // ✅ FIX: PayDigital returns 'payUrl', not 'paymentUrl'
       return response.data.payUrl;
     } catch (error) {
+      // Record error performance data
+      timer.end({ 
+        success: false, 
+        endpoint: '/steam/pay',
+        provider: 'paydigital',
+        errorType: 'payment_creation_error'
+      });
+      
       if (axios.isAxiosError(error)) {
         const apiError = error.response?.data as PayDigitalError;
+        
+        await performanceMonitor.recordApiResponseTime(
+          '/steam/pay',
+          Date.now() - startTime,
+          false,
+          error.response?.status,
+          'paydigital'
+        );
+        
+        await performanceMonitor.recordError(
+          'paydigital_payment_error',
+          'paydigital',
+          {
+            endpoint: '/steam/pay',
+            statusCode: error.response?.status,
+            errorData: error.response?.data,
+            amountUSD,
+            totalAmountRUB
+          }
+        );
         
         // Handle specific API errors
         if (apiError?.code === 'TRANSACTION_USED') {
@@ -275,6 +398,18 @@ export class PayDigitalService {
           data: error.response?.data
         });
       }
+
+      // Record network/unknown error
+      await performanceMonitor.recordError(
+        'paydigital_payment_network_error',
+        'paydigital',
+        {
+          endpoint: '/steam/pay',
+          error: error instanceof Error ? error.message : 'Unknown error',
+          amountUSD,
+          totalAmountRUB
+        }
+      );
 
       logger.error('Error creating Steam payment', {
         error,

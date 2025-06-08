@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { logger } from '../../utils/logger';
 import { db } from '../../database/connection';
+import { performanceMonitor } from '../monitoring/performanceMonitor';
 
 // Types for exchange rate system
 export interface ExchangeRate {
@@ -107,6 +108,9 @@ class ExchangeRateService {
    * PRD Requirement: Primary source for exchange rates
    */
   private async fetchFromPayDigitalAPI(): Promise<RateUpdateResult> {
+    const startTime = Date.now();
+    const timer = performanceMonitor.startTimer('exchange_rate_api_fetch');
+    
     try {
       logger.info('Fetching exchange rate from PayDigital API');
 
@@ -135,6 +139,20 @@ class ExchangeRateService {
             expires_at: new Date(Date.now() + (this.CACHE_DURATION_HOURS * 60 * 60 * 1000))
           });
 
+          // Record successful exchange rate fetch
+          timer.end({ 
+            success: true, 
+            provider: 'paydigital',
+            rate: rate 
+          });
+          
+          await performanceMonitor.recordExchangeRateFetch(
+            'paydigital',
+            Date.now() - startTime,
+            true,
+            rate
+          );
+
           return {
             success: true,
             rate: savedRate,
@@ -154,6 +172,21 @@ class ExchangeRateService {
       }
 
     } catch (error) {
+      // Record failed exchange rate fetch
+      timer.end({ 
+        success: false, 
+        provider: 'paydigital',
+        errorType: 'api_error'
+      });
+      
+      await performanceMonitor.recordExchangeRateFetch(
+        'paydigital',
+        Date.now() - startTime,
+        false,
+        undefined,
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+      
       logger.error('PayDigital API request failed', { 
         error: error instanceof Error ? error.message : error 
       });
