@@ -2,12 +2,17 @@ import { updateTransactionStatus } from '../transaction/transactionService';
 import { getBotInstance } from '../../bot/botInstance';
 import { logger } from '../../utils/logger';
 import { db } from '../../database/connection';
+import crypto from 'crypto';
 
-interface WebhookPayload {
-  order_uuid: string;
-  status: 'Paid' | 'Pending' | 'Failed';
-  amount: number;
-  paid_date_msk?: string;
+// ✅ UPDATED: PayDigital webhook format from official documentation
+interface PayDigitalWebhookPayload {
+  order_uuid: string;                    // идентификатор транзакции
+  sbp_id?: string;                      // НСПК-ссылка для оплаты по QR
+  amount: number;                       // сумма транзакции
+  status: 'Paid' | 'Pending' | 'Failed'; // статус транзакции
+  paid_date_msk?: string;               // дата оплаты по Москве
+  hash: string;                         // хэш для верификации
+  order_id?: string;                    // номер заказа
 }
 
 interface InlineKeyboardButton {
@@ -16,11 +21,68 @@ interface InlineKeyboardButton {
 }
 
 /**
- * ✅ ENHANCED: Process payment webhook with comprehensive error handling
+ * ✅ ENHANCED: Verify PayDigital webhook hash
  */
-export async function processPaymentWebhook(payload: WebhookPayload) {
+function verifyWebhookHash(payload: PayDigitalWebhookPayload): boolean {
   try {
-    const { order_uuid, status } = payload;
+    const { order_uuid, hash } = payload;
+    const webhookSecret = process.env.PAYDIGITAL_WEBHOOK_SECRET;
+    
+    if (!webhookSecret) {
+      logger.warn('PayDigital webhook secret not configured');
+      return false; // In production, you might want to reject if no secret
+    }
+    
+    // PayDigital hash: SHA256(order_uuid + webhook_secret)
+    const expectedHash = crypto
+      .createHash('sha256')
+      .update(order_uuid + webhookSecret)
+      .digest('hex');
+      
+    const isValid = expectedHash === hash;
+    
+    if (!isValid) {
+      logger.error('Invalid webhook hash', {
+        order_uuid,
+        expectedHash: expectedHash.substring(0, 8) + '...',
+        receivedHash: hash?.substring(0, 8) + '...'
+      });
+    }
+    
+    return isValid;
+  } catch (error) {
+    logger.error('Error verifying webhook hash', { error, payload });
+    return false;
+  }
+}
+
+/**
+ * ✅ ENHANCED: Process PayDigital payment webhook with official format
+ */
+export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, clientIP?: string) {
+  try {
+    logger.info('Processing PayDigital webhook', { 
+      order_uuid: payload.order_uuid,
+      status: payload.status,
+      amount: payload.amount,
+      clientIP
+    });
+
+    // ✅ Security: Verify IP address (PayDigital webhooks come from 62.76.102.182)
+    if (clientIP && clientIP !== '62.76.102.182') {
+      logger.warn('Webhook from unauthorized IP', { clientIP, order_uuid: payload.order_uuid });
+      // Note: In development, you might want to allow other IPs
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`Unauthorized webhook IP: ${clientIP}`);
+      }
+    }
+
+    // ✅ Security: Verify webhook hash
+    if (!verifyWebhookHash(payload)) {
+      throw new Error('Invalid webhook signature');
+    }
+
+    const { order_uuid, status, amount, paid_date_msk } = payload;
 
     if (!order_uuid) {
       throw new Error('Missing order_uuid in webhook payload');
@@ -30,14 +92,14 @@ export async function processPaymentWebhook(payload: WebhookPayload) {
       throw new Error(`Invalid status in webhook: ${status}`);
     }
 
-    // Find transaction by order_uuid (which should match our LP-{id} format)
+    // Find transaction by order_uuid (LP-{id} format or raw {id})
     let transaction;
     
-    // Handle both LP-{id} format and raw {id} format
     if (order_uuid.startsWith('LP-')) {
       const id = order_uuid.substring(3); // Remove 'LP-' prefix
       transaction = await db('transactions').where('id', id).first();
     } else {
+      // Also check if order_uuid matches our internal order_id format
       transaction = await db('transactions').where('id', order_uuid).first();
     }
 
@@ -49,19 +111,46 @@ export async function processPaymentWebhook(payload: WebhookPayload) {
       throw new Error(`Transaction not found: ${order_uuid}`);
     }
 
-    // Update transaction status
-    const newStatus = status === 'Paid' ? 'completed' : 
-                     status === 'Pending' ? 'pending' : 'failed';
-    
-    await updateTransactionStatus(transaction.id.toString(), newStatus);
+    // ✅ Update transaction with PayDigital data
+    const updates: any = {
+      paydigital_status: status,
+      updated_at: new Date()
+    };
+
+    // Map PayDigital status to internal status
+    if (status === 'Paid') {
+      updates.status = 'completed';
+      updates.completed_at = paid_date_msk ? new Date(paid_date_msk) : new Date();
+      updates.sbp_payment_status = 'completed';
+    } else if (status === 'Failed') {
+      updates.status = 'failed';
+      updates.sbp_payment_status = 'failed';
+    } else if (status === 'Pending') {
+      updates.status = 'pending';
+      updates.sbp_payment_status = 'pending';
+    }
+
+    // Store PayDigital webhook data
+    updates.paydigital_response = JSON.stringify(payload);
+
+    await updateTransactionStatus(transaction.id.toString(), updates.status);
+
+    // Update additional fields
+    await db('transactions').where('id', transaction.id).update(updates);
 
     // Notify user
-    await notifyUser(transaction.user_id, transaction, newStatus);
+    await notifyUser(transaction.user_id, transaction, updates.status);
 
-    logger.info('Webhook processed successfully', { order_uuid, status, transactionId: transaction.id });
+    logger.info('PayDigital webhook processed successfully', { 
+      order_uuid, 
+      status, 
+      transactionId: transaction.id,
+      amount,
+      paid_date_msk
+    });
 
   } catch (error) {
-    logger.error('Error processing webhook', { 
+    logger.error('Error processing PayDigital webhook', { 
       error: error instanceof Error ? {
         message: error.message,
         stack: error.stack

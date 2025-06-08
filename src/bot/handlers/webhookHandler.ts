@@ -156,7 +156,13 @@ export async function handleWebhook(req: Request, res: Response): Promise<void> 
     // Handle PayDigital webhooks
     if (payload.order_uuid && payload.status) {
       try {
-        await processPaymentWebhook(payload);
+        // Get client IP (handle proxies)
+        const clientIP = req.headers['x-forwarded-for'] as string || 
+                        req.headers['x-real-ip'] as string || 
+                        req.connection.remoteAddress || 
+                        req.socket.remoteAddress;
+        
+        await processPaymentWebhook(payload, clientIP);
         res.status(200).json({ 
           success: true, 
           message: 'Webhook processed successfully' 
@@ -164,10 +170,35 @@ export async function handleWebhook(req: Request, res: Response): Promise<void> 
         return;
       } catch (error) {
         logger.error('PayDigital webhook processing failed', { error, payload });
-        res.status(500).json({ 
-          error: 'Webhook processing failed',
-          details: error instanceof Error ? error.message : 'Unknown error'
-        });
+        
+        // Return appropriate error status based on error type
+        if (error instanceof Error) {
+          if (error.message.includes('Unauthorized webhook IP')) {
+            res.status(403).json({ 
+              error: 'Forbidden - Invalid source IP',
+              details: error.message
+            });
+          } else if (error.message.includes('Invalid webhook signature')) {
+            res.status(401).json({ 
+              error: 'Unauthorized - Invalid signature',
+              details: error.message
+            });
+          } else if (error.message.includes('Transaction not found')) {
+            res.status(404).json({ 
+              error: 'Transaction not found',
+              details: error.message
+            });
+          } else {
+            res.status(500).json({ 
+              error: 'Webhook processing failed',
+              details: error.message
+            });
+          }
+        } else {
+          res.status(500).json({ 
+            error: 'Unknown webhook processing error'
+          });
+        }
         return;
       }
     }
