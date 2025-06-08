@@ -69,7 +69,7 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
     });
 
     // ✅ Security: Verify IP address (PayDigital webhooks come from authorized IPs)
-    const authorizedIPs = ['62.76.102.182', '195.210.170.29'];
+    const authorizedIPs = ['62.76.102.182', '195.210.170.29', '89.113.156.153'];
     
     if (clientIP && !authorizedIPs.includes(clientIP)) {
       logger.warn('Webhook from unauthorized IP', { 
