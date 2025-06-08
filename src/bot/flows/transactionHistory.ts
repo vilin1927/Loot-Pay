@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { getUserTransactions } from '../../services/transaction/transactionService';
 import { logger } from '../../utils/logger';
-import { formatRussianCurrency } from '../../utils/locale';
+import { formatRussianCurrency, formatMoscowTime } from '../../utils/locale';
 
 export async function showTransactionHistory(
   bot: TelegramBot,
@@ -48,24 +48,28 @@ export async function showTransactionHistory(
     message += `• Потрачено: ${totalUSDSpent} USD (${formatRussianCurrency(totalRUBSpent)})\n`;
     if (transactions.length > 0) {
       message += `• Средний чек: ${averageUSD.toFixed(1)} USD\n`;
-      message += `• Последнее пополнение: ${mostRecentDate?.toLocaleDateString('ru-RU', {
-        day: '2-digit', month: 'long', year: 'numeric'
-      })}\n`;
+      const lastTransactionDate = mostRecentDate?.toLocaleDateString('ru-RU', {
+        day: '2-digit', 
+        month: 'long', 
+        year: 'numeric',
+        timeZone: 'Europe/Moscow'
+      });
+      message += `• Последнее пополнение: ${lastTransactionDate} (МСК)\n`;
     }
     message += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
     
     transactions.forEach((tx, index) => {
-      const date = new Date(tx.created_at).toLocaleDateString('ru-RU', {
-        day: '2-digit', month: '2-digit', year: 'numeric'
-      });
-      const time = new Date(tx.created_at).toLocaleTimeString('ru-RU', {
-        hour: '2-digit', minute: '2-digit'
-      });
+      const moscowDateTime = formatMoscowTime(new Date(tx.created_at));
+      const [date, time] = moscowDateTime.split(', ');
       
-      message += `${page * 3 + index + 1}. ✅ ${date} в ${time}\n`;
-      message += `   💰 ${tx.amount_usd} USD → ${formatRussianCurrency(tx.amount_rub + tx.commission_rub)}\n`;
+      // Calculate commission percentage for display
+      const totalPaid = tx.amount_rub + tx.commission_rub;
+      const commissionPercent = ((tx.commission_rub / totalPaid) * 100).toFixed(1);
+      
+      message += `${page * 3 + index + 1}. ✅ ${date} в ${time} (МСК)\n`;
+      message += `   💰 ${tx.amount_usd} USD → ${formatRussianCurrency(totalPaid)}\n`;
       message += `   🎮 ${tx.steam_username}\n`;
-      message += `   📊 Курс: ${tx.exchange_rate?.toFixed(2) || 'н/д'}₽/$\n\n`;
+      message += `   📊 Курс: ${tx.exchange_rate?.toFixed(2) || 'н/д'}₽/$ • Комиссия: ${commissionPercent}%\n\n`;
     });
 
     const keyboard = [];
@@ -82,9 +86,9 @@ export async function showTransactionHistory(
     ]);
     
     // Future expansion: transaction details
-    // keyboard.push([
-    //   { text: '📋 Детали операций', callback_data: 'transaction_details' }
-    // ]);
+    keyboard.push([
+      { text: '📋 Детали операций', callback_data: 'transaction_details' }
+    ]);
     
     keyboard.push([
       { text: '🔄 Обновить', callback_data: 'my_transactions' },
@@ -112,6 +116,47 @@ export async function showTransactionHistory(
             { text: '❓ Поддержка', callback_data: 'support' }
           ],
           [{ text: '🏠 Главное меню', callback_data: 'main_menu' }]
+        ]
+      }
+    });
+  }
+}
+
+export async function showTransactionDetails(
+  bot: TelegramBot,
+  chatId: number,
+  userId: number
+) {
+  try {
+    await bot.sendMessage(chatId, `📋 Детализация операций
+
+🚧 **Функция в разработке**
+
+В ближайших обновлениях здесь будет доступна подробная информация о каждой операции:
+
+• 📄 Чеки и документы
+• 🔗 Ссылки на платежи  
+• ⏱️ Точное время обработки
+• 🆔 Номера заказов
+• 📞 История обращений в поддержку
+
+💡 **Пока что:** Вся информация об операциях доступна в основной истории пополнений.`, {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '📊 Вернуться к истории', callback_data: 'my_transactions' }],
+          [{ text: '❓ Поддержка', callback_data: 'support' }, { text: '🏠 Главное меню', callback_data: 'main_menu' }]
+        ]
+      }
+    });
+  } catch (error) {
+    logger.error('Error showing transaction details', { error, userId });
+    await bot.sendMessage(chatId, `❌ Не удалось загрузить детали операций
+
+Попробуйте вернуться к истории пополнений или обратитесь в поддержку.`, {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '📊 История пополнений', callback_data: 'my_transactions' }],
+          [{ text: '❓ Поддержка', callback_data: 'support' }]
         ]
       }
     });
