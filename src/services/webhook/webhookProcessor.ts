@@ -167,7 +167,7 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
     await db('transactions').where('id', transaction.id).update(updates);
 
     // Notify user
-    await notifyUser(transaction.user_id, transaction, updates.status);
+    await notifyUser(transaction.user_id, transaction, updates.status, amount);
 
     logger.info('PayDigital webhook processed successfully', { 
       order_uuid,
@@ -190,7 +190,7 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
   }
 }
 
-async function notifyUser(userId: number, transaction: any, status: string) {
+async function notifyUser(userId: number, transaction: any, status: string, webhookAmount?: number) {
   try {
     const bot = await getBotInstance();
     
@@ -205,17 +205,31 @@ async function notifyUser(userId: number, transaction: any, status: string) {
     let buttons: InlineKeyboardButton[][] = [];
 
     if (status === 'completed') {
+      // Parse the PayDigital response to get the actual paid amount
+      let finalAmount = webhookAmount; // amount from webhook payload
+      
+      // If webhook doesn't have amount, try parsing from paydigital_response
+      if (!finalAmount && transaction.paydigital_response) {
+        try {
+          const paydigitalData = JSON.parse(transaction.paydigital_response);
+          finalAmount = paydigitalData.amount;
+        } catch (e) {
+          // Fallback to transaction total_amount_rub
+          finalAmount = transaction.total_amount_rub;
+        }
+      }
+      
+      // Format with 1 decimal place and Russian locale (comma as decimal separator)
       const paidAmount = new Intl.NumberFormat('ru-RU', {
-        style: 'currency',
-        currency: 'RUB',
-        minimumFractionDigits: 2
-      }).format(transaction.total_amount_rub);
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }).format(finalAmount || 0);
       
       message = `🎉 Платеж успешно завершен!
 
 💰 Сумма: ${transaction.amount_usd} USD
 🎮 Steam: ${transaction.steam_username}
-💳 Вы оплатили: ${paidAmount}
+💳 Вы оплатили: ${paidAmount} ₽
 
 ✅ Средства зачислены на ваш Steam аккаунт!`;
       
