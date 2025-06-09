@@ -205,12 +205,17 @@ async function notifyUser(userId: number, transaction: any, status: string) {
     let buttons: InlineKeyboardButton[][] = [];
 
     if (status === 'completed') {
-      const totalAmount = transaction.amount_rub + transaction.commission_rub;
+      const paidAmount = new Intl.NumberFormat('ru-RU', {
+        style: 'currency',
+        currency: 'RUB',
+        minimumFractionDigits: 2
+      }).format(transaction.total_amount_rub);
+      
       message = `🎉 Платеж успешно завершен!
 
 💰 Сумма: ${transaction.amount_usd} USD
 🎮 Steam: ${transaction.steam_username}
-💳 К доплате: ${totalAmount}₽
+💳 Вы оплатили: ${paidAmount}
 
 ✅ Средства зачислены на ваш Steam аккаунт!`;
       
