@@ -8,6 +8,7 @@ import { formatRussianCurrency } from '../../utils/locale';
 import { getSystemSetting } from '../../services/settings/settingsService';
 import { exchangeRateService } from '../../services/exchangeRate/exchangeRateService';
 import { calculateCommission } from '../../services/commission/commissionService';
+import { securityWidget } from '../ui/securityWidget';
 
 const PAYMENT_ERROR = `🚫 Произошла ошибка при создании оплаты.
 
@@ -84,6 +85,10 @@ export async function handlePaymentConfirmation(
         }
       }
     );
+
+    // Send security trust widget immediately after payment buttons
+    const securityMsg = securityWidget(payment.paymentUrl);
+    await bot.sendMessage(chatId, securityMsg.text, securityMsg.options);
 
     logger.info('Legacy payment created using new service', {
       userId,

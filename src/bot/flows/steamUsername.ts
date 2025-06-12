@@ -4,6 +4,7 @@ import { setState } from '../../services/state/stateService';
 import { payDigitalService } from '../../services/paydigital/paydigitalService';
 import { getSystemSetting } from '../../services/settings/settingsService';
 import { analyticsService } from '../../services/analytics/analyticsService';
+import { securityWidget } from '../ui/securityWidget';
 
 // Type for Steam validation result
 interface SteamValidationResult {
@@ -265,6 +266,10 @@ export async function handleSteamUsernameRequest(
         inline_keyboard: keyboard
       }
     });
+
+    // Show security trust widget after username validation (phase-2)
+    const secMsg = securityWidget();
+    await bot.sendMessage(chatId, secMsg.text, secMsg.options);
 
     logger.info('Steam username validated with transactionId stored', {
       userId,
