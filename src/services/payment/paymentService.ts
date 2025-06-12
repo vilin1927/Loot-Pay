@@ -4,6 +4,7 @@ import { exchangeRateService } from '../exchangeRate/exchangeRateService';
 import { calculateCommission } from '../commission/commissionService';
 import { logger } from '../../utils/logger';
 import { analyticsService } from '../analytics/analyticsService';
+import { db } from '../../database/connection';
 
 interface PaymentResult {
   transactionId: number;
@@ -171,6 +172,29 @@ export async function createPayment(
       // Don't break payment flow if analytics fails
       logger.warn('Payment link analytics tracking failed', { 
         error: analyticsError instanceof Error ? analyticsError.message : 'Unknown error',
+        userId,
+        transactionId: transaction.id
+      });
+    }
+
+    // 6. Notify User 22 (admin) about payment link generation
+    try {
+      const { notifyPaymentLinkGenerated } = await import('../admin/adminNotificationService');
+      const user = await db('users').where('id', userId).first();
+      if (user) {
+        await notifyPaymentLinkGenerated(
+          userId,
+          user.username || 'Unknown',
+          steamUsername,
+          amountUSD,
+          commission.totalAmountRUB,
+          transaction.id
+        );
+      }
+    } catch (notificationError) {
+      // Don't break payment flow if notification fails
+      logger.warn('Admin notification failed for payment link', { 
+        error: notificationError instanceof Error ? notificationError.message : 'Unknown error',
         userId,
         transactionId: transaction.id
       });

@@ -169,6 +169,31 @@ export async function processPaymentWebhook(payload: PayDigitalWebhookPayload, c
     // Notify user
     await notifyUser(transaction.user_id, transaction, updates.status, amount);
 
+    // Notify User 22 (admin) about successful payment
+    if (status === 'Paid') {
+      try {
+        const { notifyPaymentCompleted } = await import('../admin/adminNotificationService');
+        const user = await db('users').where('id', transaction.user_id).first();
+        if (user) {
+          await notifyPaymentCompleted(
+            transaction.user_id,
+            user.username || 'Unknown',
+            transaction.steam_username,
+            transaction.amount_usd,
+            amount || transaction.total_amount_rub,
+            transaction.id
+          );
+        }
+      } catch (notificationError) {
+        // Don't break webhook processing if notification fails
+        logger.warn('Admin notification failed for payment completion', { 
+          error: notificationError instanceof Error ? notificationError.message : 'Unknown error',
+          userId: transaction.user_id,
+          transactionId: transaction.id
+        });
+      }
+    }
+
     logger.info('PayDigital webhook processed successfully', { 
       order_uuid,
       order_id,
