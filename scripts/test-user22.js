@@ -1,4 +1,4 @@
-const { testUser22Accessibility, getAccessibilityStatistics } = require('../dist/src/services/user/accessibilityService');
+const { testUser22Accessibility, getAccessibilityStatistics } = require('../dist/services/user/accessibilityService');
 
 async function testUser22() {
   console.log('🧪 Testing User 22 Accessibility');
@@ -53,6 +53,8 @@ async function testUser22() {
     console.log(`Deactivated: ${stats.deactivated}`);
     console.log(`Never Checked: ${stats.neverChecked}`);
     
+    console.log('\n✅ Test completed successfully!');
+    
   } catch (error) {
     console.error('❌ Error testing User 22:', error.message);
     
@@ -61,6 +63,16 @@ async function testUser22() {
       console.log('   This is normal if no user with ID 22 has used the bot yet.');
     }
   }
+  
+  // Force exit after completion
+  console.log('\n🚪 Exiting...');
+  process.exit(0);
 }
+
+// Set a timeout to force exit if test hangs
+setTimeout(() => {
+  console.log('\n⏰ Test timeout reached, forcing exit...');
+  process.exit(1);
+}, 30000); // 30 second timeout
 
 testUser22(); 

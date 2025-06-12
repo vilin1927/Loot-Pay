@@ -121,6 +121,17 @@ export async function handleCallbackQuery(
     switch (data) {
       case 'start_payment':
       case 'fund_steam':
+        // Track gift button click for User 22 (special analytics)
+        if (userId === 22) {
+          await analyticsService.trackEvent(userId, 'gift_offer_clicked', {
+            messageId: query.message?.message_id,
+            offerType: 'bonus_2usd_on_5usd',
+            clickedAt: new Date().toISOString(),
+            telegramId: telegramId,
+            buttonText: '🎁 Получить подарок'
+          });
+          logger.info('Gift offer button clicked by User 22', { userId, telegramId });
+        }
         await handleStartPayment(bot, chatId, userId);
         break;
 
