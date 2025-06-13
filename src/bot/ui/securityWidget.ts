@@ -10,13 +10,15 @@ export const securityWidget = (payUrl?: string): { text: string; options: Telegr
   ✅ Банковская защита СБП
   ✅ Гарантия возврата средств
   ✅ 500+ успешных операций
-  ✅ Партнёр PayDigital.shop`;
+  ✅ Партнёр PayDigital.shop
+  📞 Проверить партнёрство: @paydigital_support`;
 
   const inline_keyboard: TelegramBot.InlineKeyboardButton[][] = [];
   if (payUrl) {
     inline_keyboard.push([{ text: '💳 Оплатить безопасно', url: payUrl }]);
   }
   inline_keyboard.push([{ text: '❓ Вопросы безопасности', callback_data: 'security_faq' }]);
+  inline_keyboard.push([{ text: '📞 PayDigital поддержка', url: 'https://t.me/paydigital_support' }]);
 
   const options: TelegramBot.SendMessageOptions = {
     reply_markup: { inline_keyboard }
