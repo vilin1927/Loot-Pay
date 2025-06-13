@@ -2,8 +2,6 @@ import { Message } from 'node-telegram-bot-api';
 import { getBotInstance } from '../botInstance';
 import { findOrCreateUser } from '../../services/user/userService';
 import { logger } from '../../utils/logger';
-import { getSystemSetting } from '../../services/settings/settingsService';
-import { formatRussianCurrency } from '../../utils/locale';
 
 export async function handleStartCommand(msg: Message) {
   try {
@@ -24,30 +22,23 @@ export async function handleStartCommand(msg: Message) {
     // Get bot instance
     const bot = await getBotInstance();
 
-    // Get minimum amounts and commission from settings
-    const minAmountUSD = Number(await getSystemSetting('min_amount_usd')) || 1;
-    const minAmountRUB = Number(await getSystemSetting('min_amount_rub')) || (minAmountUSD * 80); // Fallback: USD * approx exchange rate
-    const commissionPercent = Number(await getSystemSetting('commission_percent')) || 10;
-
     // Welcome message with inline keyboard
     const welcomeMessage = `Привет, это 🎮 LootPay!
 
 Пополняй Steam за 15 минут
 с удобной оплатой, честным курсом и без риска быть обманутым ⏱️
 
-🔹 Минимальная и прозрачная комиссия **${commissionPercent}%** — без скрытых наценок 
-🔹 Гарантия возврата при сбоях 
-🔹 Поддержка **24/7**
+• Комиссия 10% — без скрытых наценок 
+• Гарантия возврата при сбоях 
+• Поддержка 24/7
 
-💳 Автоматическое зачисление от **${formatRussianCurrency(minAmountRUB)} / ${minAmountUSD} USD** — любые РФ-карты или СБП
+Как это работает?
+⚡️Введи Steam ID 
+⚡️Выбери сумму и оплати через СБП 
+⚡️Получи уведомление о зачислении 🎉 
+⚡️Новички получают бонус +10% к пополнению при пополнении от 5 USD! 🎁
 
-🔸 **Как это работает?**
-1️⃣ Запусти бота, включи уведомления, введи Steam ID 
-2️⃣ Выбери сумму и оплати через СБП 
-3️⃣ Получи уведомление о зачислении 🎉 
-4️⃣ **Новички получают бонус +10% к пополнению при пополнении от 5 USD!** 🎁
-
-Пополняй без риска и обмана — вместе с 🎮 LootPay!`;
+⬇️ Нажми ниже и пополняй с 🎮 LootPay!`;
 
     const keyboard = {
       inline_keyboard: [
