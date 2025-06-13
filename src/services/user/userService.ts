@@ -21,6 +21,7 @@ interface UserUpdate {
   gaming_frequency?: string;
   payment_method?: string;
   referral_source?: string;
+  source_channel?: string; // Deep-link attribution
 }
 
 // Simple cache to prevent repeated database queries

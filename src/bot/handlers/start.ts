@@ -11,6 +11,7 @@ import { Message } from 'node-telegram-bot-api';
 import { getBotInstance } from '../botInstance';
 import { getUserById } from '../../services/user/userService';
 import { analyticsService } from '../../services/analytics/analyticsService';
+import { updateUser } from '../../services/user/userService';
 
 // Messages
 const MAIN_MENU_MESSAGE = `
@@ -45,8 +46,22 @@ export async function handleStartCommand(msg: Message) {
       last_name: msg.from?.last_name
     });
 
-    // Track bot start event
-    await analyticsService.trackBotStart(user.id, 'telegram');
+    // Deep-link source attribution (Telegram /start payload)
+    const payload = msg.text?.split(' ')[1];
+    if (payload && !user.source_channel) {
+      try {
+        await updateUser(user.id, { source_channel: payload.substring(0, 64) });
+        user.source_channel = payload.substring(0, 64);
+      } catch (err) {
+        logger.warn('Failed to save source_channel', { err, userId: user.id, payload });
+      }
+    }
+
+    // Track bot start event with attribution
+    await analyticsService.trackBotStart(
+      user.id,
+      payload ? `telegram:${payload}` : 'telegram'
+    );
 
     // Get bot instance
     const bot = await getBotInstance();
