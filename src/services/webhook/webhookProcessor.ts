@@ -258,6 +258,12 @@ async function notifyUser(userId: number, transaction: any, status: string, webh
 
 ✅ Средства зачислены на ваш Steam аккаунт!`;
       
+      if (transaction.amount_usd >= 5) {
+        message += `\n\n🎁 *Хотите выиграть Аркану?* Подпишитесь на канал [Крипочка Тысячного Ранга](https://t.me/+x8yIvXBQ5OxjNWI6) и участвуйте в еженедельном розыгрыше!`;
+      } else {
+        message += `\n\n🎁 РОЗЫГРЫШ АРКАНЫ для подписчиков Крипочки Тысячного Ранга! от $5/400 рублей`;
+      }
+      
       buttons = [
         [{ text: '🏠 Главное меню', callback_data: 'main_menu' }],
         [{ text: '💰 Еще пополнение', callback_data: 'fund_steam' }]
@@ -289,6 +295,7 @@ async function notifyUser(userId: number, transaction: any, status: string, webh
 
     if (message) {
       await bot.sendMessage(user.telegram_id, message, {
+        parse_mode: 'Markdown',
         reply_markup: { inline_keyboard: buttons }
       });
       
