@@ -12,7 +12,12 @@ export type UserState =
   | 'AWAITING_CUSTOM_AMOUNT'
   | 'AMOUNT_SELECTED'
   | 'PAYMENT_PENDING'
-  | 'PAYMENT_COMPLETED';
+  | 'PAYMENT_COMPLETED'
+  | 'SURVEY_Q1'
+  | 'SURVEY_Q2'
+  | 'SURVEY_Q3'
+  | 'SURVEY_Q2_TEXT'
+  | 'SURVEY_GIFT_CHOICE';
 
 // State data interface
 export interface StateData {

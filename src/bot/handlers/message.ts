@@ -8,6 +8,8 @@ import { findOrCreateUser } from '../../services/user/userService';
 import { handleAmountSelected } from './callbackQuery';
 import { getSystemSetting } from '../../services/settings/settingsService';
 import { registerUserActivity } from '../idleReminder';
+import { saveAnswer } from '../../services/survey/surveyService';
+import { sendSurveyQuestion } from '../flows/giftSurvey';
 
 export async function handleMessage(
   bot: TelegramBot,
@@ -72,6 +74,12 @@ export async function handleMessage(
           return;
         }
         await handleAmountSelected(bot, chatId, userId, amount);
+        break;
+
+      case 'SURVEY_Q2_TEXT':
+        // Save free text for Q2 option 1
+        await saveAnswer(userId, 2, '1', text);
+        await sendSurveyQuestion(bot, chatId, userId, 3);
         break;
 
       default:

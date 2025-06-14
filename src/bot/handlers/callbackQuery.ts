@@ -12,6 +12,7 @@ import { Message } from 'node-telegram-bot-api';
 import { getSystemSetting } from '../../services/settings/settingsService';
 import { analyticsService } from '../../services/analytics/analyticsService';
 import { registerUserActivity } from '../idleReminder';
+import { startGiftSurvey, skipGiftSurvey, handleSurveyCallback } from '../flows/giftSurvey';
 
 // Helper functions
 async function trackAmountButtonClick(userId: number, amount: number) {
@@ -292,6 +293,23 @@ LootPay - это сервис для быстрого и безопасного 
         });
         break;
 
+      case 'survey_start':
+        await startGiftSurvey(bot, chatId, userId);
+        break;
+      case 'survey_skip':
+        await skipGiftSurvey(bot, chatId, userId);
+        break;
+      case 'gift_steam':
+        await bot.sendMessage(chatId, 'Подарок будет начислен на твой Steam в ближайшие минуты. Спасибо!');
+        await bot.sendMessage(1708729, `User @${user.username || ''} (${telegramId}) прошёл опрос. Gift: Steam.`);
+        await setState(userId, 'SURVEY_GIFT_CHOICE', {});
+        break;
+      case 'gift_sbp':
+        await bot.sendMessage(chatId, 'Отправь номер СБП в поддержку, и мы начислим 100 ₽.');
+        await bot.sendMessage(1708729, `User @${user.username || ''} (${telegramId}) прошёл опрос. Gift: SBP.`);
+        await setState(userId, 'SURVEY_GIFT_CHOICE', {});
+        break;
+
       default:
         if (data.startsWith('history_page_')) {
           const page = parseInt(data.split('_')[2]);
@@ -306,6 +324,11 @@ LootPay - это сервис для быстрого и безопасного 
             await handleAmountSelected(bot, chatId, userId, amount);
             return;
           }
+        }
+        
+        if (data.startsWith('s')) {
+          await handleSurveyCallback(bot, chatId, userId, data);
+          return;
         }
         
         logger.warn('Unknown callback data', { data, telegramId, userId });
