@@ -82,7 +82,7 @@ const STEAM_USERNAME_ERROR = `⚠️ Не удалось найти такой �
 
 const STEAM_USERNAME_SUCCESS = async (username: string) => {
   const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
-  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 100;
   
   return `✅ Аккаунт найден!
 👤 Логин: ${username}
@@ -91,7 +91,9 @@ const STEAM_USERNAME_SUCCESS = async (username: string) => {
 💰 Выберите сумму пополнения ниже:
 — Минимум: ${minAmount} USD 
 — Максимум: ${maxAmount} USD
-Выберите один из вариантов ниже или введите свою сумму 👇`;
+Выберите один из вариантов ниже или введите свою сумму 👇
+
+🎁 РОЗЫГРЫШ АРКАНЫ для подписчиков Крипочки Тысячного Ранга! от $5/400 рублей`;
 };
 
 // Enhanced validation function with better error handling
@@ -243,7 +245,8 @@ export async function handleSteamUsernameRequest(
     
     // Fixed preset amounts: 1, 10, 15, 20 USD
     function getPresetAmounts(): number[] {
-      return [1, 10, 15, 20];
+      // Preset amounts starting from 5 USD as requested
+      return [5, 10, 25, 50];
     }
     
     const presetAmounts = getPresetAmounts();
@@ -254,9 +257,9 @@ export async function handleSteamUsernameRequest(
     // Add preset amounts in rows of 2
     for (let i = 0; i < presetAmounts.length; i += 2) {
       const row = [];
-      row.push({ text: `${presetAmounts[i]} USD`, callback_data: `amount_${presetAmounts[i]}` });
+      row.push({ text: `${presetAmounts[i]} USD 🎁`, callback_data: `amount_${presetAmounts[i]}` });
       if (presetAmounts[i + 1]) {
-        row.push({ text: `${presetAmounts[i + 1]} USD`, callback_data: `amount_${presetAmounts[i + 1]}` });
+        row.push({ text: `${presetAmounts[i + 1]} USD 🎁`, callback_data: `amount_${presetAmounts[i + 1]}` });
       }
       keyboard.push(row);
     }

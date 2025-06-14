@@ -11,7 +11,9 @@ import { analyticsService } from '../../services/analytics/analyticsService';
 
 const AMOUNT_PROMPT = (minAmount: number, maxAmount: number) => `💰 Введите сумму пополнения, учитывая лимиты:
 — Минимум: ${minAmount} USD 
-— Максимум: ${maxAmount} USD`;
+— Максимум: ${maxAmount} USD
+
+🎁 РОЗЫГРЫШ АРКАНЫ для подписчиков Крипочки Тысячного Ранга! от $5/400 рублей`;
 
 const AMOUNT_TOO_LOW = (minAmount: number) => `⚠️ Слишком маленькая сумма.
 Минимальная сумма пополнения — ${minAmount} USD. 
@@ -31,12 +33,14 @@ const PAYMENT_DETAILS = async (username: string, amountUSD: number, amountRUB: n
 
 ❗️Пожалуйста, убедитесь, что логин и сумма указаны верно. 
 В случае ошибки средства могут уйти другому пользователю.
-Если всё правильно — выберите способ оплаты ниже 👇`;
+Если всё правильно — выберите способ оплаты ниже 👇
+
+🎁 РОЗЫГРЫШ АРКАНЫ для подписчиков Крипочки Тысячного Ранга! от $5/400 рублей`;
 };
 
-// Fixed preset amounts: 1, 10, 15, 20 USD
+// Fixed preset amounts starting from 5 USD as per new requirements
 function getPresetAmounts(): number[] {
-  return [1, 10, 15, 20];
+  return [5, 10, 25, 50];
 }
 
 export async function handleAmountSelection(
@@ -49,7 +53,7 @@ export async function handleAmountSelection(
     if (!amount) {
       // Get minimum and maximum amounts from settings
       const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
-      const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+      const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 100;
 
       // Get preset amounts
       const presetAmounts = getPresetAmounts();
@@ -60,9 +64,9 @@ export async function handleAmountSelection(
       // Add preset amounts in rows of 2
       for (let i = 0; i < presetAmounts.length; i += 2) {
         const row = [];
-        row.push({ text: `${presetAmounts[i]} USD`, callback_data: `amount_${presetAmounts[i]}` });
+        row.push({ text: `${presetAmounts[i]} USD 🎁`, callback_data: `amount_${presetAmounts[i]}` });
         if (presetAmounts[i + 1]) {
-          row.push({ text: `${presetAmounts[i + 1]} USD`, callback_data: `amount_${presetAmounts[i + 1]}` });
+          row.push({ text: `${presetAmounts[i + 1]} USD 🎁`, callback_data: `amount_${presetAmounts[i + 1]}` });
         }
         keyboard.push(row);
       }
@@ -87,7 +91,7 @@ export async function handleAmountSelection(
 
     // Get minimum and maximum amounts from settings first
     const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
-    const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+    const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 100;
 
     // Input sanitization and validation
     const sanitizedAmount = amount.trim().replace(/[^0-9.,]/g, ''); // Remove non-numeric chars except decimals
