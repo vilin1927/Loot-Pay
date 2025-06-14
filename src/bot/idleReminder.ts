@@ -28,10 +28,14 @@ export function registerUserActivity(telegramId: number) {
     clearTimeout(existing);
   }
 
-  // If user is active again, allow future reminders
-  reminderSent.delete(telegramId);
+  // If this user has already received a reminder, do nothing further
+  if (reminderSent.has(telegramId)) {
+    // Just clear any running timer to avoid leaks
+    if (existing) timers.delete(telegramId);
+    return;
+  }
 
-  // Start a new timer
+  // Start a new timer (first-time reminder)
   const timer = setTimeout(async () => {
     // Avoid duplicate send in edge cases
     if (reminderSent.has(telegramId)) return;
