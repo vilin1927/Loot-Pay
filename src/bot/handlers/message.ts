@@ -7,6 +7,7 @@ import { handleAmountSelection } from '../flows/amountSelection';
 import { findOrCreateUser } from '../../services/user/userService';
 import { handleAmountSelected } from './callbackQuery';
 import { getSystemSetting } from '../../services/settings/settingsService';
+import { registerUserActivity } from '../idleReminder';
 
 export async function handleMessage(
   bot: TelegramBot,
@@ -20,6 +21,9 @@ export async function handleMessage(
     if (!telegramId || !text) {
       return;
     }
+
+    // Register user activity for inactivity tracking
+    registerUserActivity(telegramId);
 
     // Skip messages that are bot commands (already handled by command handlers)
     if (text.startsWith('/')) {

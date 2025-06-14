@@ -11,6 +11,7 @@ import { showTransactionHistory } from '../flows/transactionHistory';
 import { Message } from 'node-telegram-bot-api';
 import { getSystemSetting } from '../../services/settings/settingsService';
 import { analyticsService } from '../../services/analytics/analyticsService';
+import { registerUserActivity } from '../idleReminder';
 
 // Helper functions
 async function trackAmountButtonClick(userId: number, amount: number) {
@@ -83,6 +84,9 @@ export async function handleCallbackQuery(
     }
 
     logger.debug('Processing callback query', { telegramId, data, queryId: query.id });
+
+    // Register user activity for inactivity tracking
+    registerUserActivity(telegramId);
 
     // Answer callback query immediately to prevent loading state
     await bot.answerCallbackQuery(query.id);
