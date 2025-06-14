@@ -12,6 +12,7 @@ import { getBotInstance } from '../botInstance';
 import { getUserById } from '../../services/user/userService';
 import { analyticsService } from '../../services/analytics/analyticsService';
 import { updateUser } from '../../services/user/userService';
+import { registerUserActivity } from '../idleReminder';
 
 // Messages
 const MAIN_MENU_MESSAGE = `
@@ -37,6 +38,9 @@ export async function handleStartCommand(msg: Message) {
       logger.warn('Received /start without user ID');
       return;
     }
+
+    // Mark recent user activity
+    registerUserActivity(telegramId);
 
     // Register or get user
     const user = await findOrCreateUser({
