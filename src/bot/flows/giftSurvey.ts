@@ -1,7 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { startSurvey, saveAnswer, completeSurvey, skipSurvey } from '../../services/survey/surveyService';
-import { setState, getState } from '../../services/state/stateService';
-import { logger } from '../../utils/logger';
+import { setState } from '../../services/state/stateService';
 
 // Questions definitions
 export const SURVEY_QUESTIONS = {
