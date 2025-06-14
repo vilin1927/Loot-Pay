@@ -53,7 +53,7 @@ async function handleCustomAmountPrompt(bot: TelegramBot, chatId: number, userId
   
   // Get dynamic limits from database
   const minAmount = Number(await getSystemSetting('min_amount_usd')) || 1;
-  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 25;
+  const maxAmount = Number(await getSystemSetting('max_amount_usd')) || 100;
   
   await bot.sendMessage(chatId, `💰 Введите сумму в USD (от ${minAmount} до ${maxAmount}):`);
   await setState(userId, 'AWAITING_CUSTOM_AMOUNT', existingData);
@@ -144,13 +144,13 @@ export async function handleCallbackQuery(
         await trackAmountButtonClick(userId, 10);
         await handleAmountSelected(bot, chatId, userId, 10);
         break;
-      case 'amount_15':
-        await trackAmountButtonClick(userId, 15);
-        await handleAmountSelected(bot, chatId, userId, 15);
+      case 'amount_25':
+        await trackAmountButtonClick(userId, 25);
+        await handleAmountSelected(bot, chatId, userId, 25);
         break;
-      case 'amount_20':
-        await trackAmountButtonClick(userId, 20);
-        await handleAmountSelected(bot, chatId, userId, 20);
+      case 'amount_50':
+        await trackAmountButtonClick(userId, 50);
+        await handleAmountSelected(bot, chatId, userId, 50);
         break;
       case 'amount_custom':
         await handleCustomAmountPrompt(bot, chatId, userId);
