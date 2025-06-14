@@ -61,20 +61,18 @@ const STEAM_USERNAME_PROMPT = `🧩 Введите логин аккаунта S
 
 💡 Правильный логин = быстрое зачисление`;
 
-const STEAM_USERNAME_HELP = `🔎 Где взять логин Steam?
+const STEAM_USERNAME_HELP = `*Как найти логин Steam:*
 
-Логин — это уникальный идентификатор, который вы указывали при регистрации. Он нужен для пополнения вашего аккаунта.
+- В клиенте Steam — правый верхний угол  
+- В браузере — steamcommunity.com/id/ВАШ_ЛОГИН/
 
-Вот как его узнать:
+✅ Правильно: \`nickname123\`  
+❌ Неправильно: email или отображаемое имя
 
-1️⃣ Откройте приложение Steam 
-2️⃣ Нажмите на свой ник в правом верхнем углу 
-3️⃣ Выберите «Об аккаунте» 
-4️⃣ В разделе «Аккаунт пользователя» вы увидите логин
+Пример показан на изображении ниже 👇`;
 
-📎 [Открыть страницу аккаунта в Steam](https://store.steampowered.com/account/) 
-
-🧩 [Перейти к авторизации](https://store.steampowered.com/login/?redir=account%2F&redir_ssl=1)`;
+// Replace with actual hosted image URL or local path accessible to the bot
+const STEAM_LOGIN_HELP_IMAGE_URL = process.env.STEAM_LOGIN_HELP_IMAGE_URL || 'https://i.imgur.com/placeholder.png';
 
 const STEAM_USERNAME_ERROR = `⚠️ Не удалось найти такой аккаунт в Steam.
 
@@ -301,7 +299,8 @@ export async function handleSteamUsernameHelp(
   userId: number
 ): Promise<void> {
   try {
-    await bot.sendMessage(chatId, STEAM_USERNAME_HELP, {
+    await bot.sendPhoto(chatId, STEAM_LOGIN_HELP_IMAGE_URL, {
+      caption: STEAM_USERNAME_HELP,
       parse_mode: 'Markdown',
       reply_markup: {
         inline_keyboard: [
